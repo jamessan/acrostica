@@ -3,9 +3,12 @@
 
 #include <QMainWindow>
 
-namespace Ui {
-class Acrostica;
-}
+class QAction;
+class QGroupBox;
+class QLabel;
+class QMenu;
+class QPlainTextEdit;
+class QWidget;
 
 class Acrostica : public QMainWindow
 {
@@ -13,10 +16,41 @@ class Acrostica : public QMainWindow
 
 public:
     explicit Acrostica(QWidget *parent = 0);
-    ~Acrostica();
+
+protected:
+    void closeEvent(QCloseEvent *event) Q_DECL_OVERRIDE;
+
+private slots:
+    void newAcrostic();
+    void open();
+    bool save();
+    void print();
 
 private:
-    Ui::Acrostica *ui;
+    void createActions();
+    void createMenus();
+    void createWidgets();
+    void layoutWidgets();
+
+    QMenu *fileMenu;
+
+    QAction *newAction;
+    QAction *openAction;
+    QAction *saveAction;
+    QAction *printAction;
+    QAction *exitAction;
+
+    QWidget *centralWidget;
+
+    QGroupBox *message;
+    QPlainTextEdit *messageText;
+
+    QGroupBox *downMessage;
+    QLabel *downText;
+
+    QGroupBox *clues;
+
+    QGroupBox *letters;
 };
 
 #endif // ACROSTICA_H
