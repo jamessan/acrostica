@@ -1,5 +1,5 @@
-#ifndef ACROSTICA_H
-#define ACROSTICA_H
+#ifndef ACROSTICA_MAINWINDOW_H
+#define ACROSTICA_MAINWINDOW_H
 
 #include <QMainWindow>
 
@@ -10,12 +10,12 @@ class QMenu;
 class QPlainTextEdit;
 class QWidget;
 
-class Acrostica : public QMainWindow
+class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit Acrostica(QWidget *parent = 0);
+    explicit MainWindow(QWidget *parent = 0);
 
 protected:
     void closeEvent(QCloseEvent *event) Q_DECL_OVERRIDE;

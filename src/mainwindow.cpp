@@ -1,7 +1,7 @@
 #include <QtWidgets>
-#include "acrostica.h"
+#include "mainwindow.h"
 
-Acrostica::Acrostica(QWidget *parent) :
+MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
     centralWidget = new QWidget;
@@ -13,7 +13,7 @@ Acrostica::Acrostica(QWidget *parent) :
     layoutWidgets();
 }
 
-void Acrostica::createActions()
+void MainWindow::createActions()
 {
     newAction = new QAction(tr("&New"), this);
     newAction->setShortcut(tr("Ctrl+N"));
@@ -40,7 +40,7 @@ void Acrostica::createActions()
     connect(exitAction, SIGNAL(triggered()), this, SLOT(close()));
 }
 
-void Acrostica::createMenus()
+void MainWindow::createMenus()
 {
     fileMenu = menuBar()->addMenu(tr("&File"));
     fileMenu->addAction(newAction);
@@ -51,7 +51,7 @@ void Acrostica::createMenus()
     fileMenu->addAction(exitAction);
 }
 
-void Acrostica::createWidgets()
+void MainWindow::createWidgets()
 {
     message = new QGroupBox(tr("Message"));
 
@@ -69,7 +69,7 @@ void Acrostica::createWidgets()
     letters = new QGroupBox(tr("Letters"));
 }
 
-void Acrostica::layoutWidgets()
+void MainWindow::layoutWidgets()
 {
     QVBoxLayout *messageLayout = new QVBoxLayout;
     messageLayout->addWidget(messageText);
@@ -100,24 +100,24 @@ void Acrostica::layoutWidgets()
     centralWidget->setLayout(centralLayout);
 }
 
-void Acrostica::closeEvent(QCloseEvent *event)
+void MainWindow::closeEvent(QCloseEvent *event)
 {
     event->accept();
 }
 
-void Acrostica::newAcrostic()
+void MainWindow::newAcrostic()
 {
 }
 
-void Acrostica::open()
+void MainWindow::open()
 {
 }
 
-bool Acrostica::save()
+bool MainWindow::save()
 {
     return true;
 }
 
-void Acrostica::print()
+void MainWindow::print()
 {
 }
