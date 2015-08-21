@@ -44,13 +44,13 @@ private:
 
     QGroupBox *message;
     QPlainTextEdit *messageText;
+    QGroupBox *messageLetters;
 
     QGroupBox *downMessage;
     QLabel *downText;
 
-    QGroupBox *clues;
-
-    QGroupBox *letters;
+    QGroupBox *clueList;
+    QGroupBox *clueLetters;
 };
 
 #endif // ACROSTICA_H

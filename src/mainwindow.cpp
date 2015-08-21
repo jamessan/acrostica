@@ -54,9 +54,10 @@ void MainWindow::createMenus()
 void MainWindow::createWidgets()
 {
     message = new QGroupBox(tr("Message"));
-
     messageText = new QPlainTextEdit;
     messageText->setTabChangesFocus(true);
+
+    messageLetters = new QGroupBox(tr("Letters Missing from Message"));
 
     downMessage = new QGroupBox(tr("Down Message"));
 
@@ -64,9 +65,8 @@ void MainWindow::createWidgets()
     downText->setTextFormat(Qt::PlainText);
     downText->setTextInteractionFlags(Qt::NoTextInteraction);
 
-    clues = new QGroupBox(tr("Clues"));
-
-    letters = new QGroupBox(tr("Letters"));
+    clueList = new QGroupBox(tr("Clues"));
+    clueLetters = new QGroupBox(tr("Letters Missing from Clues"));
 }
 
 void MainWindow::layoutWidgets()
@@ -75,28 +75,12 @@ void MainWindow::layoutWidgets()
     messageLayout->addWidget(messageText);
     message->setLayout(messageLayout);
 
-    QVBoxLayout *downMessageLayout = new QVBoxLayout;
-    downMessageLayout->addWidget(downText);
-    downMessage->setLayout(downMessageLayout);
-
-    QVBoxLayout *clueLayout = new QVBoxLayout;
-    clues->setLayout(clueLayout);
-
-    QVBoxLayout *lettersLayout = new QVBoxLayout;
-    letters->setLayout(lettersLayout);
-
-    QVBoxLayout *leftColumn = new QVBoxLayout;
-    leftColumn->addWidget(message);
-    leftColumn->addWidget(downMessage);
-    leftColumn->addWidget(clues);
-
-    QVBoxLayout *rightColumn = new QVBoxLayout;
-    rightColumn->addWidget(letters);
-
-    QHBoxLayout *centralLayout = new QHBoxLayout;
-    centralLayout->addLayout(leftColumn);
-    centralLayout->addLayout(rightColumn);
-
+    QGridLayout *centralLayout = new QGridLayout;
+    centralLayout->addWidget(message, 0, 0);
+    centralLayout->addWidget(messageLetters, 0, 1);
+    centralLayout->addWidget(downMessage, 1, 0, 1, 2);
+    centralLayout->addWidget(clueList, 2, 0);
+    centralLayout->addWidget(clueLetters, 2, 1);
     centralWidget->setLayout(centralLayout);
 }
 
