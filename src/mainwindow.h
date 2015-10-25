@@ -45,12 +45,14 @@ private:
     QGroupBox *message;
     QPlainTextEdit *messageText;
     QGroupBox *messageLetters;
+    QList<QLabel*> messageLabels;
 
     QGroupBox *downMessage;
     QLabel *downText;
 
     QGroupBox *clueList;
     QGroupBox *clueLetters;
+    QList<QLabel*> clueLabels;
 };
 
 #endif // ACROSTICA_H
