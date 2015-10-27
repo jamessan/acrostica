@@ -9,6 +9,7 @@ class QLabel;
 class QMenu;
 class QPlainTextEdit;
 class QWidget;
+class LetterGrid;
 
 class MainWindow : public QMainWindow
 {
@@ -25,6 +26,7 @@ private slots:
     void open();
     bool save();
     void print();
+    void messageTextChanged();
 
 private:
     void createActions();
@@ -44,15 +46,13 @@ private:
 
     QGroupBox *message;
     QPlainTextEdit *messageText;
-    QGroupBox *messageLetters;
-    QList<QLabel*> messageLabels;
+    LetterGrid *messageLetters;
 
     QGroupBox *downMessage;
     QLabel *downText;
 
     QGroupBox *clueList;
-    QGroupBox *clueLetters;
-    QList<QLabel*> clueLabels;
+    LetterGrid *clueLetters;
 };
 
 #endif // ACROSTICA_H

@@ -1,6 +1,8 @@
 #include <QtWidgets>
 #include "mainwindow.h"
 
+#include "lettergrid.h"
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
@@ -56,13 +58,9 @@ void MainWindow::createWidgets()
     message = new QGroupBox(tr("Message"));
     messageText = new QPlainTextEdit;
     messageText->setTabChangesFocus(true);
+    connect(messageText, SIGNAL(textChanged()), this, SLOT(messageTextChanged()));
 
-    messageLetters = new QGroupBox(tr("Letters Missing from Message"));
-    messageLabels.reserve(26);
-    for (int i = 0; i < 26; i++)
-    {
-        messageLabels.append(new QLabel(messageLetters));
-    }
+    messageLetters = new LetterGrid(tr("Letters Missing from Message"));
 
     downMessage = new QGroupBox(tr("Down Message"));
 
@@ -71,12 +69,14 @@ void MainWindow::createWidgets()
     downText->setTextInteractionFlags(Qt::NoTextInteraction);
 
     clueList = new QGroupBox(tr("Clues"));
-    clueLetters = new QGroupBox(tr("Letters Missing from Clues"));
-    clueLabels.reserve(26);
-    for (int i = 0; i < 26; i++)
-    {
-        clueLabels.append(new QLabel(clueLetters));
-    }
+    clueLetters = new LetterGrid(tr("Letters Missing from Clues"));
+}
+
+void MainWindow::messageTextChanged()
+{
+    QPlainTextEdit *textEdit = qobject_cast<QPlainTextEdit*>(sender());
+
+    clueLetters->setText(textEdit->toPlainText(), qHash(textEdit));
 }
 
 void MainWindow::layoutWidgets()
@@ -84,26 +84,6 @@ void MainWindow::layoutWidgets()
     QVBoxLayout *messageLayout = new QVBoxLayout;
     messageLayout->addWidget(messageText);
     message->setLayout(messageLayout);
-
-    QGridLayout *letterLayout = new QGridLayout;
-    for (int i = 0; i < 26; i++)
-    {
-        if (i < 13)
-            letterLayout->addWidget(messageLabels[i], i, 0);
-        else
-            letterLayout->addWidget(messageLabels[i], i - 13, 1);
-    }
-    messageLetters->setLayout(letterLayout);
-
-    QGridLayout *clueLayout = new QGridLayout;
-    for (int i = 0; i < 26; i++)
-    {
-        if (i < 13)
-            clueLayout->addWidget(clueLabels[i], i, 0);
-        else
-            clueLayout->addWidget(clueLabels[i], i - 13, 1);
-    }
-    clueLetters->setLayout(clueLayout);
 
     QGridLayout *centralLayout = new QGridLayout;
     centralLayout->addWidget(message, 0, 0);
