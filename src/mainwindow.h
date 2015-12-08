@@ -8,8 +8,8 @@ class QGroupBox;
 class QLabel;
 class QMenu;
 class QPlainTextEdit;
+class QTableView;
 class QWidget;
-class LetterGrid;
 
 class MainWindow : public QMainWindow
 {
@@ -46,13 +46,15 @@ private:
 
     QGroupBox *message;
     QPlainTextEdit *messageText;
-    LetterGrid *messageLetters;
+    QGroupBox *messageLetters;
+    QTableView *messageLettersView;
 
     QGroupBox *downMessage;
     QLabel *downText;
 
     QGroupBox *clueList;
-    LetterGrid *clueLetters;
+    QGroupBox *clueLetters;
+    QTableView *clueLettersView;
 };
 
 #endif // ACROSTICA_H

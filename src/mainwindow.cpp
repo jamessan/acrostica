@@ -1,7 +1,6 @@
 #include <QtWidgets>
 #include "mainwindow.h"
-
-#include "lettergrid.h"
+#include "MissingLettersModel.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
@@ -60,7 +59,18 @@ void MainWindow::createWidgets()
     messageText->setTabChangesFocus(true);
     connect(messageText, SIGNAL(textChanged()), this, SLOT(messageTextChanged()));
 
-    messageLetters = new LetterGrid(tr("Letters Missing from Message"));
+    messageLetters = new QGroupBox(tr("Letters Missing from Message"));
+    QStringList llist;
+    llist << "A" << "B" << "C" << "D" << "E" << "F" << "G" << "H" << "I" << "J" << "K"
+        << "L" << "M" << "N" << "O" << "P" << "Q" << "R" << "S" << "T" << "U"
+        << "V" << "W" << "X" << "Y" << "Z";
+    MissingLettersModel *missingMessage = new MissingLettersModel(llist);
+    messageLettersView = new QTableView(messageLetters);
+    messageLettersView->setModel(missingMessage);
+    messageLettersView->setShowGrid(false);
+    messageLettersView->horizontalHeader()->setVisible(false);
+    messageLettersView->horizontalHeader()->setStretchLastSection(true);
+    messageLettersView->verticalHeader()->setVisible(false);
 
     downMessage = new QGroupBox(tr("Down Message"));
 
@@ -69,14 +79,14 @@ void MainWindow::createWidgets()
     downText->setTextInteractionFlags(Qt::NoTextInteraction);
 
     clueList = new QGroupBox(tr("Clues"));
-    clueLetters = new LetterGrid(tr("Letters Missing from Clues"));
+    clueLetters = new QGroupBox(tr("Letters Missing from Clues"));
+    clueLettersView = new QTableView(clueLetters);
 }
 
 void MainWindow::messageTextChanged()
 {
     QPlainTextEdit *textEdit = qobject_cast<QPlainTextEdit*>(sender());
 
-    clueLetters->setText(textEdit->toPlainText(), qHash(textEdit));
 }
 
 void MainWindow::layoutWidgets()
@@ -84,6 +94,10 @@ void MainWindow::layoutWidgets()
     QVBoxLayout *messageLayout = new QVBoxLayout;
     messageLayout->addWidget(messageText);
     message->setLayout(messageLayout);
+
+    QVBoxLayout *messageLettersLayout = new QVBoxLayout;
+    messageLettersLayout->addWidget(messageLettersView);
+    messageLetters->setLayout(messageLettersLayout);
 
     QGridLayout *centralLayout = new QGridLayout;
     centralLayout->addWidget(message, 0, 0);
