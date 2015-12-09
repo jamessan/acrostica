@@ -1,6 +1,7 @@
 #include <QtWidgets>
 #include "mainwindow.h"
 #include "MissingLettersModel.h"
+#include "MissingLettersUI.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
@@ -65,12 +66,8 @@ void MainWindow::createWidgets()
         << "L" << "M" << "N" << "O" << "P" << "Q" << "R" << "S" << "T" << "U"
         << "V" << "W" << "X" << "Y" << "Z";
     MissingLettersModel *missingMessage = new MissingLettersModel(llist);
-    messageLettersView = new QTableView(messageLetters);
+    messageLettersView = new MissingLettersUI(messageLetters);
     messageLettersView->setModel(missingMessage);
-    messageLettersView->setShowGrid(false);
-    messageLettersView->horizontalHeader()->setVisible(false);
-    messageLettersView->horizontalHeader()->setStretchLastSection(true);
-    messageLettersView->verticalHeader()->setVisible(false);
 
     downMessage = new QGroupBox(tr("Down Message"));
 
@@ -80,7 +77,8 @@ void MainWindow::createWidgets()
 
     clueList = new QGroupBox(tr("Clues"));
     clueLetters = new QGroupBox(tr("Letters Missing from Clues"));
-    clueLettersView = new QTableView(clueLetters);
+    clueLettersView = new MissingLettersUI(clueLetters);
+    clueLettersView->setModel(missingMessage);
 }
 
 void MainWindow::messageTextChanged()
@@ -98,6 +96,10 @@ void MainWindow::layoutWidgets()
     QVBoxLayout *messageLettersLayout = new QVBoxLayout;
     messageLettersLayout->addWidget(messageLettersView);
     messageLetters->setLayout(messageLettersLayout);
+
+    QVBoxLayout *clueLettersLayout = new QVBoxLayout;
+    clueLettersLayout->addWidget(clueLettersView);
+    clueLetters->setLayout(clueLettersLayout);
 
     QGridLayout *centralLayout = new QGridLayout;
     centralLayout->addWidget(message, 0, 0);
