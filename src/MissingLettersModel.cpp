@@ -53,3 +53,8 @@ QVariant MissingLettersModel::headerData(int section, Qt::Orientation orientatio
 {
   return QVariant();
 }
+
+Qt::ItemFlags MissingLettersModel::flags(const QModelIndex& index) const
+{
+  return Qt::ItemIsEnabled;
+}
