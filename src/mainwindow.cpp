@@ -61,11 +61,7 @@ void MainWindow::createWidgets()
     connect(messageText, SIGNAL(textChanged()), this, SLOT(messageTextChanged()));
 
     messageLetters = new QGroupBox(tr("Letters Missing from Message"));
-    QStringList llist;
-    llist << "A" << "B" << "C" << "D" << "E" << "F" << "G" << "H" << "I" << "J" << "K"
-        << "L" << "M" << "N" << "O" << "P" << "Q" << "R" << "S" << "T" << "U"
-        << "V" << "W" << "X" << "Y" << "Z";
-    MissingLettersModel *missingMessage = new MissingLettersModel(llist);
+    MissingLettersModel *missingMessage = new MissingLettersModel();
     messageLettersView = new MissingLettersUI(messageLetters);
     messageLettersView->setModel(missingMessage);
 
