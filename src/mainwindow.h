@@ -3,12 +3,13 @@
 
 #include <QMainWindow>
 
+class MissingLettersModel;
+class MissingLettersUI;
 class QAction;
 class QGroupBox;
 class QLabel;
 class QMenu;
 class QPlainTextEdit;
-class MissingLettersUI;
 class QWidget;
 
 class MainWindow : public QMainWindow
@@ -26,7 +27,6 @@ private slots:
     void open();
     bool save();
     void print();
-    void messageTextChanged();
 
 private:
     void createActions();
@@ -48,6 +48,7 @@ private:
     QPlainTextEdit *messageText;
     QGroupBox *messageLetters;
     MissingLettersUI *messageLettersView;
+    MissingLettersModel *missingMessageLetters;
 
     QGroupBox *downMessage;
     QLabel *downText;
@@ -55,6 +56,7 @@ private:
     QGroupBox *clueList;
     QGroupBox *clueLetters;
     MissingLettersUI *clueLettersView;
+    MissingLettersModel *missingClueLetters;
 };
 
 #endif // ACROSTICA_H

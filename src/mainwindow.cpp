@@ -58,12 +58,11 @@ void MainWindow::createWidgets()
     message = new QGroupBox(tr("Message"));
     messageText = new QPlainTextEdit;
     messageText->setTabChangesFocus(true);
-    connect(messageText, SIGNAL(textChanged()), this, SLOT(messageTextChanged()));
 
     messageLetters = new QGroupBox(tr("Letters Missing from Message"));
-    MissingLettersModel *missingMessage = new MissingLettersModel();
+    missingMessageLetters = new MissingLettersModel("message");
     messageLettersView = new MissingLettersUI(messageLetters);
-    messageLettersView->setModel(missingMessage);
+    messageLettersView->setModel(missingMessageLetters);
 
     downMessage = new QGroupBox(tr("Down Message"));
 
@@ -73,14 +72,14 @@ void MainWindow::createWidgets()
 
     clueList = new QGroupBox(tr("Clues"));
     clueLetters = new QGroupBox(tr("Letters Missing from Clues"));
+    missingClueLetters = new MissingLettersModel("clue");
     clueLettersView = new MissingLettersUI(clueLetters);
-    clueLettersView->setModel(missingMessage);
-}
+    clueLettersView->setModel(missingClueLetters);
 
-void MainWindow::messageTextChanged()
-{
-    QPlainTextEdit *textEdit = qobject_cast<QPlainTextEdit*>(sender());
-
+    connect(messageText, SIGNAL(textChanged()),
+            missingMessageLetters, SLOT(removeLetters()));
+    connect(messageText, SIGNAL(textChanged()),
+            missingClueLetters, SLOT(addLetters()));
 }
 
 void MainWindow::layoutWidgets()
