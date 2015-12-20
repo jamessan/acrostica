@@ -22,5 +22,4 @@ before_install:
 cache: ccache
 
 script:
-  - mkdir build && (cd build && cmake ..)
-  - make -C build
+  - ./travis.sh
