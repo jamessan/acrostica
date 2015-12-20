@@ -8,9 +8,13 @@ os:
 
 addons:
   apt:
+    sources:
+      - debian-sid
     packages:
       - cmake
-      - qtbase5-dev
+      - qt5-default
+      - qtbase5-dev-tools
+      - qt5-qmake
 
 before_install:
   - if [ "$TRAVIS_OS_NAME" = osx ]; then brew update; brew install qt5; fi
