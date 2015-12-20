@@ -6,9 +6,17 @@ os:
   - linux
   - osx
 
+addons:
+  apt:
+    packages:
+      - cmake
+      - qtbase5-dev
+
 before_install:
-  - brew update
-  - brew install qt5 cmake
+  - if [ "$TRAVIS_OS_NAME" = osx ]; then \
+      brew update; \
+      brew install qt5; \
+    fi
 
 script:
   - mkdir build && cmake build
