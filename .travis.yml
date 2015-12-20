@@ -16,5 +16,5 @@ before_install:
   - if [ "$TRAVIS_OS_NAME" = osx ]; then brew update; brew install qt5; fi
 
 script:
-  - mkdir build && cmake build
+  - mkdir build && cd build && cmake ..
   - make -C build
