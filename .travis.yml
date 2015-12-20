@@ -18,5 +18,5 @@ before_install:
 cache: ccache
 
 script:
-  - mkdir build && cd build && cmake ..
+  - mkdir build && (cd build && cmake ..)
   - make -C build
