@@ -11,6 +11,7 @@ addons:
     sources:
       - debian-sid
     packages:
+      - gcc
       - g++
       - cmake
       - qt5-default
