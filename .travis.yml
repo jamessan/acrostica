@@ -1,0 +1,15 @@
+language: cpp
+
+sudo: false
+
+os:
+  - linux
+  - osx
+
+before_install:
+  - brew update
+  - brew install qt5 cmake
+
+script:
+  - mkdir build && cmake build
+  - make -C build
