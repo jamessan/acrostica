@@ -6,6 +6,8 @@
 #include <QLabel>
 #include <QPlainTextEdit>
 
+#include "ClueHighlighter.h"
+
 ClueWidget::ClueWidget(const QString& title, QWidget *parent)
   : QGroupBox(title, parent),
     clue(new QPlainTextEdit(this)), answer(new QPlainTextEdit(this))
@@ -17,4 +19,6 @@ ClueWidget::ClueWidget(const QString& title, QWidget *parent)
 
   clue->setPlaceholderText(tr("Clue..."));
   answer->setPlaceholderText(tr("Answer..."));
+
+  highlighter = new ClueHighlighter(answer->document());
 }

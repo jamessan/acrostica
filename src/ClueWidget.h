@@ -3,6 +3,7 @@
 
 #include <QGroupBox>
 
+class ClueHighlighter;
 class QLabel;
 class QPlainTextEdit;
 class QString;
@@ -17,6 +18,7 @@ public:
 
 private:
     QPlainTextEdit *clue, *answer;
+    ClueHighlighter *highlighter;
 };
 
 #endif
