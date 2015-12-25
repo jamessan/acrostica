@@ -18,7 +18,10 @@ ClueWidget::ClueWidget(const QString& title, QWidget *parent)
   setLayout(layout);
 
   clue->setPlaceholderText(tr("Clue..."));
+  clue->setTabChangesFocus(true);
+
   answer->setPlaceholderText(tr("Answer..."));
+  answer->setTabChangesFocus(true);
 
   highlighter = new ClueHighlighter(answer->document());
 }
