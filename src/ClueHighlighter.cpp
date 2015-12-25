@@ -14,7 +14,6 @@ void ClueHighlighter::highlightBlock(const QString& text)
 {
     QTextCharFormat myClassFormat;
     myClassFormat.setUnderlineStyle(QTextCharFormat::SingleUnderline);
-    myClassFormat.setFontFamily("Monospace");
     QString pattern = "\\b[A-Za-z]+\\b";
 
     QRegExp expression(pattern);
