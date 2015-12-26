@@ -7,7 +7,7 @@ class MissingLettersModel;
 class MissingLettersUI;
 class QAction;
 class QGroupBox;
-class QLabel;
+class QLineEdit;
 class QMenu;
 class QPlainTextEdit;
 class QWidget;
@@ -51,7 +51,7 @@ private:
     MissingLettersModel *missingMessageLetters;
 
     QGroupBox *downMessage;
-    QLabel *downText;
+    QLineEdit *downText;
 
     QGroupBox *clueList;
     QGroupBox *clueLetters;

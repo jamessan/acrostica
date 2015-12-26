@@ -1,5 +1,9 @@
 #include <QtWidgets>
 #include "mainwindow.h"
+
+#include <QRegExp>
+#include <QRegExpValidator>
+
 #include "MissingLettersModel.h"
 #include "MissingLettersUI.h"
 
@@ -66,9 +70,9 @@ void MainWindow::createWidgets()
 
     downMessage = new QGroupBox(tr("Down Message"));
 
-    downText = new QLabel;
-    downText->setTextFormat(Qt::PlainText);
-    downText->setTextInteractionFlags(Qt::NoTextInteraction);
+    downText = new QLineEdit(downMessage);
+    QValidator *alpha = new QRegExpValidator(QRegExp("[A-Za-z ]+"));
+    downText->setValidator(alpha);
 
     clueList = new QGroupBox(tr("Clues"));
     clueLetters = new QGroupBox(tr("Letters Missing from Clues"));
@@ -95,6 +99,10 @@ void MainWindow::layoutWidgets()
     QVBoxLayout *clueLettersLayout = new QVBoxLayout;
     clueLettersLayout->addWidget(clueLettersView);
     clueLetters->setLayout(clueLettersLayout);
+
+    QVBoxLayout *down = new QVBoxLayout;
+    down->addWidget(downText);
+    downMessage->setLayout(down);
 
     QGridLayout *centralLayout = new QGridLayout;
     centralLayout->addWidget(message, 0, 0);
