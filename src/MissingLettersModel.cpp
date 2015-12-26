@@ -7,6 +7,14 @@
 #include <QVector>
 
 #include <algorithm>
+#include <cstring>
+
+#include "ClueWidget.h"
+
+namespace
+{
+  void getHashAndBody(QObject* obj, uint& hash, QString& body);
+}
 
 MissingLettersModel::MissingLettersModel(const QString& name, QWidget *parent)
   : QAbstractTableModel(parent), name_(name)
@@ -56,20 +64,22 @@ Qt::ItemFlags MissingLettersModel::flags(const QModelIndex& index) const
 
 void MissingLettersModel::addLetters()
 {
-  QPlainTextEdit *widget = qobject_cast<QPlainTextEdit*>(sender());
+  uint hash;
+  QString text;
 
-  uint hash = qHash(widget);
+  getHashAndBody(sender(), hash, text);
 
-  setLetters(hash, widget->toPlainText(), 1);
+  setLetters(hash, text, 1);
 }
 
 void MissingLettersModel::removeLetters()
 {
-  QPlainTextEdit *widget = qobject_cast<QPlainTextEdit*>(sender());
+  uint hash;
+  QString text;
 
-  uint hash = qHash(widget);
+  getHashAndBody(sender(), hash, text);
 
-  setLetters(hash, widget->toPlainText(), -1);
+  setLetters(hash, text, -1);
 }
 
 void MissingLettersModel::setLetters(uint hash, const QString& str, int sign)
@@ -112,5 +122,33 @@ void MissingLettersModel::setLetters(uint hash, const QString& str, int sign)
     letters_[i] = QString(std::max(added_[i] - removed_[i], 0), QChar(c));
     setData(index, letters_[i], Qt::DisplayRole);
     emit dataChanged(index, index, QVector<int>() << Qt::DisplayRole);
+  }
+}
+
+namespace
+{
+  void getHashAndBody(QObject *obj, uint& hash, QString& body)
+  {
+    const char* name = obj->metaObject()->className();
+
+    if (strcmp(name, "ClueWidget") == 0)
+    {
+      ClueWidget *widget = qobject_cast<ClueWidget*>(obj);
+
+      hash = qHash(widget);
+      body = widget->toPlainText();
+    }
+    else if (strcmp(name, "QPlainTextEdit") == 0)
+    {
+      QPlainTextEdit *widget = qobject_cast<QPlainTextEdit*>(obj);
+
+      hash = qHash(widget);
+      body = widget->toPlainText();
+    }
+    else
+    {
+      qDebug() << "Unknown class: " << name;
+      abort();
+    }
   }
 }
