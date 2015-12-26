@@ -14,11 +14,18 @@ class ClueWidget : public QGroupBox
   Q_OBJECT
 
 public:
-    ClueWidget(const QString& title, QWidget *parent = 0);
+  ClueWidget(const QString& title, QWidget *parent = 0);
+  QString toPlainText() const;
+
+signals:
+  void textChanged();
+
+private slots:
+  void proxyTextChanged();
 
 private:
-    QPlainTextEdit *clue, *answer;
-    ClueHighlighter *highlighter;
+  QPlainTextEdit *clue, *answer;
+  ClueHighlighter *highlighter;
 };
 
 #endif

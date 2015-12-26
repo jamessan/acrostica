@@ -24,4 +24,17 @@ ClueWidget::ClueWidget(const QString& title, QWidget *parent)
   answer->setTabChangesFocus(true);
 
   highlighter = new ClueHighlighter(answer->document());
+
+  connect(answer, SIGNAL(textChanged()),
+          this, SLOT(proxyTextChanged()));
+}
+
+QString ClueWidget::toPlainText() const
+{
+  return answer->toPlainText();
+}
+
+void ClueWidget::proxyTextChanged()
+{
+  emit textChanged();
 }
