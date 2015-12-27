@@ -3,7 +3,6 @@
 
 #include <QGroupBox>
 
-class ClueHighlighter;
 class QLabel;
 class QLineEdit;
 class QString;
@@ -24,7 +23,6 @@ private slots:
 
 private:
   QLineEdit *clue, *answer;
-  ClueHighlighter *highlighter;
 };
 
 #endif

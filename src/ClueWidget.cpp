@@ -6,8 +6,6 @@
 #include <QPlainTextEdit>
 #include <QVBoxLayout>
 
-#include "ClueHighlighter.h"
-
 ClueWidget::ClueWidget(const QString& title, QWidget *parent)
   : QGroupBox(title, parent),
     clue(new QLineEdit(this)), answer(new QLineEdit(this))
