@@ -11,8 +11,8 @@ ClueWidget::ClueWidget(const QString& title, QWidget *parent)
     clue(new QLineEdit(this)), answer(new QLineEdit(this))
 {
   QVBoxLayout *layout = new QVBoxLayout;
-  layout->addWidget(clue, 0, 0);
-  layout->addWidget(answer, 1, 0);
+  layout->addWidget(clue);
+  layout->addWidget(answer);
   setLayout(layout);
 
   clue->setPlaceholderText(tr("Clue..."));
