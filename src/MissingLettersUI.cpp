@@ -1,6 +1,8 @@
 #include <QtWidgets>
 #include "MissingLettersUI.h"
 
+#include <QHeaderView>
+
 MissingLettersUI::MissingLettersUI(QWidget *parent) : QTableView(parent)
 {
   // Remove distractions
@@ -8,8 +10,9 @@ MissingLettersUI::MissingLettersUI(QWidget *parent) : QTableView(parent)
   horizontalHeader()->setVisible(false);
   verticalHeader()->setVisible(false);
 
-  // Take up more space
+  // Adjust size of displayed widgets
   horizontalHeader()->setStretchLastSection(true);
+  horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
   // Disable editing
   setEditTriggers(QAbstractItemView::NoEditTriggers);

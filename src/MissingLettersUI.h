@@ -5,10 +5,10 @@
 
 class MissingLettersUI : public QTableView
 {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    MissingLettersUI(QWidget *parent = 0);
+  MissingLettersUI(QWidget *parent = 0);
 };
 
 #endif
