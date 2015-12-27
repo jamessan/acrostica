@@ -1,10 +1,10 @@
 #include <QtWidgets>
 #include "ClueWidget.h"
 
-#include <QGridLayout>
 #include <QGroupBox>
 #include <QLabel>
 #include <QPlainTextEdit>
+#include <QVBoxLayout>
 
 #include "ClueHighlighter.h"
 
@@ -12,7 +12,7 @@ ClueWidget::ClueWidget(const QString& title, QWidget *parent)
   : QGroupBox(title, parent),
     clue(new QPlainTextEdit(this)), answer(new QPlainTextEdit(this))
 {
-  QGridLayout *layout = new QGridLayout;
+  QVBoxLayout *layout = new QVBoxLayout;
   layout->addWidget(clue, 0, 0);
   layout->addWidget(answer, 1, 0);
   setLayout(layout);
