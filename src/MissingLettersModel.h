@@ -20,7 +20,9 @@ public:
 
 public slots:
     void addLetters();
+    void addLetters(const QString& str);
     void removeLetters();
+    void removeLetters(const QString& str);
 
 private:
     void setLetters(uint hash, const QString& str, int sign);

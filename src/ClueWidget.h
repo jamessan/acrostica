@@ -5,7 +5,7 @@
 
 class ClueHighlighter;
 class QLabel;
-class QPlainTextEdit;
+class QLineEdit;
 class QString;
 class QWidget;
 
@@ -15,16 +15,15 @@ class ClueWidget : public QGroupBox
 
 public:
   ClueWidget(const QString& title, QWidget *parent = 0);
-  QString toPlainText() const;
 
 signals:
-  void textChanged();
+  void textChanged(const QString& str);
 
 private slots:
-  void proxyTextChanged();
+  void proxyTextChanged(const QString &str);
 
 private:
-  QPlainTextEdit *clue, *answer;
+  QLineEdit *clue, *answer;
   ClueHighlighter *highlighter;
 };
 

@@ -72,10 +72,30 @@ void MissingLettersModel::addLetters()
   setLetters(hash, text, 1);
 }
 
+void MissingLettersModel::addLetters(const QString& str)
+{
+  uint hash;
+  QString text(str);
+
+  getHashAndBody(sender(), hash, text);
+
+  setLetters(hash, text, 1);
+}
+
 void MissingLettersModel::removeLetters()
 {
   uint hash;
   QString text;
+
+  getHashAndBody(sender(), hash, text);
+
+  setLetters(hash, text, -1);
+}
+
+void MissingLettersModel::removeLetters(const QString& str)
+{
+  uint hash;
+  QString text(str);
 
   getHashAndBody(sender(), hash, text);
 
@@ -136,7 +156,6 @@ namespace
       ClueWidget *widget = qobject_cast<ClueWidget*>(obj);
 
       hash = qHash(widget);
-      body = widget->toPlainText();
     }
     else if (strcmp(name, "QPlainTextEdit") == 0)
     {
