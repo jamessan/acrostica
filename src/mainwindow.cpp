@@ -3,6 +3,7 @@
 
 #include <QRegExp>
 #include <QRegExpValidator>
+#include <QSizePolicy>
 
 #include "MissingLettersModel.h"
 #include "MissingLettersUI.h"
@@ -75,6 +76,7 @@ void MainWindow::createWidgets()
     downText->setValidator(alpha);
 
     clueList = new QGroupBox(tr("Clues"));
+    clueList->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Maximum);
     clueLetters = new QGroupBox(tr("Letters Missing from Clues"));
     missingClueLetters = new MissingLettersModel("clue");
     clueLettersView = new MissingLettersUI(clueLetters);

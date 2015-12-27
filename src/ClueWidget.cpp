@@ -4,6 +4,7 @@
 #include <QGroupBox>
 #include <QLabel>
 #include <QPlainTextEdit>
+#include <QSizePolicy>
 #include <QVBoxLayout>
 
 ClueWidget::ClueWidget(const QString& title, QWidget *parent)
@@ -14,6 +15,7 @@ ClueWidget::ClueWidget(const QString& title, QWidget *parent)
   layout->addWidget(clue);
   layout->addWidget(answer);
   setLayout(layout);
+  setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Maximum);
 
   clue->setPlaceholderText(tr("Clue..."));
 
