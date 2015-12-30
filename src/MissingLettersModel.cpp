@@ -29,12 +29,12 @@ MissingLettersModel::MissingLettersModel(const QString& name, QWidget *parent)
 
 int MissingLettersModel::rowCount(const QModelIndex& parent) const
 {
-  return 13;
+  return 6;
 }
 
 int MissingLettersModel::columnCount(const QModelIndex& parent) const
 {
-  return 2;
+  return 5;
 }
 
 QVariant MissingLettersModel::data(const QModelIndex& index, int role) const
@@ -48,7 +48,7 @@ QVariant MissingLettersModel::data(const QModelIndex& index, int role) const
   if (role != Qt::DisplayRole)
     return QVariant();
 
-  return letters_[index.row() + index.column() * rowCount()];
+  return letters_[index.row() * columnCount() + index.column()];
 }
 
 QVariant MissingLettersModel::headerData(int section, Qt::Orientation orientation,
@@ -130,7 +130,7 @@ void MissingLettersModel::setLetters(uint hash, const QString& str, int sign)
     char c = it.key();
     int i = c - 'A';
     int count = it.value();
-    QModelIndex index = this->index(i % 13, i / 13);
+    QModelIndex index = this->index(i / columnCount(), i % columnCount());
     if (sign > 0)
     {
       added_[i] = std::max(added_[i] + count, 0);
