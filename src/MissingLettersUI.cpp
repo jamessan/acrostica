@@ -11,7 +11,6 @@ MissingLettersUI::MissingLettersUI(QWidget *parent) : QTableView(parent)
   verticalHeader()->setVisible(false);
 
   // Adjust size of displayed widgets
-  horizontalHeader()->setStretchLastSection(true);
   horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
   // Disable editing
