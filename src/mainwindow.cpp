@@ -1,10 +1,12 @@
 #include <QtWidgets>
 #include "mainwindow.h"
 
+#include <QPalette>
 #include <QRegExp>
 #include <QRegExpValidator>
 #include <QSizePolicy>
 
+#include "ClueWidget.h"
 #include "MissingLettersModel.h"
 #include "MissingLettersUI.h"
 
@@ -77,8 +79,15 @@ void MainWindow::createWidgets()
     QValidator *alpha = new QRegExpValidator(QRegExp("[A-Za-z ]+"));
     downText->setValidator(alpha);
 
-    clueList = new QGroupBox(tr("Clues"));
-    clueList->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Maximum);
+    connect(downText, SIGNAL(editingFinished()),
+            this, SLOT(createClues()));
+
+    scroller = new QScrollArea();
+    clueBox = new QGroupBox(tr("Clues"), scroller);
+    clueBox->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Maximum);
+    scroller->setWidget(clueBox);
+    scroller->setWidgetResizable(true);
+
     clueLetters = new QGroupBox(tr("Letters Missing from Clues"));
     missingClueLetters = new MissingLettersModel("clue");
     clueLettersView = new MissingLettersUI(clueLetters);
@@ -88,6 +97,29 @@ void MainWindow::createWidgets()
             missingMessageLetters, SLOT(removeLetters()));
     connect(messageText, SIGNAL(textChanged()),
             missingClueLetters, SLOT(addLetters()));
+}
+
+void MainWindow::createClues()
+{
+    QLineEdit *widget = qobject_cast<QLineEdit*>(sender());
+    int n = 0;
+
+    for (auto c : widget->text().toUpper().toLatin1())
+    {
+        if (::isalpha(c))
+        {
+            clueList.push_back(new ClueWidget(QString('A' + n), clueBox));
+            clueBox->layout()->addWidget(clueList[n]);
+            n++;
+        }
+    }
+    widget->setReadOnly(true);
+    QPalette newPalette = widget->palette();
+    newPalette.setCurrentColorGroup(QPalette::Inactive);
+    newPalette.setColor(QPalette::Base, Qt::lightGray);
+    newPalette.setColor(QPalette::Text, Qt::black);
+    widget->setPalette(newPalette);
+    messageText->setFocus();
 }
 
 void MainWindow::layoutWidgets()
@@ -108,11 +140,14 @@ void MainWindow::layoutWidgets()
     down->addWidget(downText);
     downMessage->setLayout(down);
 
+    QVBoxLayout *stubList = new QVBoxLayout;
+    clueBox->setLayout(stubList);
+
     QGridLayout *centralLayout = new QGridLayout;
     centralLayout->addWidget(message, 0, 0);
     centralLayout->addWidget(messageLetters, 0, 1);
     centralLayout->addWidget(downMessage, 1, 0, 1, 2);
-    centralLayout->addWidget(clueList, 2, 0);
+    centralLayout->addWidget(scroller, 2, 0);
     centralLayout->addWidget(clueLetters, 2, 1);
     centralWidget->setLayout(centralLayout);
 }

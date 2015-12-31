@@ -1,8 +1,10 @@
 #ifndef ACROSTICA_MAINWINDOW_H
 #define ACROSTICA_MAINWINDOW_H
 
+#include <QList>
 #include <QMainWindow>
 
+class ClueWidget;
 class MissingLettersModel;
 class MissingLettersUI;
 class QAction;
@@ -10,6 +12,7 @@ class QGroupBox;
 class QLineEdit;
 class QMenu;
 class QPlainTextEdit;
+class QScrollArea;
 class QWidget;
 
 class MainWindow : public QMainWindow
@@ -27,6 +30,8 @@ private slots:
     void open();
     bool save();
     void print();
+
+    void createClues();
 
 private:
     void createActions();
@@ -53,7 +58,10 @@ private:
     QGroupBox *downMessage;
     QLineEdit *downText;
 
-    QGroupBox *clueList;
+    QScrollArea *scroller;
+    QGroupBox *clueBox;
+    QList<ClueWidget*> clueList;
+
     QGroupBox *clueLetters;
     MissingLettersUI *clueLettersView;
     MissingLettersModel *missingClueLetters;
