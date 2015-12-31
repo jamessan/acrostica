@@ -140,8 +140,8 @@ void MainWindow::layoutWidgets()
     down->addWidget(downText);
     downMessage->setLayout(down);
 
-    QVBoxLayout *stubList = new QVBoxLayout;
-    clueBox->setLayout(stubList);
+    QVBoxLayout *clueLayout = new QVBoxLayout;
+    clueBox->setLayout(clueLayout);
 
     QGridLayout *centralLayout = new QGridLayout;
     centralLayout->addWidget(message, 0, 0);
