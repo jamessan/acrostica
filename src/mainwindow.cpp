@@ -18,6 +18,8 @@ MainWindow::MainWindow(QWidget *parent) :
     createMenus();
     createWidgets();
     layoutWidgets();
+
+    downText->setFocus();
 }
 
 void MainWindow::createActions()
