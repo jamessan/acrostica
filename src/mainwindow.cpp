@@ -128,15 +128,21 @@ void MainWindow::createClues()
     {
       clueList.push_back(new ClueWidget(c, QString('A' + n), clueBox));
       clueBox->layout()->addWidget(clueList[n]);
+      connect(clueList[n], SIGNAL(textChanged(const QString&)),
+              missingClueLetters, SLOT(removeLetters(const QString&)));
+      connect(clueList[n], SIGNAL(textChanged(const QString&)),
+              missingMessageLetters, SLOT(addLetters(const QString&)));
       n++;
     }
   }
   widget->setReadOnly(true);
+
   QPalette newPalette = widget->palette();
   newPalette.setCurrentColorGroup(QPalette::Inactive);
   newPalette.setColor(QPalette::Base, Qt::lightGray);
   newPalette.setColor(QPalette::Text, Qt::black);
   widget->setPalette(newPalette);
+
   messageText->setFocus();
 }
 
