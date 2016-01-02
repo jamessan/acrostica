@@ -17,54 +17,54 @@ class QWidget;
 
 class MainWindow : public QMainWindow
 {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
+  explicit MainWindow(QWidget *parent = 0);
 
 protected:
-    void closeEvent(QCloseEvent *event) Q_DECL_OVERRIDE;
+  void closeEvent(QCloseEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
-    void newAcrostic();
-    void open();
-    bool save();
-    void print();
+  void newAcrostic();
+  void open();
+  bool save();
+  void print();
 
-    void createClues();
+  void createClues();
 
 private:
-    void createActions();
-    void createMenus();
-    void createWidgets();
-    void layoutWidgets();
+  void createActions();
+  void createMenus();
+  void createWidgets();
+  void layoutWidgets();
 
-    QMenu *fileMenu;
+  QMenu *fileMenu;
 
-    QAction *newAction;
-    QAction *openAction;
-    QAction *saveAction;
-    QAction *printAction;
-    QAction *exitAction;
+  QAction *newAction;
+  QAction *openAction;
+  QAction *saveAction;
+  QAction *printAction;
+  QAction *exitAction;
 
-    QWidget *centralWidget;
+  QWidget *centralWidget;
 
-    QGroupBox *message;
-    QPlainTextEdit *messageText;
-    QGroupBox *messageLetters;
-    MissingLettersUI *messageLettersView;
-    MissingLettersModel *missingMessageLetters;
+  QGroupBox *message;
+  QPlainTextEdit *messageText;
+  QGroupBox *messageLetters;
+  MissingLettersUI *messageLettersView;
+  MissingLettersModel *missingMessageLetters;
 
-    QGroupBox *downMessage;
-    QLineEdit *downText;
+  QGroupBox *downMessage;
+  QLineEdit *downText;
 
-    QScrollArea *scroller;
-    QGroupBox *clueBox;
-    QList<ClueWidget*> clueList;
+  QScrollArea *scroller;
+  QGroupBox *clueBox;
+  QList<ClueWidget*> clueList;
 
-    QGroupBox *clueLetters;
-    MissingLettersUI *clueLettersView;
-    MissingLettersModel *missingClueLetters;
+  QGroupBox *clueLetters;
+  MissingLettersUI *clueLettersView;
+  MissingLettersModel *missingClueLetters;
 };
 
 #endif // ACROSTICA_H

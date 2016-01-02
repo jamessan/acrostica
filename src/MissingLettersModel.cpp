@@ -16,8 +16,8 @@ namespace
   void getHashAndBody(QObject* obj, uint& hash, QString& body);
 }
 
-MissingLettersModel::MissingLettersModel(const QString& name, QWidget *parent)
-  : QAbstractTableModel(parent), name_(name)
+MissingLettersModel::MissingLettersModel(const QString& name, QWidget *parent) :
+  QAbstractTableModel(parent), name_(name)
 {
   for (int i = rowCount() * columnCount(); i > 0; i--)
   {

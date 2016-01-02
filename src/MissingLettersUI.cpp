@@ -3,7 +3,8 @@
 
 #include <QHeaderView>
 
-MissingLettersUI::MissingLettersUI(QWidget *parent) : QTableView(parent)
+MissingLettersUI::MissingLettersUI(QWidget *parent) :
+  QTableView(parent)
 {
   // Remove distractions
   setShowGrid(false);

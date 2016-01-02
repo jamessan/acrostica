@@ -7,9 +7,10 @@
 #include <QSizePolicy>
 #include <QVBoxLayout>
 
-ClueWidget::ClueWidget(const QString& title, QWidget *parent)
-  : QGroupBox(title, parent),
-    clue(new QLineEdit(this)), answer(new QLineEdit(this))
+ClueWidget::ClueWidget(const QString& title, QWidget *parent) :
+  QGroupBox(title, parent),
+  clue(new QLineEdit(this)),
+  answer(new QLineEdit(this))
 {
   QVBoxLayout *layout = new QVBoxLayout;
   layout->addWidget(clue);
