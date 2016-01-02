@@ -50,11 +50,6 @@ ClueWidget::ClueWidget(char initialLetter, const QString& title, QWidget *parent
 
   initialLetter_->setTextFormat(Qt::PlainText);
   initialLetter_->setFrameShape(QFrame::Box);
-  QPalette newPalette = initialLetter_->palette();
-  newPalette.setCurrentColorGroup(QPalette::Inactive);
-  newPalette.setColor(QPalette::Base, Qt::lightGray);
-  newPalette.setColor(QPalette::Text, Qt::black);
-  initialLetter_->setPalette(newPalette);
 
   connect(answer_, SIGNAL(textChanged(const QString&)),
           this, SLOT(proxyTextChanged(const QString&)));
