@@ -126,7 +126,7 @@ void MainWindow::createClues()
   {
     if (::isalpha(c))
     {
-      clueList.push_back(new ClueWidget(QString('A' + n), clueBox));
+      clueList.push_back(new ClueWidget(c, QString('A' + n), clueBox));
       clueBox->layout()->addWidget(clueList[n]);
       n++;
     }

@@ -19,28 +19,44 @@
 #include <QtWidgets>
 #include "ClueWidget.h"
 
+#include <QFrame>
 #include <QGroupBox>
+#include <QHBoxLayout>
 #include <QLabel>
+#include <QPalette>
 #include <QPlainTextEdit>
 #include <QSizePolicy>
+#include <QString>
 #include <QVBoxLayout>
 
-ClueWidget::ClueWidget(const QString& title, QWidget *parent) :
+ClueWidget::ClueWidget(char initialLetter, const QString& title, QWidget *parent) :
   QGroupBox(title, parent),
-  clue(new QLineEdit(this)),
-  answer(new QLineEdit(this))
+  clue_(new QLineEdit(this)),
+  answer_(new QLineEdit(this)),
+  initialLetter_(new QLabel(QString(initialLetter), this))
 {
-  QVBoxLayout *layout = new QVBoxLayout;
-  layout->addWidget(clue);
-  layout->addWidget(answer);
-  setLayout(layout);
+  QVBoxLayout *vlayout = new QVBoxLayout;
+  QHBoxLayout *hlayout = new QHBoxLayout;
+  vlayout->addWidget(clue_);
+  hlayout->addWidget(initialLetter_);
+  hlayout->addWidget(answer_);
+  vlayout->addLayout(hlayout);
+  setLayout(vlayout);
   setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Maximum);
 
-  clue->setPlaceholderText(tr("Clue..."));
+  clue_->setPlaceholderText(tr("Clue..."));
 
-  answer->setPlaceholderText(tr("Answer..."));
+  answer_->setPlaceholderText(tr("Answer..."));
 
-  connect(answer, SIGNAL(textChanged(const QString&)),
+  initialLetter_->setTextFormat(Qt::PlainText);
+  initialLetter_->setFrameShape(QFrame::Box);
+  QPalette newPalette = initialLetter_->palette();
+  newPalette.setCurrentColorGroup(QPalette::Inactive);
+  newPalette.setColor(QPalette::Base, Qt::lightGray);
+  newPalette.setColor(QPalette::Text, Qt::black);
+  initialLetter_->setPalette(newPalette);
+
+  connect(answer_, SIGNAL(textChanged(const QString&)),
           this, SLOT(proxyTextChanged(const QString&)));
 }
 

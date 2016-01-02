@@ -31,7 +31,7 @@ class ClueWidget : public QGroupBox
   Q_OBJECT
 
 public:
-  ClueWidget(const QString& title, QWidget *parent = 0);
+  ClueWidget(char initialLetter, const QString& title, QWidget *parent = 0);
 
 signals:
   void textChanged(const QString& str);
@@ -40,7 +40,8 @@ private slots:
   void proxyTextChanged(const QString &str);
 
 private:
-  QLineEdit *clue, *answer;
+  QLineEdit *clue_, *answer_;
+  QLabel *initialLetter_;
 };
 
 #endif
