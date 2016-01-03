@@ -36,12 +36,17 @@ public:
 signals:
   void textChanged(const QString& str);
 
+protected:
+  void timerEvent(QTimerEvent *event);
+
 private slots:
   void proxyTextChanged(const QString &str);
 
 private:
   QLineEdit *clue_, *answer_;
-  QLabel *initialLetter_;
+  QString initialLetter_;
+  QLabel *initialLabel_;
+  QString fullAnswer_;
 };
 
 #endif

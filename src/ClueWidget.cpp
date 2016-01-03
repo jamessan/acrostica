@@ -33,12 +33,13 @@ ClueWidget::ClueWidget(char initialLetter, const QString& title, QWidget *parent
   QGroupBox(title, parent),
   clue_(new QLineEdit(this)),
   answer_(new QLineEdit(this)),
-  initialLetter_(new QLabel(QString(initialLetter), this))
+  initialLetter_(initialLetter),
+  initialLabel_(new QLabel(initialLetter_, this))
 {
   QVBoxLayout *vlayout = new QVBoxLayout;
   QHBoxLayout *hlayout = new QHBoxLayout;
   vlayout->addWidget(clue_);
-  hlayout->addWidget(initialLetter_);
+  hlayout->addWidget(initialLabel_);
   hlayout->addWidget(answer_);
   vlayout->addLayout(hlayout);
   setLayout(vlayout);
@@ -48,14 +49,27 @@ ClueWidget::ClueWidget(char initialLetter, const QString& title, QWidget *parent
 
   answer_->setPlaceholderText(tr("Answer..."));
 
-  initialLetter_->setTextFormat(Qt::PlainText);
-  initialLetter_->setFrameShape(QFrame::Box);
+  initialLabel_->setTextFormat(Qt::PlainText);
+  initialLabel_->setFrameShape(QFrame::Box);
 
   connect(answer_, SIGNAL(textChanged(const QString&)),
           this, SLOT(proxyTextChanged(const QString&)));
+
+  startTimer(10);
+}
+
+void ClueWidget::timerEvent(QTimerEvent *event)
+{
+  if (receivers(SIGNAL(textChanged(const QString&))) > 0)
+  {
+    killTimer(event->timerId());
+    fullAnswer_ = initialLetter_ + answer_->text();
+    emit textChanged(fullAnswer_);
+  }
 }
 
 void ClueWidget::proxyTextChanged(const QString& str)
 {
-  emit textChanged(str);
+  fullAnswer_ = initialLetter_ + str;
+  emit textChanged(fullAnswer_);
 }
