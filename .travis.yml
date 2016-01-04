@@ -32,7 +32,9 @@ deploy:
   provider: releases
   api_key:
     secure: SSwEeuT6tjCSPGPmbJxmtBHDWOsNhXzj4t0/3kyqRSWmtEHbRcDh/VVPpyore1JxPY7Kc/OD94JdwojMAZgrMeJfVWjWvBxwo5yzFGpFT3Qi8MEop5/WndyIfIOxK4ccDC+0t9Y8ujKGaL7njatewDDTU98ReXzVzFcrglbeD78=
-  file: build/acrostica-*-Darwin*
+  file:
+    - build/acrostica-1.0.0-Darwin.dmg
+    - build/acrostica-1.0.0-Darwin.tar.gz
   on:
     repo: jamessan/acrostica
     tags: true
