@@ -12,3 +12,4 @@ mkdir build
   fi
 )
 make -C build
+make -C build package
