@@ -23,13 +23,15 @@ before_install:
 cache: ccache
 
 script:
-  - ./travis.sh
+  - "./travis.sh"
 
 before_deploy:
   - make -C build package
 
 deploy:
   provider: releases
-  api_key: "gQz+KbddwbnLgXsOiz7RCxRrQpRyWlXYHwrwC+hu62hFxfGMvN8Keg8bjdzLPKa03fS/zyaeGTCk8+fpVdyacA0NM0pyG/TAceogvaA8Tc92WbqYF0C/cgp2iHGjqG9XZ6dDH70eaHdCB75DBjJ4oHg0v4BG2V0+owk9prmn1Zk="
-  file: "build/acrostica-*-Darwin*"
-  skip_cleanup: true
+  api_key:
+    secure: SSwEeuT6tjCSPGPmbJxmtBHDWOsNhXzj4t0/3kyqRSWmtEHbRcDh/VVPpyore1JxPY7Kc/OD94JdwojMAZgrMeJfVWjWvBxwo5yzFGpFT3Qi8MEop5/WndyIfIOxK4ccDC+0t9Y8ujKGaL7njatewDDTU98ReXzVzFcrglbeD78=
+  file: build/acrostica-*-Darwin*
+  on:
+    repo: jamessan/acrostica
