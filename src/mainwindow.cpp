@@ -29,7 +29,8 @@
 #include "MissingLettersUI.h"
 
 MainWindow::MainWindow(QWidget *parent) :
-  QMainWindow(parent)
+  QMainWindow(parent),
+  alphaValidation(QRegExp("[A-Za-z ]+"))
 {
   centralWidget = new QWidget;
   setCentralWidget(centralWidget);
@@ -40,6 +41,12 @@ MainWindow::MainWindow(QWidget *parent) :
   layoutWidgets();
 
   downText->setFocus();
+}
+
+MainWindow::~MainWindow()
+{
+  delete missingMessageLetters;
+  delete missingClueLetters;
 }
 
 void MainWindow::createActions()
@@ -94,8 +101,7 @@ void MainWindow::createWidgets()
   downMessage = new QGroupBox(tr("Down Message"));
 
   downText = new QLineEdit(downMessage);
-  QValidator *alpha = new QRegExpValidator(QRegExp("[A-Za-z ]+"));
-  downText->setValidator(alpha);
+  downText->setValidator(&alphaValidation);
 
   connect(downText, SIGNAL(editingFinished()),
           this, SLOT(createClues()));

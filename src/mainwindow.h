@@ -21,6 +21,7 @@
 
 #include <QList>
 #include <QMainWindow>
+#include <QRegExpValidator>
 
 class ClueWidget;
 class MissingLettersModel;
@@ -39,6 +40,7 @@ class MainWindow : public QMainWindow
 
 public:
   explicit MainWindow(QWidget *parent = 0);
+  virtual ~MainWindow();
 
 protected:
   void closeEvent(QCloseEvent *event) Q_DECL_OVERRIDE;
@@ -75,6 +77,7 @@ private:
 
   QGroupBox *downMessage;
   QLineEdit *downText;
+  QRegExpValidator alphaValidation;
 
   QScrollArea *scroller;
   QGroupBox *clueBox;
