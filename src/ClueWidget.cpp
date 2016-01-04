@@ -55,7 +55,7 @@ ClueWidget::ClueWidget(char initialLetter, const QString& title, QWidget *parent
   connect(answer_, SIGNAL(textChanged(const QString&)),
           this, SLOT(proxyTextChanged(const QString&)));
 
-  startTimer(10);
+  startTimer(0);
 }
 
 void ClueWidget::timerEvent(QTimerEvent *event)
