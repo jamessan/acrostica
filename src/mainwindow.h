@@ -1,6 +1,6 @@
 /*
  * Acrostica - Simple acrostic creator
- * Copyright (C) 2014-2015 James McCoy <jamessan@jamessan.com>
+ * Copyright (C) 2014-2016 James McCoy <jamessan@jamessan.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,18 +21,24 @@
 
 #include <QList>
 #include <QMainWindow>
-#include <QRegExpValidator>
 
 class ClueWidget;
 class MissingLettersModel;
 class MissingLettersUI;
 class QAction;
 class QGroupBox;
-class QLineEdit;
 class QMenu;
 class QPlainTextEdit;
 class QScrollArea;
 class QWidget;
+
+namespace acrostica
+{
+  namespace widget
+  {
+    class downmsg;
+  }
+}
 
 class MainWindow : public QMainWindow
 {
@@ -75,9 +81,7 @@ private:
   MissingLettersUI *messageLettersView;
   MissingLettersModel *missingMessageLetters;
 
-  QGroupBox *downMessage;
-  QLineEdit *downText;
-  QRegExpValidator alphaValidation;
+  acrostica::widget::downmsg *downMessage;
 
   QScrollArea *scroller;
   QGroupBox *clueBox;

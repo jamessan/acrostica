@@ -1,6 +1,6 @@
 ###
 # Acrostica - Simple acrostic creator
-# Copyright (C) 2014-2015 James McCoy <jamessan@jamessan.com>
+# Copyright (C) 2014-2016 James McCoy <jamessan@jamessan.com>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,6 +17,8 @@
 ###
 
 file(GLOB_RECURSE SRC_FILES *.cpp)
+
+include_directories(widgets)
 
 add_executable(${CMAKE_PROJECT_NAME} WIN32
   ${SRC_FILES}

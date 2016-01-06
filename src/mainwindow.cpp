@@ -1,6 +1,6 @@
 /*
  * Acrostica - Simple acrostic creator
- * Copyright (C) 2014-2015 James McCoy <jamessan@jamessan.com>
+ * Copyright (C) 2014-2016 James McCoy <jamessan@jamessan.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,12 +25,12 @@
 #include <QSizePolicy>
 
 #include "ClueWidget.h"
+#include "DownMsg.h"
 #include "MissingLettersModel.h"
 #include "MissingLettersUI.h"
 
 MainWindow::MainWindow(QWidget *parent) :
-  QMainWindow(parent),
-  alphaValidation(QRegExp("[A-Za-z ]+"))
+  QMainWindow(parent)
 {
   centralWidget = new QWidget;
   setCentralWidget(centralWidget);
@@ -40,7 +40,7 @@ MainWindow::MainWindow(QWidget *parent) :
   createWidgets();
   layoutWidgets();
 
-  downText->setFocus();
+  downMessage->setFocus();
 }
 
 MainWindow::~MainWindow()
@@ -98,12 +98,9 @@ void MainWindow::createWidgets()
   messageLettersView = new MissingLettersUI(messageLetters);
   messageLettersView->setModel(missingMessageLetters);
 
-  downMessage = new QGroupBox(tr("Down Message"));
+  downMessage = new acrostica::widget::downmsg(this);
 
-  downText = new QLineEdit(downMessage);
-  downText->setValidator(&alphaValidation);
-
-  connect(downText, SIGNAL(editingFinished()),
+  connect(downMessage, SIGNAL(editingFinished()),
           this, SLOT(createClues()));
 
   scroller = new QScrollArea();
@@ -125,7 +122,7 @@ void MainWindow::createWidgets()
 
 void MainWindow::createClues()
 {
-  QLineEdit *widget = qobject_cast<QLineEdit*>(sender());
+  auto widget = qobject_cast<acrostica::widget::downmsg*>(sender());
   int n = 0;
 
   for (auto c : widget->text().toUpper().toLatin1())
@@ -141,13 +138,7 @@ void MainWindow::createClues()
       n++;
     }
   }
-  widget->setReadOnly(true);
-
-  QPalette newPalette = widget->palette();
-  newPalette.setCurrentColorGroup(QPalette::Inactive);
-  newPalette.setColor(QPalette::Base, Qt::lightGray);
-  newPalette.setColor(QPalette::Text, Qt::black);
-  widget->setPalette(newPalette);
+  widget->toggleState();
 
   messageText->setFocus();
 }
@@ -165,10 +156,6 @@ void MainWindow::layoutWidgets()
   QVBoxLayout *clueLettersLayout = new QVBoxLayout;
   clueLettersLayout->addWidget(clueLettersView);
   clueLetters->setLayout(clueLettersLayout);
-
-  QVBoxLayout *down = new QVBoxLayout;
-  down->addWidget(downText);
-  downMessage->setLayout(down);
 
   QVBoxLayout *clueLayout = new QVBoxLayout;
   clueBox->setLayout(clueLayout);
