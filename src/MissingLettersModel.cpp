@@ -1,6 +1,6 @@
 /*
  * Acrostica - Simple acrostic creator
- * Copyright (C) 2014-2015 James McCoy <jamessan@jamessan.com>
+ * Copyright (C) 2014-2016 James McCoy <jamessan@jamessan.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,7 +25,6 @@
 #include <QVector>
 
 #include <algorithm>
-#include <cstring>
 
 #include "ClueWidget.h"
 
@@ -37,6 +36,7 @@ namespace
 MissingLettersModel::MissingLettersModel(const QString& name, QWidget *parent) :
   QAbstractTableModel(parent), name_(name)
 {
+  // XXX Fix handling of the non-ASCII QChars
   for (int i = rowCount() * columnCount(); i > 0; i--)
   {
     added_ << 0;
@@ -125,19 +125,19 @@ void MissingLettersModel::setLetters(uint hash, const QString& str, int sign)
   QString oldval = cache_.value(hash);
   QString newval = cache_[hash] = str.toUpper();
 
-  QMap<char, int> delta;
+  QMap<QChar, int> delta;
 
-  for (auto c : oldval.toLatin1())
+  for (auto c : oldval)
   {
-    if (::isalpha(c))
+    if (c.isLetter())
     {
       delta[c]--;
     }
   }
 
-  for (auto c : newval.toLatin1())
+  for (auto c : newval)
   {
-    if (::isalpha(c))
+    if (c.isLetter())
     {
       delta[c]++;
     }
@@ -145,8 +145,8 @@ void MissingLettersModel::setLetters(uint hash, const QString& str, int sign)
 
   for (auto it = delta.begin(); it != delta.end(); ++it)
   {
-    char c = it.key();
-    int i = c - 'A';
+    QChar c = it.key();
+    int i = c.unicode() - 'A';
     int count = it.value();
     QModelIndex index = this->index(i / columnCount(), i % columnCount());
     if (sign > 0)
