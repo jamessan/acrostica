@@ -1,6 +1,6 @@
 /*
  * Acrostica - Simple acrostic creator
- * Copyright (C) 2014-2015 James McCoy <jamessan@jamessan.com>
+ * Copyright (C) 2014-2016 James McCoy <jamessan@jamessan.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,13 +36,12 @@ ClueWidget::ClueWidget(char initialLetter, const QString& title, QWidget *parent
   initialLetter_(initialLetter),
   initialLabel_(new QLabel(initialLetter_, this))
 {
-  QVBoxLayout *vlayout = new QVBoxLayout;
-  QHBoxLayout *hlayout = new QHBoxLayout;
-  vlayout->addWidget(clue_);
+  setLayout(new QVBoxLayout);
+  QHBoxLayout *hlayout = new QHBoxLayout(layout());
   hlayout->addWidget(initialLabel_);
   hlayout->addWidget(answer_);
-  vlayout->addLayout(hlayout);
-  setLayout(vlayout);
+  layout()->addWidget(clue_);
+  layout()->addWidget(answer_);
   setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Maximum);
 
   clue_->setPlaceholderText(tr("Clue..."));

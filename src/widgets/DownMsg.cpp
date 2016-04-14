@@ -34,9 +34,8 @@ namespace acrostica
     {
       msg->setValidator(&alphaValidation);
 
-      QVBoxLayout *layout = new QVBoxLayout;
-      layout->addWidget(msg);
-      setLayout(layout);
+      setLayout(new QVBoxLayout);
+      layout()->addWidget(msg);
 
       connect(msg, SIGNAL(editingFinished()),
               this, SLOT(proxyEditingFinished()));

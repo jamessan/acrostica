@@ -145,28 +145,23 @@ void MainWindow::createClues()
 
 void MainWindow::layoutWidgets()
 {
-  QVBoxLayout *messageLayout = new QVBoxLayout;
+  QVBoxLayout *messageLayout = new QVBoxLayout(message);
   messageLayout->addWidget(messageText);
-  message->setLayout(messageLayout);
 
-  QVBoxLayout *messageLettersLayout = new QVBoxLayout;
+  QVBoxLayout *messageLettersLayout = new QVBoxLayout(messageLetters);
   messageLettersLayout->addWidget(messageLettersView);
-  messageLetters->setLayout(messageLettersLayout);
 
-  QVBoxLayout *clueLettersLayout = new QVBoxLayout;
+  QVBoxLayout *clueLettersLayout = new QVBoxLayout(clueLetters);
   clueLettersLayout->addWidget(clueLettersView);
-  clueLetters->setLayout(clueLettersLayout);
 
-  QVBoxLayout *clueLayout = new QVBoxLayout;
-  clueBox->setLayout(clueLayout);
+  QVBoxLayout *clueLayout = new QVBoxLayout(clueBox);
 
-  QGridLayout *centralLayout = new QGridLayout;
+  QGridLayout *centralLayout = new QGridLayout(centralWidget);
   centralLayout->addWidget(message, 0, 0);
   centralLayout->addWidget(messageLetters, 0, 1);
   centralLayout->addWidget(downMessage, 1, 0, 1, 2);
   centralLayout->addWidget(scroller, 2, 0);
   centralLayout->addWidget(clueLetters, 2, 1);
-  centralWidget->setLayout(centralLayout);
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
