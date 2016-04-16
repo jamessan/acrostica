@@ -19,27 +19,18 @@
 #include <QtWidgets>
 #include "ClueWidget.h"
 
-#include <QFrame>
 #include <QGroupBox>
-#include <QHBoxLayout>
-#include <QLabel>
-#include <QPalette>
-#include <QPlainTextEdit>
+#include <QLineEdit>
 #include <QSizePolicy>
 #include <QString>
 #include <QVBoxLayout>
 
-ClueWidget::ClueWidget(char initialLetter, const QString& title, QWidget *parent) :
+ClueWidget::ClueWidget(const QString& answer, const QString& title, QWidget *parent) :
   QGroupBox(title, parent),
   clue_(new QLineEdit(this)),
-  answer_(new QLineEdit(this)),
-  initialLetter_(initialLetter),
-  initialLabel_(new QLabel(initialLetter_, this))
+  answer_(new QLineEdit(answer, this))
 {
   setLayout(new QVBoxLayout);
-  QHBoxLayout *hlayout = new QHBoxLayout(layout());
-  hlayout->addWidget(initialLabel_);
-  hlayout->addWidget(answer_);
   layout()->addWidget(clue_);
   layout()->addWidget(answer_);
   setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Maximum);
@@ -47,9 +38,6 @@ ClueWidget::ClueWidget(char initialLetter, const QString& title, QWidget *parent
   clue_->setPlaceholderText(tr("Clue..."));
 
   answer_->setPlaceholderText(tr("Answer..."));
-
-  initialLabel_->setTextFormat(Qt::PlainText);
-  initialLabel_->setFrameShape(QFrame::Box);
 
   connect(answer_, SIGNAL(textChanged(const QString&)),
           this, SLOT(proxyTextChanged(const QString&)));
@@ -62,13 +50,21 @@ void ClueWidget::timerEvent(QTimerEvent *event)
   if (receivers(SIGNAL(textChanged(const QString&))) > 0)
   {
     killTimer(event->timerId());
-    fullAnswer_ = initialLetter_ + answer_->text();
-    emit textChanged(fullAnswer_);
+    emit textChanged(answer_->text());
   }
 }
 
 void ClueWidget::proxyTextChanged(const QString& str)
 {
-  fullAnswer_ = initialLetter_ + str;
-  emit textChanged(fullAnswer_);
+  emit textChanged(str);
+}
+
+QString ClueWidget::answer() const
+{
+  return answer_->text();
+}
+
+void ClueWidget::setAnswer(const QString &str)
+{
+  answer_->setText(str);
 }

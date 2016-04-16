@@ -57,7 +57,7 @@ private slots:
   bool save();
   void print();
 
-  void createClues();
+  void setClues();
 
 private:
   void createActions();

@@ -1,6 +1,6 @@
 /*
  * Acrostica - Simple acrostic creator
- * Copyright (C) 2014-2015 James McCoy <jamessan@jamessan.com>
+ * Copyright (C) 2014-2016 James McCoy <jamessan@jamessan.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,9 +21,9 @@
 
 #include <QGroupBox>
 
-class QLabel;
 class QLineEdit;
 class QString;
+class QTimerEvent;
 class QWidget;
 
 class ClueWidget : public QGroupBox
@@ -31,7 +31,10 @@ class ClueWidget : public QGroupBox
   Q_OBJECT
 
 public:
-  ClueWidget(char initialLetter, const QString& title, QWidget *parent = 0);
+  ClueWidget(const QString& answer, const QString& title, QWidget *parent = 0);
+
+  QString answer() const;
+  void setAnswer(const QString& str);
 
 signals:
   void textChanged(const QString& str);
@@ -44,9 +47,6 @@ private slots:
 
 private:
   QLineEdit *clue_, *answer_;
-  QString initialLetter_;
-  QLabel *initialLabel_;
-  QString fullAnswer_;
 };
 
 #endif

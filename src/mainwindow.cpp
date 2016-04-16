@@ -20,8 +20,7 @@
 #include "mainwindow.h"
 
 #include <QPalette>
-#include <QRegExp>
-#include <QRegExpValidator>
+#include <QRegularExpression>
 #include <QSizePolicy>
 
 #include "ClueWidget.h"
@@ -101,7 +100,7 @@ void MainWindow::createWidgets()
   downMessage = new acrostica::widget::downmsg(this);
 
   connect(downMessage, SIGNAL(editingFinished()),
-          this, SLOT(createClues()));
+          this, SLOT(setClues()));
 
   scroller = new QScrollArea();
   clueBox = new QGroupBox(tr("Clues"), scroller);
@@ -120,22 +119,56 @@ void MainWindow::createWidgets()
           missingClueLetters, SLOT(addLetters()));
 }
 
-void MainWindow::createClues()
+void MainWindow::setClues()
 {
   auto widget = qobject_cast<acrostica::widget::downmsg*>(sender());
-  int n = 0;
 
-  for (auto c : widget->text().toUpper().toLatin1())
+  QString msg = widget->text();
+  msg.remove(QRegularExpression("\\P{L}"));
+
+  int clues = clueList.size();
+  int msglen = msg.length();
+  int clue;
+  int c;
+
+  for (clue = 0, c = 0; clue < clues && c < msglen; clue++, c++)
   {
-    if (::isalpha(c))
+    QString ans = clueList[clue]->answer();
+    if (msg[c].isLetter() && ans[0] != msg[c].toUpper())
     {
-      clueList.push_back(new ClueWidget(c, QString('A' + n), clueBox));
-      clueBox->layout()->addWidget(clueList[n]);
-      connect(clueList[n], SIGNAL(textChanged(const QString&)),
-              missingClueLetters, SLOT(removeLetters(const QString&)));
-      connect(clueList[n], SIGNAL(textChanged(const QString&)),
-              missingMessageLetters, SLOT(addLetters(const QString&)));
-      n++;
+      clueList[clue]->setAnswer(ans.replace(0, 1, msg[c].toUpper()));
+    }
+  }
+
+  if (c < msglen)
+  {
+    for (; c < msglen; c++)
+    {
+      if (msg[c].isLetter())
+      {
+        clueList.push_back(new ClueWidget(msg[c].toUpper(), QString('A' + c), clueBox));
+        clueBox->layout()->addWidget(clueList[clue]);
+        connect(clueList[clue], SIGNAL(textChanged(const QString&)),
+                missingClueLetters, SLOT(removeLetters(const QString&)));
+        connect(clueList[clue], SIGNAL(textChanged(const QString&)),
+                missingMessageLetters, SLOT(addLetters(const QString&)));
+        clue++;
+      }
+    }
+  }
+  else if (clue < clues)
+  {
+    while (clues > clue)
+    {
+      clues--;
+      clueList[clues]->setAnswer("");
+      clueBox->layout()->removeWidget(clueList[clues]);
+      disconnect(clueList[clues], SIGNAL(textChanged(const QString&)),
+                 missingMessageLetters, SLOT(addLetters(const QString&)));
+      disconnect(clueList[clues], SIGNAL(textChanged(const QString&)),
+                 missingClueLetters, SLOT(removeLetters(const QString&)));
+      clueList[clues]->close();
+      clueList.removeLast();
     }
   }
   widget->toggleState();
