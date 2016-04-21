@@ -46,22 +46,23 @@ namespace acrostica
       return msg->text();
     }
 
-    void downmsg::toggleState()
+    void downmsg::changeEvent(QEvent *event)
     {
-      if (msg->isReadOnly())
+      if (event->type() == QEvent::EnabledChange
+          && !isEnabled())
       {
-        msg->setReadOnly(false);
-      }
-      else
-      {
-        msg->setReadOnly(true);
-
         QPalette newPalette = msg->palette();
         newPalette.setCurrentColorGroup(QPalette::Inactive);
         newPalette.setColor(QPalette::Base, Qt::lightGray);
         newPalette.setColor(QPalette::Text, Qt::black);
         msg->setPalette(newPalette);
+        event->accept();
       }
+      else
+      {
+        event->ignore();
+      }
+      return;
     }
 
     void downmsg::setFocus()

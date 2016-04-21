@@ -23,6 +23,7 @@
 #include <QRegularExpressionValidator>
 #include <QString>
 
+class QEvent;
 class QLineEdit;
 
 namespace acrostica
@@ -36,7 +37,7 @@ namespace acrostica
     public:
       downmsg(QWidget *parent = 0);
       QString text() const;
-      void toggleState();
+      void changeEvent(QEvent *event);
 
     signals:
       void editingFinished();
