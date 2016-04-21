@@ -88,12 +88,12 @@ void MainWindow::createMenus()
 
 void MainWindow::createWidgets()
 {
-  message = new QGroupBox(tr("Message"));
-  messageText = new QPlainTextEdit;
+  message = new QGroupBox(tr("Message"), this);
+  messageText = new QPlainTextEdit(this);
   messageText->setTabChangesFocus(true);
 
-  messageLetters = new QGroupBox(tr("Letters Missing from Message"));
-  missingMessageLetters = new MissingLettersModel("message");
+  messageLetters = new QGroupBox(tr("Letters Missing from Message"), this);
+  missingMessageLetters = new MissingLettersModel("message", this);
   messageLettersView = new MissingLettersUI(messageLetters);
   messageLettersView->setModel(missingMessageLetters);
 
@@ -102,14 +102,14 @@ void MainWindow::createWidgets()
   connect(downMessage, SIGNAL(editingFinished()),
           this, SLOT(setClues()));
 
-  scroller = new QScrollArea();
+  scroller = new QScrollArea(this);
   clueBox = new QGroupBox(tr("Clues"), scroller);
   clueBox->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Maximum);
   scroller->setWidget(clueBox);
   scroller->setWidgetResizable(true);
 
-  clueLetters = new QGroupBox(tr("Letters Missing from Clues"));
-  missingClueLetters = new MissingLettersModel("clue");
+  clueLetters = new QGroupBox(tr("Letters Missing from Clues"), this);
+  missingClueLetters = new MissingLettersModel("clue", this);
   clueLettersView = new MissingLettersUI(clueLetters);
   clueLettersView->setModel(missingClueLetters);
 
