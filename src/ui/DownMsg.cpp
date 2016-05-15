@@ -30,7 +30,7 @@ namespace acrostica
     downmsg::downmsg(QWidget *parent) :
       QGroupBox(tr("Down Message"), parent),
       msg(new QLineEdit(this)),
-      alphaValidation(QRegularExpression("[\\p{L} ]+"))
+      alphaValidation(QRegularExpression("\\p{L}+"))
     {
       msg->setValidator(&alphaValidation);
 

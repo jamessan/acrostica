@@ -20,7 +20,6 @@
 #include "mainwindow.h"
 
 #include <QPalette>
-#include <QRegularExpression>
 #include <QSizePolicy>
 
 #include "ClueWidget.h"
@@ -124,7 +123,6 @@ void MainWindow::setClues()
   auto widget = qobject_cast<acrostica::ui::downmsg*>(sender());
 
   QString msg = widget->text();
-  msg.remove(QRegularExpression("\\P{L}"));
 
   int clues = clueList.size();
   int msglen = msg.length();
