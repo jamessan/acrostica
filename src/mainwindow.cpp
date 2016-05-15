@@ -169,7 +169,6 @@ void MainWindow::setClues()
       clueList.removeLast();
     }
   }
-  widget->setEnabled(false);
 
   messageText->setFocus();
 }
