@@ -34,7 +34,7 @@ class QWidget;
 
 namespace acrostica
 {
-  namespace widget
+  namespace ui
   {
     class downmsg;
   }
@@ -81,7 +81,7 @@ private:
   MissingLettersUI *messageLettersView;
   MissingLettersModel *missingMessageLetters;
 
-  acrostica::widget::downmsg *downMessage;
+  acrostica::ui::downmsg *downMessage;
 
   QScrollArea *scroller;
   QGroupBox *clueBox;

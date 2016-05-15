@@ -28,7 +28,7 @@ class QLineEdit;
 
 namespace acrostica
 {
-  namespace widget
+  namespace ui
   {
     class downmsg : public QGroupBox
     {

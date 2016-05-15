@@ -97,7 +97,7 @@ void MainWindow::createWidgets()
   messageLettersView = new MissingLettersUI(messageLetters);
   messageLettersView->setModel(missingMessageLetters);
 
-  downMessage = new acrostica::widget::downmsg(this);
+  downMessage = new acrostica::ui::downmsg(this);
 
   connect(downMessage, SIGNAL(editingFinished()),
           this, SLOT(setClues()));
@@ -121,7 +121,7 @@ void MainWindow::createWidgets()
 
 void MainWindow::setClues()
 {
-  auto widget = qobject_cast<acrostica::widget::downmsg*>(sender());
+  auto widget = qobject_cast<acrostica::ui::downmsg*>(sender());
 
   QString msg = widget->text();
   msg.remove(QRegularExpression("\\P{L}"));

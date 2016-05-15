@@ -18,7 +18,7 @@
 
 file(GLOB_RECURSE SRC_FILES *.cpp)
 
-include_directories(widgets)
+include_directories(ui)
 
 add_executable(${CMAKE_PROJECT_NAME} WIN32
   ${SRC_FILES}

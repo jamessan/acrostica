@@ -25,7 +25,7 @@
 
 namespace acrostica
 {
-  namespace widget
+  namespace ui
   {
     downmsg::downmsg(QWidget *parent) :
       QGroupBox(tr("Down Message"), parent),
