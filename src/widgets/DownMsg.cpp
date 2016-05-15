@@ -39,6 +39,8 @@ namespace acrostica
 
       connect(msg, SIGNAL(editingFinished()),
               this, SLOT(proxyEditingFinished()));
+      connect(msg, SIGNAL(textEdited(const QString&)),
+              this, SLOT(forceUpper(const QString&)));
     }
 
     QString downmsg::text() const
@@ -68,6 +70,11 @@ namespace acrostica
     void downmsg::setFocus()
     {
       msg->setFocus();
+    }
+
+    void downmsg::forceUpper(const QString& s)
+    {
+      msg->setText(s.toUpper());
     }
 
     void downmsg::proxyEditingFinished()

@@ -47,6 +47,7 @@ namespace acrostica
 
     private slots:
       void proxyEditingFinished();
+      void forceUpper(const QString &text);
 
     private:
       QLineEdit *msg;
