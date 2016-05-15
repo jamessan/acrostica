@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACROSTICA_WIDGET_DOWNMESSAGE_
-#define ACROSTICA_WIDGET_DOWNMESSAGE_
+#ifndef ACROSTICA_UI_DOWNMESSAGE_
+#define ACROSTICA_UI_DOWNMESSAGE_
 
 #include <QGroupBox>
 #include <QRegularExpressionValidator>
