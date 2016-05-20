@@ -17,7 +17,7 @@
  */
 
 #include <QtWidgets>
-#include "DownMsg.h"
+#include "ui/DownMsg.h"
 
 #include <QGroupBox>
 #include <QPalette>

@@ -23,7 +23,7 @@
 #include <QSizePolicy>
 
 #include "ClueWidget.h"
-#include "DownMsg.h"
+#include "ui/DownMsg.h"
 #include "MissingLettersModel.h"
 #include "MissingLettersUI.h"
 

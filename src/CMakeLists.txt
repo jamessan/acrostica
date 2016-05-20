@@ -16,9 +16,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ###
 
-file(GLOB_RECURSE SRC_FILES *.cpp)
-
-include_directories(ui)
+file(GLOB SRC_FILES
+  *.cpp
+  ui/*.cpp)
 
 add_executable(${CMAKE_PROJECT_NAME} WIN32
   ${SRC_FILES}
