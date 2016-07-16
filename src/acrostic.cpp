@@ -18,6 +18,8 @@
 
 #include "acrostic.h"
 
+#include <memory>
+
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QJsonValue>
@@ -26,7 +28,8 @@
 
 namespace acrostica
 {
-  acrostic::acrostic() : clues_(), message_()
+  acrostic::acrostic(QObject *parent)
+    : QAbstractListModel(parent), clues_(), message_()
   {}
 
   void acrostic::load(const QJsonObject &json)
@@ -38,8 +41,8 @@ namespace acrostica
     for (const QJsonValue &v : clues)
     {
       const QJsonObject obj = v.toObject();
-      clue c;
-      c.load(obj);
+      std::shared_ptr<clue> c(new clue(this));
+      c->load(obj);
       clues_ << c;
     }
   }
@@ -49,11 +52,38 @@ namespace acrostica
     json["message"] = message_;
 
     QJsonArray clues;
-    for (const clue &c : clues_)
+    for (const auto &c : clues_)
     {
       QJsonObject obj;
-      c.dump(obj);
+      c->dump(obj);
       clues.append(obj);
+    }
+  }
+
+  int acrostic::rowCount(const QModelIndex &parent) const
+  {
+    return clues_.count();
+  }
+
+  QVariant acrostic::data(const QModelIndex &index, int role) const
+  {
+    if (!index.isValid())
+    {
+      return QVariant();
+    }
+
+    if (index.row() >= clues_.size())
+    {
+      return QVariant();
+    }
+
+    if (role == Qt::DisplayRole)
+    {
+      return QVariant::fromValue(clues_.at(index.row()));
+    }
+    else
+    {
+      return QVariant();
     }
   }
 }

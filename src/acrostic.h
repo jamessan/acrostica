@@ -19,7 +19,11 @@
 #ifndef ACROSTICA_ACROSTIC_H
 #define ACROSTICA_ACROSTIC_H
 
+#include <memory>
+
+#include <QAbstractListModel>
 #include <QList>
+#include <QModelIndex>
 #include <QPair>
 #include <QString>
 
@@ -27,18 +31,26 @@
 
 class QJsonObject;
 
+Q_DECLARE_SMART_POINTER_METATYPE(std::shared_ptr)
+
 namespace acrostica
 {
   typedef QString message;
-  class acrostic
+  class acrostic : public QAbstractListModel
   {
+    Q_OBJECT
+
   public:
-    acrostic();
+    acrostic(QObject *parent = nullptr);
 
     void load(const QJsonObject &json);
     void dump(QJsonObject &json) const;
+
+    int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    QVariant data(const QModelIndex &index, int role) const;
+
   private:
-    QList<clue> clues_;
+    QList<std::shared_ptr<clue>> clues_;
     message message_;
   };
 }
