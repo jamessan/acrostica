@@ -32,6 +32,10 @@ namespace acrostica
 
     void load(const QJsonObject &json);
     void dump(QJsonObject &json) const;
+
+    const QString& hint() const { return hint_; };
+    const QString& answer() const { return answer_; };
+
   private:
     QString hint_;
     QString answer_;
