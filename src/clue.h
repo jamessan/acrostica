@@ -19,22 +19,31 @@
 #ifndef ACROSTICA_CLUE_H_
 #define ACROSTICA_CLUE_H_
 
+#include <QObject>
 #include <QString>
 
 class QJsonObject;
 
 namespace acrostica
 {
-  class clue
+  class clue : public QObject
   {
+    Q_OBJECT
+    Q_PROPERTY(QString hint READ hint WRITE setHint)
+    Q_PROPERTY(QString answer READ answer WRITE setAnswer)
+
   public:
-    clue();
+    clue(QObject *parent = nullptr);
 
     void load(const QJsonObject &json);
     void dump(QJsonObject &json) const;
 
-    const QString& hint() const { return hint_; };
-    const QString& answer() const { return answer_; };
+    const QString& hint() const { return hint_; }
+    const QString& answer() const { return answer_; }
+
+  public slots:
+    void setHint(const QString& hint) { hint_ = hint; }
+    void setAnswer(const QString& answer) { answer_ = answer; }
 
   private:
     QString hint_;

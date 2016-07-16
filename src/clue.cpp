@@ -22,7 +22,7 @@
 
 namespace acrostica
 {
-  clue::clue() : hint_(), answer_()
+  clue::clue(QObject *parent) : QObject(parent), hint_(), answer_()
   {}
 
   void clue::load(const QJsonObject &json)
