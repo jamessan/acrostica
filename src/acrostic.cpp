@@ -23,6 +23,7 @@
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QJsonValue>
+#include <QVariant>
 
 #include "clue.h"
 
@@ -77,7 +78,7 @@ namespace acrostica
       return QVariant();
     }
 
-    if (role == Qt::DisplayRole)
+    if (role == Qt::DisplayRole || role == Qt::EditRole)
     {
       return QVariant::fromValue(clues_.at(index.row()));
     }
@@ -85,5 +86,30 @@ namespace acrostica
     {
       return QVariant();
     }
+  }
+
+  Qt::ItemFlags acrostic::flags(const QModelIndex &index) const
+  {
+    if (!index.isValid())
+    {
+      return Qt::ItemIsEnabled;
+    }
+
+    return QAbstractListModel::flags(index) | Qt::ItemIsEditable;
+  }
+
+  bool acrostic::setData(const QModelIndex &index,
+                         const QVariant &value, int role)
+  {
+    if (index.isValid() && role == Qt::EditRole)
+    {
+      auto c(value.value<std::shared_ptr<clue>>());
+      clues_[index.row()]->setHint(c->hint());
+      clues_[index.row()]->setAnswer(c->answer());
+      emit dataChanged(index, index);
+      return true;
+    }
+
+    return false;
   }
 }
