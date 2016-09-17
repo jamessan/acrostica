@@ -34,6 +34,7 @@ class QWidget;
 
 namespace acrostica
 {
+  class acrostic;
   namespace ui
   {
     class downmsg;
@@ -56,8 +57,6 @@ private slots:
   void open();
   bool save();
   void print();
-
-  void setClues();
 
 private:
   void createActions();
@@ -82,6 +81,7 @@ private:
   MissingLettersModel *missingMessageLetters;
 
   acrostica::ui::downmsg *downMessage;
+  acrostica::acrostic *acrostic_;
 
   QScrollArea *scroller;
   QGroupBox *clueBox;

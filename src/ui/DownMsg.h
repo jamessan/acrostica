@@ -40,14 +40,13 @@ namespace acrostica
       void changeEvent(QEvent *event);
 
     signals:
-      void editingFinished();
+      void textEdited(const QString& text);
 
     public slots:
       void setFocus();
 
     private slots:
-      void proxyEditingFinished();
-      void forceUpper(const QString &text);
+      void forceUpper(const QString& text);
 
     private:
       QLineEdit *msg;

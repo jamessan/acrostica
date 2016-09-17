@@ -37,8 +37,6 @@ namespace acrostica
       setLayout(new QVBoxLayout);
       layout()->addWidget(msg);
 
-      connect(msg, SIGNAL(editingFinished()),
-              this, SLOT(proxyEditingFinished()));
       connect(msg, SIGNAL(textEdited(const QString&)),
               this, SLOT(forceUpper(const QString&)));
     }
@@ -75,11 +73,7 @@ namespace acrostica
     void downmsg::forceUpper(const QString& s)
     {
       msg->setText(s.toUpper());
-    }
-
-    void downmsg::proxyEditingFinished()
-    {
-      emit editingFinished();
+      emit textEdited(msg->text());
     }
   }
 }

@@ -53,6 +53,9 @@ namespace acrostica
     bool setData(const QModelIndex &index, const QVariant &value,
                  int role = Qt::EditRole);
 
+  public slots:
+    void updateClues(const QString& msg);
+
   private:
     QList<std::shared_ptr<clue>> clues_;
     message message_;

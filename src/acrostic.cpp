@@ -112,4 +112,58 @@ namespace acrostica
 
     return false;
   }
+
+  void acrostic::updateClues(const QString& msg)
+  {
+    int nclues = clues_.size();
+    int msglen = msg.length();
+    int clueidx;
+    int i;
+
+    for (clueidx = 0, i = 0; clueidx < nclues && i < msglen; clueidx++, i++)
+    {
+      auto clue = clues_[clueidx];
+      if (msg[i].isLetter() && clue->answer()[0] != msg[i].toUpper())
+      {
+        QString ans(clue->answer());
+        clue->setAnswer(ans.replace(0, 1, msg[i].toUpper()));
+        setData(index(clueidx, 0, QModelIndex()),
+                QVariant::fromValue(clue));
+      }
+    }
+
+    if (i < msglen)
+    {
+      QList<int> letters;
+      for (; i < msglen; i++)
+      {
+        if (msg[i].isLetter())
+        {
+          letters << i;
+        }
+      }
+
+      beginInsertRows(QModelIndex(), rowCount(),
+                      rowCount() + letters.size() - 1);
+      for (auto n : letters)
+      {
+        auto clue(std::shared_ptr<clue>(new class clue(this)));
+        clues_ << clue;
+        clues_[clueidx]->setAnswer(msg[n].toUpper());
+        clueidx++;
+      }
+      endInsertRows();
+    }
+    else if (clueidx < nclues)
+    {
+      beginRemoveRows(QModelIndex(), clueidx, nclues - 1);
+      while (nclues > clueidx)
+      {
+        auto c(clues_.takeLast());
+        nclues--;
+        c->setAnswer("");
+      }
+      endRemoveRows();
+    }
+  }
 }

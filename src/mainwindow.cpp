@@ -22,6 +22,7 @@
 #include <QPalette>
 #include <QSizePolicy>
 
+#include "acrostic.h"
 #include "ClueWidget.h"
 #include "ui/DownMsg.h"
 #include "MissingLettersModel.h"
@@ -98,8 +99,9 @@ void MainWindow::createWidgets()
 
   downMessage = new acrostica::ui::downmsg(this);
 
-  connect(downMessage, SIGNAL(editingFinished()),
-          this, SLOT(setClues()));
+  acrostic_ = new acrostica::acrostic(this);
+  connect(downMessage, SIGNAL(textEdited(const QString&)),
+          acrostic_, SLOT(updateClues(const QString&)));
 
   scroller = new QScrollArea(this);
   clueBox = new QGroupBox(tr("Clues"), scroller);
@@ -116,61 +118,6 @@ void MainWindow::createWidgets()
           missingMessageLetters, SLOT(removeLetters()));
   connect(messageText, SIGNAL(textChanged()),
           missingClueLetters, SLOT(addLetters()));
-}
-
-void MainWindow::setClues()
-{
-  auto widget = qobject_cast<acrostica::ui::downmsg*>(sender());
-
-  QString msg = widget->text();
-
-  int clues = clueList.size();
-  int msglen = msg.length();
-  int clue;
-  int c;
-
-  for (clue = 0, c = 0; clue < clues && c < msglen; clue++, c++)
-  {
-    QString ans = clueList[clue]->answer();
-    if (msg[c].isLetter() && ans[0] != msg[c].toUpper())
-    {
-      clueList[clue]->setAnswer(ans.replace(0, 1, msg[c].toUpper()));
-    }
-  }
-
-  if (c < msglen)
-  {
-    for (; c < msglen; c++)
-    {
-      if (msg[c].isLetter())
-      {
-        clueList.push_back(new ClueWidget(msg[c].toUpper(), QString('A' + c), clueBox));
-        clueBox->layout()->addWidget(clueList[clue]);
-        connect(clueList[clue], SIGNAL(textChanged(const QString&)),
-                missingClueLetters, SLOT(removeLetters(const QString&)));
-        connect(clueList[clue], SIGNAL(textChanged(const QString&)),
-                missingMessageLetters, SLOT(addLetters(const QString&)));
-        clue++;
-      }
-    }
-  }
-  else if (clue < clues)
-  {
-    while (clues > clue)
-    {
-      clues--;
-      clueList[clues]->setAnswer("");
-      clueBox->layout()->removeWidget(clueList[clues]);
-      disconnect(clueList[clues], SIGNAL(textChanged(const QString&)),
-                 missingMessageLetters, SLOT(addLetters(const QString&)));
-      disconnect(clueList[clues], SIGNAL(textChanged(const QString&)),
-                 missingClueLetters, SLOT(removeLetters(const QString&)));
-      clueList[clues]->close();
-      clueList.removeLast();
-    }
-  }
-
-  messageText->setFocus();
 }
 
 void MainWindow::layoutWidgets()
