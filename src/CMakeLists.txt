@@ -19,6 +19,7 @@
 file(GLOB SRC_FILES
   *.cpp
   ui/*.cpp)
+list(SORT SRC_FILES)
 
 add_executable(${CMAKE_PROJECT_NAME} WIN32
   ${SRC_FILES}

@@ -1,6 +1,6 @@
 ###
 # Acrostica - Simple acrostic creator
-# Copyright (C) 2014-2015 James McCoy <jamessan@jamessan.com>
+# Copyright (C) 2014-2016 James McCoy <jamessan@jamessan.com>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -52,5 +52,7 @@ find_package(Qt5Widgets REQUIRED)
 if (NOT MSVC)
   set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -std=c++11)
 endif()
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 add_subdirectory(src)
