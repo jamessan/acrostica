@@ -34,6 +34,10 @@ namespace acrostica
 
   public:
     clue(QObject *parent = nullptr);
+    clue(const clue &c);
+    clue(clue &&c);
+    clue& operator=(clue c);
+    friend void swap(clue &lhs, clue &rhs);
 
     void load(const QJsonObject &json);
     void dump(QJsonObject &json) const;
@@ -50,5 +54,6 @@ namespace acrostica
     QString answer_;
   };
 }
+Q_DECLARE_METATYPE(acrostica::clue);
 
 #endif

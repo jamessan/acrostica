@@ -22,8 +22,33 @@
 
 namespace acrostica
 {
+  void swap(clue &lhs, clue &rhs)
+  {
+    using std::swap;
+
+    swap(lhs.hint_, rhs.hint_);
+    swap(lhs.answer_, rhs.answer_);
+  }
+
   clue::clue(QObject *parent) : QObject(parent), hint_(), answer_()
   {}
+
+  clue::clue(const clue &c) : clue(c.parent())
+  {
+    hint_ = c.hint();
+    answer_ = c.answer();
+  }
+
+  clue::clue(clue &&c) : clue()
+  {
+    swap(*this, c);
+  }
+
+  clue& clue::operator=(clue c)
+  {
+    swap(*this, c);
+    return *this;
+  }
 
   void clue::load(const QJsonObject &json)
   {
