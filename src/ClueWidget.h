@@ -31,6 +31,7 @@ class ClueWidget : public QGroupBox
   Q_OBJECT
 
 public:
+  ClueWidget(QWidget *parent = 0);
   ClueWidget(const QString& answer, const QString& title, QWidget *parent = 0);
 
   QString answer() const;

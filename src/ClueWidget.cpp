@@ -25,6 +25,11 @@
 #include <QString>
 #include <QVBoxLayout>
 
+ClueWidget::ClueWidget(QWidget *parent)
+  : ClueWidget("", "", parent)
+{
+}
+
 ClueWidget::ClueWidget(const QString& answer, const QString& title, QWidget *parent) :
   QGroupBox(title, parent),
   clue_(new QLineEdit(this)),
