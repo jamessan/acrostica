@@ -19,7 +19,7 @@
 cmake_minimum_required(VERSION 2.8)
 
 if (NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE Release CACHE STRING
+  set(CMAKE_BUILD_TYPE RelWithDebInfo CACHE STRING
       "None Debug Release RelWithDebInfo MinSizeRel"
       FORCE)
 endif()
