@@ -22,6 +22,8 @@
 #include <QObject>
 #include <QString>
 
+#include <memory>
+
 class QJsonObject;
 
 namespace acrostica
@@ -54,6 +56,6 @@ namespace acrostica
     QString answer_;
   };
 }
-Q_DECLARE_METATYPE(acrostica::clue);
+Q_DECLARE_METATYPE(std::shared_ptr<acrostica::clue>);
 
 #endif
