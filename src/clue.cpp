@@ -19,6 +19,7 @@
 #include "clue.h"
 
 #include <QJsonObject>
+#include <QString>
 
 namespace acrostica
 {
@@ -30,14 +31,15 @@ namespace acrostica
     swap(lhs.answer_, rhs.answer_);
   }
 
-  clue::clue(QObject *parent) : QObject(parent), hint_(), answer_()
+  clue::clue(QObject *parent) : QObject(parent)
   {}
 
-  clue::clue(const clue &c) : clue(c.parent())
-  {
-    hint_ = c.hint();
-    answer_ = c.answer();
-  }
+  clue::clue(const QString &hint, const QString &answer, QObject *parent)
+    : QObject(parent), hint_(hint), answer_(answer)
+  {}
+
+  clue::clue(const clue &c) : clue(c.hint_, c.answer_, c.parent())
+  {}
 
   clue::clue(clue &&c) : clue()
   {

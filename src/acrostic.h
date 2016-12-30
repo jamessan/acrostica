@@ -21,7 +21,7 @@
 
 #include <memory>
 
-#include <QAbstractListModel>
+#include <QAbstractTableModel>
 #include <QList>
 #include <QModelIndex>
 #include <QPair>
@@ -36,7 +36,7 @@ Q_DECLARE_SMART_POINTER_METATYPE(std::shared_ptr)
 namespace acrostica
 {
   typedef QString message;
-  class acrostic : public QAbstractListModel
+  class acrostic : public QAbstractTableModel
   {
     Q_OBJECT
 
@@ -47,6 +47,9 @@ namespace acrostica
     void dump(QJsonObject &json) const;
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    int columnCount(const QModelIndex &parent = QModelIndex()) const {
+      return 2;
+    }
     QVariant data(const QModelIndex &index, int role) const;
 
     Qt::ItemFlags flags(const QModelIndex &index) const;

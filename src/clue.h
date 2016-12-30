@@ -36,6 +36,7 @@ namespace acrostica
 
   public:
     clue(QObject *parent = nullptr);
+    clue(const QString &hint, const QString &answer, QObject *parent = nullptr);
     clue(const clue &c);
     clue(clue &&c);
     clue& operator=(clue c);

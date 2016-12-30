@@ -21,6 +21,7 @@
 
 #include <QPalette>
 #include <QSizePolicy>
+#include <QTableView>
 
 #include "acrostic.h"
 #include "ClueWidget.h"
@@ -103,11 +104,13 @@ void MainWindow::createWidgets()
   connect(downMessage, SIGNAL(textEdited(const QString&)),
           acrostic_, SLOT(updateClues(const QString&)));
 
-  scroller = new QScrollArea(this);
-  clueBox = new QGroupBox(tr("Clues"), scroller);
-  clueBox->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Maximum);
-  scroller->setWidget(clueBox);
-  scroller->setWidgetResizable(true);
+  clueBox_ = new QGroupBox(tr("Clues"), this);
+  auto clueView = new QTableView(clueBox_);
+  clueView->setSortingEnabled(false);
+  clueView->setModel(acrostic_);
+
+  QVBoxLayout *clueLayout = new QVBoxLayout(clueBox_);
+  clueLayout->addWidget(clueView);
 
   clueLetters = new QGroupBox(tr("Letters Missing from Clues"), this);
   missingClueLetters = new MissingLettersModel("clue", this);
@@ -131,13 +134,11 @@ void MainWindow::layoutWidgets()
   QVBoxLayout *clueLettersLayout = new QVBoxLayout(clueLetters);
   clueLettersLayout->addWidget(clueLettersView);
 
-  QVBoxLayout *clueLayout = new QVBoxLayout(clueBox);
-
   QGridLayout *centralLayout = new QGridLayout(centralWidget);
   centralLayout->addWidget(message, 0, 0);
   centralLayout->addWidget(messageLetters, 0, 1);
   centralLayout->addWidget(downMessage, 1, 0, 1, 2);
-  centralLayout->addWidget(scroller, 2, 0);
+  centralLayout->addWidget(clueBox_, 2, 0);
   centralLayout->addWidget(clueLetters, 2, 1);
 }
 

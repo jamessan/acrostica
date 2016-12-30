@@ -30,7 +30,7 @@
 namespace acrostica
 {
   acrostic::acrostic(QObject *parent)
-    : QAbstractListModel(parent), clues_(), message_()
+    : QAbstractTableModel(parent), clues_(), message_()
   {}
 
   void acrostic::load(const QJsonObject &json)
@@ -42,7 +42,7 @@ namespace acrostica
     for (const QJsonValue &v : clues)
     {
       const QJsonObject obj = v.toObject();
-      std::shared_ptr<clue> c(new clue(this));
+      auto c(std::make_shared<acrostica::clue>(this));
       c->load(obj);
       clues_ << c;
     }
@@ -73,14 +73,17 @@ namespace acrostica
       return QVariant();
     }
 
-    if (index.row() >= clues_.size())
+    if (index.row() >= rowCount() || index.column() >= columnCount())
     {
       return QVariant();
     }
 
     if (role == Qt::DisplayRole || role == Qt::EditRole)
     {
-      return QVariant::fromValue(clues_.at(index.row()));
+      auto c = clues_.at(index.row());
+      return QVariant::fromValue((index.column() == 0)
+                                 ? c->hint()
+                                 : c->answer());
     }
     else
     {
@@ -95,7 +98,7 @@ namespace acrostica
       return Qt::ItemIsEnabled;
     }
 
-    return QAbstractListModel::flags(index) | Qt::ItemIsEditable;
+    return QAbstractTableModel::flags(index) | Qt::ItemIsEditable;
   }
 
   bool acrostic::setData(const QModelIndex &index,
@@ -103,9 +106,15 @@ namespace acrostica
   {
     if (index.isValid() && role == Qt::EditRole)
     {
-      auto c(value.value<std::shared_ptr<clue>>());
-      clues_[index.row()]->setHint(c->hint());
-      clues_[index.row()]->setAnswer(c->answer());
+      auto s(value.value<QString>());
+      if (index.column() % 2)
+      {
+        clues_[index.row()]->setAnswer(s);
+      }
+      else
+      {
+        clues_[index.row()]->setHint(s);
+      }
       emit dataChanged(index, index);
       return true;
     }
@@ -126,9 +135,9 @@ namespace acrostica
       if (msg[i].isLetter() && clue->answer()[0] != msg[i].toUpper())
       {
         QString ans(clue->answer());
-        clue->setAnswer(ans.replace(0, 1, msg[i].toUpper()));
-        setData(index(clueidx, 0, QModelIndex()),
-                QVariant::fromValue(clue));
+        ans.replace(0, 1, msg[i].toUpper());
+        setData(index(clueidx, 1, QModelIndex()),
+                QVariant::fromValue(ans));
       }
     }
 
@@ -147,9 +156,8 @@ namespace acrostica
                       rowCount() + letters.size() - 1);
       for (auto n : letters)
       {
-        auto clue(std::shared_ptr<clue>(new class clue(this)));
-        clues_ << clue;
-        clues_[clueidx]->setAnswer(msg[n].toUpper());
+        auto c(std::make_shared<clue>(QString(), msg[n].toUpper(), this));
+        clues_ << c;
         clueidx++;
       }
       endInsertRows();

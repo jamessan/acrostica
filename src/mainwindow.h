@@ -83,9 +83,7 @@ private:
   acrostica::ui::downmsg *downMessage;
   acrostica::acrostic *acrostic_;
 
-  QScrollArea *scroller;
-  QGroupBox *clueBox;
-  QList<ClueWidget*> clueList;
+  QGroupBox *clueBox_;
 
   QGroupBox *clueLetters;
   MissingLettersUI *clueLettersView;
