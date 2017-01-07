@@ -122,6 +122,29 @@ namespace acrostica
     return false;
   }
 
+  QVariant acrostic::headerData(int section, Qt::Orientation orientation,
+                                int role) const
+  {
+    if (role != Qt::DisplayRole)
+    {
+      return QVariant();
+    }
+    if (orientation == Qt::Horizontal)
+    {
+      return QVariant::fromValue(section == 0 ? tr("Hint") : tr("Answer"));
+    }
+
+    QString s;
+    // Change to 1-based indexing so the following loop works
+    section++;
+    while (section > 0)
+    {
+      s.prepend(QChar('A' + (section - 1) % 26));
+      section = (section - 1) / 26;
+    }
+    return QVariant::fromValue(s);
+  }
+
   void acrostic::updateClues(const QString& msg)
   {
     int nclues = clues_.size();
