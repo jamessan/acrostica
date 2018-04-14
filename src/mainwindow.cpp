@@ -97,7 +97,7 @@ void MainWindow::createWidgets()
   messageText->setTabChangesFocus(true);
 
   messageLetters = new QGroupBox(tr("Letters Missing from Message"), this);
-  missingMessageLetters = new MissingLettersModel("message", this);
+  missingMessageLetters = new MissingLettersModel(mAcrostic, Clues, this);
   messageLettersView = new MissingLettersUI(messageLetters);
   messageLettersView->setModel(missingMessageLetters);
 
@@ -114,14 +114,9 @@ void MainWindow::createWidgets()
   clueLayout->addWidget(clueView);
 
   clueLetters = new QGroupBox(tr("Letters Missing from Clues"), this);
-  missingClueLetters = new MissingLettersModel("clue", this);
+  missingClueLetters = new MissingLettersModel(mAcrostic, Message, this);
   clueLettersView = new MissingLettersUI(clueLetters);
   clueLettersView->setModel(missingClueLetters);
-
-  connect(messageText, SIGNAL(textChanged()),
-          missingMessageLetters, SLOT(removeLetters()));
-  connect(messageText, SIGNAL(textChanged()),
-          missingClueLetters, SLOT(addLetters()));
 }
 
 void MainWindow::layoutWidgets()

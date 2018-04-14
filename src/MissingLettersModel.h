@@ -1,6 +1,6 @@
 /*
  * Acrostica - Simple acrostic creator
- * Copyright (C) 2014-2015 James McCoy <jamessan@jamessan.com>
+ * Copyright © 2014-2018 James McCoy <jamessan@jamessan.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,36 +19,50 @@
 #ifndef ACROSTICA_MISSINGLETTERSMODEL_H
 #define ACROSTICA_MISSINGLETTERSMODEL_H
 
-#include <QList>
-#include <QMap>
+#include <memory>
+
+#include <QVector>
 #include <QAbstractTableModel>
+
+namespace acrostica
+{
+struct Acrostic;
+}
+
+enum AdditiveSource
+{
+  Message,
+  Clues
+};
 
 class MissingLettersModel : public QAbstractTableModel
 {
   Q_OBJECT
 
 public:
-  MissingLettersModel(const QString& name, QWidget *parent = 0);
-  int rowCount(const QModelIndex& parent = QModelIndex()) const;
-  int columnCount(const QModelIndex& parent = QModelIndex()) const;
-  QVariant data(const QModelIndex& index, int role) const;
+  MissingLettersModel(std::shared_ptr<acrostica::Acrostic> acrostic,
+                      AdditiveSource source, QWidget *parent = 0);
+
+  int rowCount(const QModelIndex& parent = QModelIndex()) const override
+  {
+    return 6;
+  }
+  int columnCount(const QModelIndex& parent = QModelIndex()) const override
+  {
+    return 5;
+  }
+  QVariant data(const QModelIndex& index, int role) const override;
   QVariant headerData(int section, Qt::Orientation orientation,
-                      int role = Qt::DisplayRole) const;
-  Qt::ItemFlags flags(const QModelIndex& index) const;
+                      int role = Qt::DisplayRole) const override;
+  Qt::ItemFlags flags(const QModelIndex& index) const override;
 
 public slots:
-  void addLetters();
-  void addLetters(const QString& str);
-  void removeLetters();
-  void removeLetters(const QString& str);
+  void update();
 
 private:
-  void setLetters(uint hash, const QString& str, int sign);
-
-  QMap<uint, QString> cache_;
-  QList<int> added_, removed_;
-  QStringList letters_;
-  QString name_;
+  QVector<QString> mLetters;
+  AdditiveSource mSource;
+  std::shared_ptr<acrostica::Acrostic> mAcrostic;
 };
 
 #endif
