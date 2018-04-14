@@ -1,6 +1,6 @@
 /*
  * Acrostica - Simple acrostic creator
- * Copyright (C) 2016 James McCoy <jamessan@jamessan.com>
+ * Copyright (C) 2016-2018 James McCoy <jamessan@jamessan.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,181 +20,121 @@
 
 #include <memory>
 
-#include <QJsonArray>
-#include <QJsonObject>
-#include <QJsonValue>
 #include <QVariant>
-
-#include "clue.h"
 
 namespace acrostica
 {
-  acrostic::acrostic(QObject *parent)
-    : QAbstractTableModel(parent), clues_(), message_()
-  {}
 
-  void acrostic::load(const QJsonObject &json)
+ClueModel::ClueModel(std::shared_ptr<Acrostic> acrostic, QObject *parent)
+  : QAbstractTableModel(parent)
+  , mAcrostic(acrostic)
+{}
+
+QVariant ClueModel::data(const QModelIndex &index, int role) const
+{
+  if (!index.isValid())
   {
-    message_ = json["message"].toString();
-
-    clues_.clear();
-    QJsonArray clues = json["clues"].toArray();
-    for (const QJsonValue &v : clues)
-    {
-      const QJsonObject obj = v.toObject();
-      auto c(std::make_shared<acrostica::clue>(this));
-      c->load(obj);
-      clues_ << c;
-    }
+    return QVariant();
   }
 
-  void acrostic::dump(QJsonObject &json) const
+  if (index.row() >= rowCount() || index.column() >= columnCount())
   {
-    json["message"] = message_;
-
-    QJsonArray clues;
-    for (const auto &c : clues_)
-    {
-      QJsonObject obj;
-      c->dump(obj);
-      clues.append(obj);
-    }
+    return QVariant();
   }
 
-  int acrostic::rowCount(const QModelIndex &parent) const
+  if (role == Qt::DisplayRole || role == Qt::EditRole)
   {
-    return clues_.count();
+    auto c = mAcrostic->clues.at(index.row());
+    return QVariant::fromValue((index.column() == 0) ? c.hint : c.answer);
+  }
+  else
+  {
+    return QVariant();
+  }
+}
+
+Qt::ItemFlags ClueModel::flags(const QModelIndex &index) const
+{
+  if (!index.isValid())
+  {
+    return Qt::ItemIsEnabled;
   }
 
-  QVariant acrostic::data(const QModelIndex &index, int role) const
+  return QAbstractTableModel::flags(index) | Qt::ItemIsEditable;
+}
+
+bool ClueModel::setData(const QModelIndex &index,
+                        const QVariant &value, int role)
+{
+  if (index.isValid() && role == Qt::EditRole)
   {
-    if (!index.isValid())
-    {
-      return QVariant();
-    }
+    auto clue = mAcrostic->clues.value(index.row());
 
-    if (index.row() >= rowCount() || index.column() >= columnCount())
+    if (index.column() % 2)
     {
-      return QVariant();
-    }
-
-    if (role == Qt::DisplayRole || role == Qt::EditRole)
-    {
-      auto c = clues_.at(index.row());
-      return QVariant::fromValue((index.column() == 0)
-                                 ? c->hint()
-                                 : c->answer());
+      clue.answer = value.toString();
     }
     else
     {
-      return QVariant();
+      clue.hint = value.toString();
     }
+
+    mAcrostic->clues.replace(index.row(), clue);
+
+    emit dataChanged(index, index);
+    return true;
   }
 
-  Qt::ItemFlags acrostic::flags(const QModelIndex &index) const
+  return false;
+}
+
+QVariant ClueModel::headerData(int section, Qt::Orientation orientation,
+                               int role) const
+{
+  if (role != Qt::DisplayRole)
   {
-    if (!index.isValid())
-    {
-      return Qt::ItemIsEnabled;
-    }
-
-    return QAbstractTableModel::flags(index) | Qt::ItemIsEditable;
+    return QVariant();
   }
-
-  bool acrostic::setData(const QModelIndex &index,
-                         const QVariant &value, int role)
+  if (orientation == Qt::Horizontal)
   {
-    if (index.isValid() && role == Qt::EditRole)
-    {
-      auto s(value.value<QString>());
-      if (index.column() % 2)
-      {
-        clues_[index.row()]->setAnswer(s);
-      }
-      else
-      {
-        clues_[index.row()]->setHint(s);
-      }
-      emit dataChanged(index, index);
-      return true;
-    }
-
-    return false;
+    return QVariant::fromValue(section == 0 ? tr("Hint") : tr("Answer"));
   }
 
-  QVariant acrostic::headerData(int section, Qt::Orientation orientation,
-                                int role) const
+  QString s;
+  // Change to 1-based indexing so the following loop works
+  section++;
+  while (section > 0)
   {
-    if (role != Qt::DisplayRole)
-    {
-      return QVariant();
-    }
-    if (orientation == Qt::Horizontal)
-    {
-      return QVariant::fromValue(section == 0 ? tr("Hint") : tr("Answer"));
-    }
-
-    QString s;
-    // Change to 1-based indexing so the following loop works
-    section++;
-    while (section > 0)
-    {
-      s.prepend(QChar('A' + (section - 1) % 26));
-      section = (section - 1) / 26;
-    }
-    return QVariant::fromValue(s);
+    s.prepend(QChar('A' + (section - 1) % 26));
+    section = (section - 1) / 26;
   }
+  return QVariant::fromValue(s);
+}
 
-  void acrostic::updateClues(const QString& msg)
+bool ClueModel::insertRows(int row, int count, const QModelIndex &parent)
+{
+  Q_UNUSED(parent);
+
+  beginInsertRows(QModelIndex(), row, row + count - 1);
+  for (int i = 0; i < count; ++i)
   {
-    int nclues = clues_.size();
-    int msglen = msg.length();
-    int clueidx;
-    int i;
-
-    for (clueidx = 0, i = 0; clueidx < nclues && i < msglen; clueidx++, i++)
-    {
-      auto clue = clues_[clueidx];
-      if (msg[i].isLetter() && clue->answer()[0] != msg[i].toUpper())
-      {
-        QString ans(clue->answer());
-        ans.replace(0, 1, msg[i].toUpper());
-        setData(index(clueidx, 1, QModelIndex()),
-                QVariant::fromValue(ans));
-      }
-    }
-
-    if (i < msglen)
-    {
-      QList<int> letters;
-      for (; i < msglen; i++)
-      {
-        if (msg[i].isLetter())
-        {
-          letters << i;
-        }
-      }
-
-      beginInsertRows(QModelIndex(), rowCount(),
-                      rowCount() + letters.size() - 1);
-      for (auto n : letters)
-      {
-        auto c(std::make_shared<clue>(QString(), msg[n].toUpper(), this));
-        clues_ << c;
-        clueidx++;
-      }
-      endInsertRows();
-    }
-    else if (clueidx < nclues)
-    {
-      beginRemoveRows(QModelIndex(), clueidx, nclues - 1);
-      while (nclues > clueidx)
-      {
-        auto c(clues_.takeLast());
-        nclues--;
-        c->setAnswer("");
-      }
-      endRemoveRows();
-    }
+    mAcrostic->clues.insert(row, { QString(), QString() });
   }
+  endInsertRows();
+  return true;
+}
+
+bool ClueModel::removeRows(int row, int count, const QModelIndex &parent)
+{
+  Q_UNUSED(parent);
+
+  beginRemoveRows(QModelIndex(), row, row + count - 1);
+  for (int i = 0; i < count; ++i)
+  {
+    mAcrostic->clues.removeAt(row);
+  }
+  endRemoveRows();
+  return true;
+}
+
 }

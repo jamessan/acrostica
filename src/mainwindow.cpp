@@ -1,6 +1,6 @@
 /*
  * Acrostica - Simple acrostic creator
- * Copyright (C) 2014-2016 James McCoy <jamessan@jamessan.com>
+ * Copyright (C) 2014-2018 James McCoy <jamessan@jamessan.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +19,8 @@
 #include <QtWidgets>
 #include "mainwindow.h"
 
+#include <memory>
+
 #include <QPalette>
 #include <QSizePolicy>
 #include <QTableView>
@@ -29,11 +31,12 @@
 #include "MissingLettersModel.h"
 #include "MissingLettersUI.h"
 
-MainWindow::MainWindow(QWidget *parent) :
-  QMainWindow(parent)
+MainWindow::MainWindow(QWidget *parent)
+  : QMainWindow(parent)
+  , mCentralWidget(new QWidget)
+  , mAcrostic(std::make_shared<acrostica::Acrostic>())
 {
-  centralWidget = new QWidget;
-  setCentralWidget(centralWidget);
+  setCentralWidget(mCentralWidget);
 
   createActions();
   createMenus();
@@ -100,14 +103,12 @@ void MainWindow::createWidgets()
 
   downMessage = new acrostica::ui::downmsg(this);
 
-  acrostic_ = new acrostica::acrostic(this);
-  connect(downMessage, SIGNAL(textEdited(const QString&)),
-          acrostic_, SLOT(updateClues(const QString&)));
+  acrostica::ClueModel *clues = new acrostica::ClueModel(mAcrostic, this);
 
   clueBox_ = new QGroupBox(tr("Clues"), this);
   auto clueView = new QTableView(clueBox_);
   clueView->setSortingEnabled(false);
-  clueView->setModel(acrostic_);
+  clueView->setModel(clues);
 
   QVBoxLayout *clueLayout = new QVBoxLayout(clueBox_);
   clueLayout->addWidget(clueView);
@@ -134,7 +135,7 @@ void MainWindow::layoutWidgets()
   QVBoxLayout *clueLettersLayout = new QVBoxLayout(clueLetters);
   clueLettersLayout->addWidget(clueLettersView);
 
-  QGridLayout *centralLayout = new QGridLayout(centralWidget);
+  QGridLayout *centralLayout = new QGridLayout(mCentralWidget);
   centralLayout->addWidget(message, 0, 0);
   centralLayout->addWidget(messageLetters, 0, 1);
   centralLayout->addWidget(downMessage, 1, 0, 1, 2);

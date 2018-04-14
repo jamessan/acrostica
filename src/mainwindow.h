@@ -1,6 +1,6 @@
 /*
  * Acrostica - Simple acrostic creator
- * Copyright (C) 2014-2016 James McCoy <jamessan@jamessan.com>
+ * Copyright (C) 2014-2018 James McCoy <jamessan@jamessan.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +19,8 @@
 #ifndef ACROSTICA_MAINWINDOW_H
 #define ACROSTICA_MAINWINDOW_H
 
+#include <memory>
+
 #include <QList>
 #include <QMainWindow>
 
@@ -34,7 +36,7 @@ class QWidget;
 
 namespace acrostica
 {
-  class acrostic;
+  class Acrostic;
   namespace ui
   {
     class downmsg;
@@ -72,7 +74,7 @@ private:
   QAction *printAction;
   QAction *exitAction;
 
-  QWidget *centralWidget;
+  QWidget *mCentralWidget;
 
   QGroupBox *message;
   QPlainTextEdit *messageText;
@@ -81,7 +83,7 @@ private:
   MissingLettersModel *missingMessageLetters;
 
   acrostica::ui::downmsg *downMessage;
-  acrostica::acrostic *acrostic_;
+  std::shared_ptr<acrostica::Acrostic> mAcrostic;
 
   QGroupBox *clueBox_;
 
