@@ -116,6 +116,13 @@ void MainWindow::createWidgets()
   missingClueLetters = new MissingLettersModel(mAcrostic, Message, this);
   clueLettersView = new MissingLettersUI(clueLetters);
   clueLettersView->setModel(missingClueLetters);
+
+  connect(message, &acrostica::MessageBox::textChanged,
+          [=](const QString& msg){ mAcrostic->message = msg; });
+  connect(message, &acrostica::MessageBox::textChanged,
+          [=](const QString&){ missingClueLetters->update(); });
+  connect(message, &acrostica::MessageBox::textChanged,
+          [=](const QString&){ missingMessageLetters->update(); });
 }
 
 void MainWindow::layoutWidgets()
