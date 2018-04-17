@@ -21,6 +21,7 @@ set(SRC_FILES
   ClueWidget.cpp
   main.cpp
   mainwindow.cpp
+  MessageBox.cpp
   MissingLettersModel.cpp
   MissingLettersUI.cpp
   ui/DownMsg.cpp

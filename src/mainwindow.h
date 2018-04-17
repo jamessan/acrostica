@@ -30,13 +30,14 @@ class MissingLettersUI;
 class QAction;
 class QGroupBox;
 class QMenu;
-class QPlainTextEdit;
 class QScrollArea;
+class QString;
 class QWidget;
 
 namespace acrostica
 {
   class Acrostic;
+  class MessageBox;
   namespace ui
   {
     class downmsg;
@@ -76,8 +77,7 @@ private:
 
   QWidget *mCentralWidget;
 
-  QGroupBox *message;
-  QPlainTextEdit *messageText;
+  acrostica::MessageBox *message;
   QGroupBox *messageLetters;
   MissingLettersUI *messageLettersView;
   MissingLettersModel *missingMessageLetters;

@@ -28,6 +28,7 @@
 #include "acrostic.h"
 #include "ClueWidget.h"
 #include "ui/DownMsg.h"
+#include "MessageBox.h"
 #include "MissingLettersModel.h"
 #include "MissingLettersUI.h"
 
@@ -92,9 +93,7 @@ void MainWindow::createMenus()
 
 void MainWindow::createWidgets()
 {
-  message = new QGroupBox(tr("Message"), this);
-  messageText = new QPlainTextEdit(this);
-  messageText->setTabChangesFocus(true);
+  message = new acrostica::MessageBox(this);
 
   messageLetters = new QGroupBox(tr("Letters Missing from Message"), this);
   missingMessageLetters = new MissingLettersModel(mAcrostic, Clues, this);
@@ -121,9 +120,6 @@ void MainWindow::createWidgets()
 
 void MainWindow::layoutWidgets()
 {
-  QVBoxLayout *messageLayout = new QVBoxLayout(message);
-  messageLayout->addWidget(messageText);
-
   QVBoxLayout *messageLettersLayout = new QVBoxLayout(messageLetters);
   messageLettersLayout->addWidget(messageLettersView);
 
