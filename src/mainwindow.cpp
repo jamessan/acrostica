@@ -123,6 +123,16 @@ void MainWindow::createWidgets()
           [=](const QString&){ missingClueLetters->update(); });
   connect(message, &acrostica::MessageBox::textChanged,
           [=](const QString&){ missingMessageLetters->update(); });
+
+  connect(clues, &acrostica::ClueModel::dataChanged,
+          [=](){ missingMessageLetters->update(); });
+  connect(clues, &acrostica::ClueModel::dataChanged,
+          [=](){ missingClueLetters->update(); });
+
+  connect(clues, &acrostica::ClueModel::rowsRemoved,
+          [=](){ missingMessageLetters->update(); });
+  connect(clues, &acrostica::ClueModel::rowsRemoved,
+          [=](){ missingClueLetters->update(); });
 }
 
 void MainWindow::layoutWidgets()
