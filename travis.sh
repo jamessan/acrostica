@@ -5,8 +5,9 @@ mkdir build
 (
   cd build
   if [ "$TRAVIS_OS_NAME" = osx ]; then
-    DIR=$(ls -1 /usr/local/Cellar/qt5)
-    cmake -DCMAKE_PREFIX_PATH=/usr/local/Cellar/qt5/$DIR ..
+    ROOT=/usr/local/Cellar/qt
+    DIR=$(ls -1 "$ROOT")
+    cmake -DCMAKE_PREFIX_PATH="$ROOT"/"$DIR" ..
   else
     cmake ..
   fi
