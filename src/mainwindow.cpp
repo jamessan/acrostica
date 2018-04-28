@@ -106,6 +106,7 @@ void MainWindow::createWidgets()
   auto clueView = new QTableView(clueBox_);
   clueView->setSortingEnabled(false);
   clueView->setModel(clues);
+  clueView->setTabKeyNavigation(false);
 
   QVBoxLayout *clueLayout = new QVBoxLayout(clueBox_);
   clueLayout->addWidget(clueView);
