@@ -31,7 +31,7 @@ namespace acrostica
       : QGroupBox(tr("Down Message"), parent)
     {
       QLineEdit *msg = new QLineEdit(this);
-      msg->setValidator(new QRegularExpressionValidator(QRegularExpression("\\p{L}*")));
+      msg->setValidator(new QRegularExpressionValidator(QRegularExpression("\\p{L}*"), msg));
 
       setLayout(new QVBoxLayout);
       layout()->addWidget(msg);
