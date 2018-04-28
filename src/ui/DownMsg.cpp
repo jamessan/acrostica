@@ -1,6 +1,6 @@
 /*
  * Acrostica - Simple acrostic creator
- * Copyright (C) 2016 James McCoy <jamessan@jamessan.com>
+ * Copyright (C) 2016-2018 James McCoy <jamessan@jamessan.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@ namespace acrostica
     downmsg::downmsg(QWidget *parent) :
       QGroupBox(tr("Down Message"), parent),
       msg(new QLineEdit(this)),
-      alphaValidation(QRegularExpression("\\p{L}+"))
+      alphaValidation(QRegularExpression("\\p{L}*"))
     {
       msg->setValidator(&alphaValidation);
 
