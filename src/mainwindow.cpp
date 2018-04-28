@@ -1,6 +1,6 @@
 /*
  * Acrostica - Simple acrostic creator
- * Copyright (C) 2014-2016 James McCoy <jamessan@jamessan.com>
+ * Copyright (C) 2014-2018 James McCoy <jamessan@jamessan.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,28 +19,29 @@
 #include <QtWidgets>
 #include "mainwindow.h"
 
+#include <memory>
+
 #include <QPalette>
 #include <QSizePolicy>
 #include <QTableView>
 
 #include "acrostic.h"
-#include "ClueWidget.h"
 #include "ui/DownMsg.h"
+#include "MessageBox.h"
 #include "MissingLettersModel.h"
 #include "MissingLettersUI.h"
 
-MainWindow::MainWindow(QWidget *parent) :
-  QMainWindow(parent)
+MainWindow::MainWindow(QWidget *parent)
+  : QMainWindow(parent)
+  , mCentralWidget(new QWidget)
+  , mAcrostic(std::make_shared<acrostica::Acrostic>())
 {
-  centralWidget = new QWidget;
-  setCentralWidget(centralWidget);
+  setCentralWidget(mCentralWidget);
 
   createActions();
   createMenus();
   createWidgets();
   layoutWidgets();
-
-  downMessage->setFocus();
 }
 
 MainWindow::~MainWindow()
@@ -89,52 +90,61 @@ void MainWindow::createMenus()
 
 void MainWindow::createWidgets()
 {
-  message = new QGroupBox(tr("Message"), this);
-  messageText = new QPlainTextEdit(this);
-  messageText->setTabChangesFocus(true);
+  message = new acrostica::MessageBox(this);
 
   messageLetters = new QGroupBox(tr("Letters Missing from Message"), this);
-  missingMessageLetters = new MissingLettersModel("message", this);
+  missingMessageLetters = new MissingLettersModel(mAcrostic, Clues, this);
   messageLettersView = new MissingLettersUI(messageLetters);
   messageLettersView->setModel(missingMessageLetters);
 
   downMessage = new acrostica::ui::downmsg(this);
 
-  acrostic_ = new acrostica::acrostic(this);
-  connect(downMessage, SIGNAL(textEdited(const QString&)),
-          acrostic_, SLOT(updateClues(const QString&)));
+  acrostica::ClueModel *clues = new acrostica::ClueModel(mAcrostic, this);
 
   clueBox_ = new QGroupBox(tr("Clues"), this);
   auto clueView = new QTableView(clueBox_);
   clueView->setSortingEnabled(false);
-  clueView->setModel(acrostic_);
+  clueView->setModel(clues);
+  clueView->setTabKeyNavigation(false);
 
   QVBoxLayout *clueLayout = new QVBoxLayout(clueBox_);
   clueLayout->addWidget(clueView);
 
   clueLetters = new QGroupBox(tr("Letters Missing from Clues"), this);
-  missingClueLetters = new MissingLettersModel("clue", this);
+  missingClueLetters = new MissingLettersModel(mAcrostic, Message, this);
   clueLettersView = new MissingLettersUI(clueLetters);
   clueLettersView->setModel(missingClueLetters);
 
-  connect(messageText, SIGNAL(textChanged()),
-          missingMessageLetters, SLOT(removeLetters()));
-  connect(messageText, SIGNAL(textChanged()),
-          missingClueLetters, SLOT(addLetters()));
+  connect(message, &acrostica::MessageBox::textChanged,
+          [=](const QString& msg){ mAcrostic->message = msg; });
+  connect(message, &acrostica::MessageBox::textChanged,
+          [=](const QString&){ missingClueLetters->update(); });
+  connect(message, &acrostica::MessageBox::textChanged,
+          [=](const QString&){ missingMessageLetters->update(); });
+
+  connect(downMessage, SIGNAL(textEdited(const QString&)),
+          clues, SLOT(propagateDownMsg(const QString&)));
+
+  connect(clues, &acrostica::ClueModel::dataChanged,
+          [=](){ missingMessageLetters->update(); });
+  connect(clues, &acrostica::ClueModel::dataChanged,
+          [=](){ missingClueLetters->update(); });
+
+  connect(clues, &acrostica::ClueModel::rowsRemoved,
+          [=](){ missingMessageLetters->update(); });
+  connect(clues, &acrostica::ClueModel::rowsRemoved,
+          [=](){ missingClueLetters->update(); });
 }
 
 void MainWindow::layoutWidgets()
 {
-  QVBoxLayout *messageLayout = new QVBoxLayout(message);
-  messageLayout->addWidget(messageText);
-
   QVBoxLayout *messageLettersLayout = new QVBoxLayout(messageLetters);
   messageLettersLayout->addWidget(messageLettersView);
 
   QVBoxLayout *clueLettersLayout = new QVBoxLayout(clueLetters);
   clueLettersLayout->addWidget(clueLettersView);
 
-  QGridLayout *centralLayout = new QGridLayout(centralWidget);
+  QGridLayout *centralLayout = new QGridLayout(mCentralWidget);
   centralLayout->addWidget(message, 0, 0);
   centralLayout->addWidget(messageLetters, 0, 1);
   centralLayout->addWidget(downMessage, 1, 0, 1, 2);

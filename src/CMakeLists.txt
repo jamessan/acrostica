@@ -1,6 +1,6 @@
 ###
 # Acrostica - Simple acrostic creator
-# Copyright (C) 2014-2016 James McCoy <jamessan@jamessan.com>
+# Copyright (C) 2014-2018 James McCoy <jamessan@jamessan.com>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,10 +16,15 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ###
 
-file(GLOB SRC_FILES
-  *.cpp
-  ui/*.cpp)
-list(SORT SRC_FILES)
+set(SRC_FILES
+  acrostic.cpp
+  main.cpp
+  mainwindow.cpp
+  MessageBox.cpp
+  MissingLettersModel.cpp
+  MissingLettersUI.cpp
+  ui/DownMsg.cpp
+)
 
 add_executable(${CMAKE_PROJECT_NAME} WIN32
   ${SRC_FILES}

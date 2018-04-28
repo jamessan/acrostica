@@ -29,6 +29,9 @@ MissingLettersUI::MissingLettersUI(QWidget *parent) :
   horizontalHeader()->setVisible(false);
   verticalHeader()->setVisible(false);
 
+  // Disallow focus since these widgets just provide information
+  setFocusPolicy(Qt::NoFocus);
+
   // Adjust size of displayed widgets
   horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 

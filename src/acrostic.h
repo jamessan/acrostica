@@ -1,6 +1,6 @@
 /*
  * Acrostica - Simple acrostic creator
- * Copyright (C) 2016 James McCoy <jamessan@jamessan.com>
+ * Copyright (C) 2016-2018 James McCoy <jamessan@jamessan.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,48 +24,76 @@
 #include <QAbstractTableModel>
 #include <QList>
 #include <QModelIndex>
-#include <QPair>
 #include <QString>
-
-#include "clue.h"
-
-class QJsonObject;
 
 Q_DECLARE_SMART_POINTER_METATYPE(std::shared_ptr)
 
 namespace acrostica
 {
-  typedef QString message;
-  class acrostic : public QAbstractTableModel
+
+struct Clue
+{
+  QString hint;
+  QString answer;
+
+  bool operator==(const Clue &other) const
   {
-    Q_OBJECT
+    return hint == other.hint && answer == other.answer;
+  }
+};
 
-  public:
-    acrostic(QObject *parent = nullptr);
+typedef QString Message;
 
-    void load(const QJsonObject &json);
-    void dump(QJsonObject &json) const;
+struct Acrostic
+{
+  Message message;
+  QList<Clue> clues;
 
-    int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    int columnCount(const QModelIndex &parent = QModelIndex()) const {
-      return 2;
-    }
-    QVariant data(const QModelIndex &index, int role) const;
+  bool operator==(const Acrostic &other) const
+  {
+    return message == other.message
+      && clues == other.clues;
+  }
+};
 
-    Qt::ItemFlags flags(const QModelIndex &index) const;
-    bool setData(const QModelIndex &index, const QVariant &value,
-                 int role = Qt::EditRole);
+class ClueModel : public QAbstractTableModel
+{
+  Q_OBJECT
 
-    QVariant headerData(int section, Qt::Orientation orientation,
-                        int role = Qt::DisplayRole) const;
+ public:
+  ClueModel(std::shared_ptr<Acrostic> acrostic, QObject *parent = nullptr);
 
-  public slots:
-    void updateClues(const QString& msg);
+  int rowCount(const QModelIndex &parent = QModelIndex()) const override
+  {
+    Q_UNUSED(parent)
+    return mAcrostic->clues.size();
+  }
+  int columnCount(const QModelIndex &parent = QModelIndex()) const override
+  {
+    Q_UNUSED(parent)
+    return 2;
+  }
+  QVariant data(const QModelIndex &index, int role) const override;
 
-  private:
-    QList<std::shared_ptr<clue>> clues_;
-    message message_;
-  };
+  Qt::ItemFlags flags(const QModelIndex &index) const override;
+  bool setData(const QModelIndex &index, const QVariant &value,
+               int role = Qt::EditRole) override;
+
+  QVariant headerData(int section, Qt::Orientation orientation,
+                      int role = Qt::DisplayRole) const override;
+
+  bool insertRows(int row, int count,
+                  const QModelIndex &parent = QModelIndex()) override;
+  bool removeRows(int row, int count,
+                  const QModelIndex &parent = QModelIndex()) override;
+
+public slots:
+  void propagateDownMsg(const QString &downMsg);
+
+ private:
+  std::shared_ptr<Acrostic> mAcrostic;
+};
+
 }
 
 #endif

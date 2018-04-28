@@ -1,6 +1,6 @@
 /*
  * Acrostica - Simple acrostic creator
- * Copyright (C) 2014-2016 James McCoy <jamessan@jamessan.com>
+ * Copyright © 2018 James McCoy <jamessan@jamessan.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,38 +16,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACROSTICA_CLUEWIDGET_H
-#define ACROSTICA_CLUEWIDGET_H
+#include "MessageBox.h"
+#include <QtWidgets>
 
-#include <QGroupBox>
+#include <memory>
 
-class QLineEdit;
-class QString;
-class QTimerEvent;
-class QWidget;
+#include "acrostic.h"
 
-class ClueWidget : public QGroupBox
+namespace acrostica
 {
-  Q_OBJECT
 
-public:
-  ClueWidget(QWidget *parent = 0);
-  ClueWidget(const QString& answer, const QString& title, QWidget *parent = 0);
+MessageBox::MessageBox(QWidget *parent)
+  : QGroupBox(tr("Message"), parent)
+{
+  auto textEdit = new QPlainTextEdit(this);
+  textEdit->setTabChangesFocus(true);
+  connect(textEdit, &QPlainTextEdit::textChanged,
+          this, [=](){ emit textChanged(textEdit->toPlainText()); });
 
-  QString answer() const;
-  void setAnswer(const QString& str);
+  auto layout = new QVBoxLayout(this);
+  layout->addWidget(textEdit);
+}
 
-signals:
-  void textChanged(const QString& str);
-
-protected:
-  void timerEvent(QTimerEvent *event);
-
-private slots:
-  void proxyTextChanged(const QString &str);
-
-private:
-  QLineEdit *clue_, *answer_;
-};
-
-#endif
+}
