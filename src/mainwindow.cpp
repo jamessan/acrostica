@@ -124,6 +124,9 @@ void MainWindow::createWidgets()
   connect(message, &acrostica::MessageBox::textChanged,
           [=](const QString&){ missingMessageLetters->update(); });
 
+  connect(downMessage, SIGNAL(textEdited(const QString&)),
+          clues, SLOT(propagateDownMsg(const QString&)));
+
   connect(clues, &acrostica::ClueModel::dataChanged,
           [=](){ missingMessageLetters->update(); });
   connect(clues, &acrostica::ClueModel::dataChanged,

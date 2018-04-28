@@ -87,6 +87,9 @@ class ClueModel : public QAbstractTableModel
   bool removeRows(int row, int count,
                   const QModelIndex &parent = QModelIndex()) override;
 
+public slots:
+  void propagateDownMsg(const QString &downMsg);
+
  private:
   std::shared_ptr<Acrostic> mAcrostic;
 };

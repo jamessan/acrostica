@@ -17,6 +17,7 @@
  */
 
 #include "acrostic.h"
+#include <QtWidgets>
 
 #include <memory>
 
@@ -135,6 +136,36 @@ bool ClueModel::removeRows(int row, int count, const QModelIndex &parent)
   }
   endRemoveRows();
   return true;
+}
+
+void ClueModel::propagateDownMsg(const QString &downMsg)
+{
+  int rows = rowCount();
+  int msglen = downMsg.size();
+
+  if (msglen > rows)
+  {
+    insertRows(rows, msglen - rows);
+  }
+  else if (msglen < rows)
+  {
+    removeRows(msglen, rows - msglen);
+  }
+
+  for (int row = 0; row < msglen; row++)
+  {
+    auto idx = index(row, 1);
+    auto s = idx.data().toString();
+    if (s.isEmpty())
+    {
+      s.push_back(downMsg.at(row));
+    }
+    else
+    {
+      s = s.replace(0, 1, downMsg.at(row));
+    }
+    setData(idx, QVariant::fromValue(s));
+  }
 }
 
 }
