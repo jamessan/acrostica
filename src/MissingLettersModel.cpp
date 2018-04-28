@@ -28,7 +28,6 @@
 #include <QVector>
 
 #include "acrostic.h"
-#include "ClueWidget.h"
 
 MissingLettersModel::MissingLettersModel(std::shared_ptr<acrostica::Acrostic> acrostic,
                                          AdditiveSource source, QWidget *parent)

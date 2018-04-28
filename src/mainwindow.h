@@ -24,7 +24,6 @@
 #include <QList>
 #include <QMainWindow>
 
-class ClueWidget;
 class MissingLettersModel;
 class MissingLettersUI;
 class QAction;

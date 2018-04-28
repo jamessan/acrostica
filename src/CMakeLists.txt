@@ -18,7 +18,6 @@
 
 set(SRC_FILES
   acrostic.cpp
-  ClueWidget.cpp
   main.cpp
   mainwindow.cpp
   MessageBox.cpp

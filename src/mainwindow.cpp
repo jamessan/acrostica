@@ -26,7 +26,6 @@
 #include <QTableView>
 
 #include "acrostic.h"
-#include "ClueWidget.h"
 #include "ui/DownMsg.h"
 #include "MessageBox.h"
 #include "MissingLettersModel.h"
