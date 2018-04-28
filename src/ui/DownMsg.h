@@ -1,6 +1,6 @@
 /*
  * Acrostica - Simple acrostic creator
- * Copyright (C) 2016 James McCoy <jamessan@jamessan.com>
+ * Copyright (C) 2016-2018 James McCoy <jamessan@jamessan.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,39 +20,25 @@
 #define ACROSTICA_UI_DOWNMESSAGE_
 
 #include <QGroupBox>
-#include <QRegularExpressionValidator>
 #include <QString>
-
-class QEvent;
-class QLineEdit;
 
 namespace acrostica
 {
-  namespace ui
-  {
-    class downmsg : public QGroupBox
-    {
-      Q_OBJECT
+namespace ui
+{
 
-    public:
-      downmsg(QWidget *parent = 0);
-      QString text() const;
-      void changeEvent(QEvent *event);
+class downmsg : public QGroupBox
+{
+  Q_OBJECT
 
-    signals:
-      void textEdited(const QString& text);
+public:
+  downmsg(QWidget *parent = 0);
 
-    public slots:
-      void setFocus();
+signals:
+  void textEdited(const QString& text);
+};
 
-    private slots:
-      void forceUpper(const QString& text);
-
-    private:
-      QLineEdit *msg;
-      QRegularExpressionValidator alphaValidation;
-    };
-  }
+}
 }
 
 #endif

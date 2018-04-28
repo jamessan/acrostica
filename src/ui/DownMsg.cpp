@@ -27,53 +27,31 @@ namespace acrostica
 {
   namespace ui
   {
-    downmsg::downmsg(QWidget *parent) :
-      QGroupBox(tr("Down Message"), parent),
-      msg(new QLineEdit(this)),
-      alphaValidation(QRegularExpression("\\p{L}*"))
+    downmsg::downmsg(QWidget *parent)
+      : QGroupBox(tr("Down Message"), parent)
     {
-      msg->setValidator(&alphaValidation);
+      QLineEdit *msg = new QLineEdit(this);
+      msg->setValidator(new QRegularExpressionValidator(QRegularExpression("\\p{L}*")));
 
       setLayout(new QVBoxLayout);
       layout()->addWidget(msg);
 
-      connect(msg, SIGNAL(textEdited(const QString&)),
-              this, SLOT(forceUpper(const QString&)));
-    }
-
-    QString downmsg::text() const
-    {
-      return msg->text();
-    }
-
-    void downmsg::changeEvent(QEvent *event)
-    {
-      if (event->type() == QEvent::EnabledChange
-          && !isEnabled())
+      auto toUpper = [this, msg](const QString &s)
       {
-        QPalette newPalette = msg->palette();
-        newPalette.setCurrentColorGroup(QPalette::Inactive);
-        newPalette.setColor(QPalette::Base, Qt::lightGray);
-        newPalette.setColor(QPalette::Text, Qt::black);
-        msg->setPalette(newPalette);
-        event->accept();
-      }
-      else
+        msg->setText(s.toUpper());
+        emit textEdited(msg->text());
+      };
+      connect(msg, &QLineEdit::textEdited,
+              this, toUpper);
+
+      auto morphToLabel = [this, msg]()
       {
-        event->ignore();
-      }
-      return;
-    }
-
-    void downmsg::setFocus()
-    {
-      msg->setFocus();
-    }
-
-    void downmsg::forceUpper(const QString& s)
-    {
-      msg->setText(s.toUpper());
-      emit textEdited(msg->text());
+        layout()->removeWidget(msg);
+        layout()->addWidget(new QLabel(msg->text()));
+        msg->hide();
+      };
+      connect(msg, &QLineEdit::editingFinished,
+              this, morphToLabel);
     }
   }
 }

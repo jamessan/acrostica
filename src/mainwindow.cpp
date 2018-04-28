@@ -43,8 +43,6 @@ MainWindow::MainWindow(QWidget *parent)
   createMenus();
   createWidgets();
   layoutWidgets();
-
-  downMessage->setFocus();
 }
 
 MainWindow::~MainWindow()
