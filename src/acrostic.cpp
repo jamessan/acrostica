@@ -82,7 +82,7 @@ bool ClueModel::setData(const QModelIndex &index,
 
     mAcrostic->clues.replace(index.row(), clue);
 
-    emit dataChanged(index, index);
+    emit dataChanged(index, index, QVector<int>() << role);
     return true;
   }
 
