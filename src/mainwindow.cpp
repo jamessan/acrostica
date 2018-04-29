@@ -49,21 +49,25 @@ void MainWindow::createActions()
   newAction = new QAction(tr("&New"), this);
   newAction->setShortcut(tr("Ctrl+N"));
   newAction->setStatusTip(tr("Create a new acrostic"));
+  newAction->setEnabled(false);
   connect(newAction, SIGNAL(triggered()), this, SLOT(newAcrostic()));
 
   openAction = new QAction(tr("&Open…"), this);
   openAction->setShortcut(tr("Ctrl+O"));
   openAction->setStatusTip(tr("Open existing acrostic"));
+  openAction->setEnabled(false);
   connect(openAction, SIGNAL(triggered()), this, SLOT(open()));
 
   saveAction = new QAction(tr("&Save"), this);
   saveAction->setShortcut(tr("Ctrl+S"));
   saveAction->setStatusTip(tr("Save current acrostic"));
+  saveAction->setEnabled(false);
   connect(saveAction, SIGNAL(triggered()), this, SLOT(save()));
 
   printAction = new QAction(tr("&Print…"), this);
   printAction->setShortcut(tr("Ctrl+P"));
   printAction->setStatusTip(tr("Print"));
+  printAction->setEnabled(false);
   connect(printAction, SIGNAL(triggered()), this, SLOT(print()));
 
   exitAction = new QAction(tr("E&xit"), this);
