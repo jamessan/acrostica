@@ -107,8 +107,10 @@ void MainWindow::createWidgets()
   clueBox_ = new QGroupBox(tr("Clues"), this);
   auto clueView = new QTableView(clueBox_);
   clueView->setSortingEnabled(false);
+  clueView->setCornerButtonEnabled(false);
   clueView->setModel(clues);
   clueView->setTabKeyNavigation(false);
+  clueView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
   QVBoxLayout *clueLayout = new QVBoxLayout(clueBox_);
   clueLayout->addWidget(clueView);
