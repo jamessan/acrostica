@@ -22,6 +22,9 @@
 #include <QGroupBox>
 #include <QString>
 
+class QLabel;
+class QLineEdit;
+
 namespace acrostica
 {
 namespace ui
@@ -36,6 +39,11 @@ public:
 
 signals:
   void textEdited(const QString& text);
+
+private:
+  bool useLabel;
+  QLineEdit *lineEdit;
+  QLabel *label;
 };
 
 }

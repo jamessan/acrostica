@@ -29,28 +29,36 @@ namespace acrostica
   {
     downmsg::downmsg(QWidget *parent)
       : QGroupBox(tr("Down Message"), parent)
+      , useLabel(false)
+      , lineEdit(new QLineEdit(this))
+      , label(new QLabel(this))
     {
-      QLineEdit *msg = new QLineEdit(this);
-      msg->setValidator(new QRegularExpressionValidator(QRegularExpression("\\p{L}*"), msg));
+      lineEdit->setValidator(new QRegularExpressionValidator(QRegularExpression("\\p{L}*"), lineEdit));
 
       setLayout(new QVBoxLayout);
-      layout()->addWidget(msg);
+      layout()->addWidget(lineEdit);
 
-      auto toUpper = [this, msg](const QString &s)
+      label->hide();
+
+      auto toUpper = [this](const QString &s)
       {
-        msg->setText(s.toUpper());
-        emit textEdited(msg->text());
+        lineEdit->setText(s.toUpper());
+        emit textEdited(lineEdit->text());
       };
-      connect(msg, &QLineEdit::textEdited,
+      connect(lineEdit, &QLineEdit::textEdited,
               this, toUpper);
 
-      auto morphToLabel = [this, msg]()
+      auto morphToLabel = [this]()
       {
-        layout()->removeWidget(msg);
-        layout()->addWidget(new QLabel(msg->text()));
-        msg->hide();
+        layout()->removeWidget(lineEdit);
+        lineEdit->hide();
+        useLabel = true;
+
+        label->setText(lineEdit->text());
+        label->show();
+        layout()->addWidget(label);
       };
-      connect(msg, &QLineEdit::editingFinished,
+      connect(lineEdit, &QLineEdit::editingFinished,
               this, morphToLabel);
     }
   }
