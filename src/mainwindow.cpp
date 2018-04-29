@@ -44,12 +44,6 @@ MainWindow::MainWindow(QWidget *parent)
   layoutWidgets();
 }
 
-MainWindow::~MainWindow()
-{
-  delete missingMessageLetters;
-  delete missingClueLetters;
-}
-
 void MainWindow::createActions()
 {
   newAction = new QAction(tr("&New"), this);
@@ -93,8 +87,8 @@ void MainWindow::createWidgets()
   message = new acrostica::MessageBox(this);
 
   messageLetters = new QGroupBox(tr("Letters Missing from Message"), this);
-  missingMessageLetters = new MissingLettersModel(mAcrostic, Clues, this);
   messageLettersView = new MissingLettersUI(messageLetters);
+  auto missingMessageLetters = new MissingLettersModel(mAcrostic, Clues, messageLettersView);
   messageLettersView->setModel(missingMessageLetters);
 
   downMessage = new acrostica::ui::downmsg(this);
@@ -111,8 +105,8 @@ void MainWindow::createWidgets()
   clueLayout->addWidget(clueView);
 
   clueLetters = new QGroupBox(tr("Letters Missing from Clues"), this);
-  missingClueLetters = new MissingLettersModel(mAcrostic, Message, this);
   clueLettersView = new MissingLettersUI(clueLetters);
+  auto missingClueLetters = new MissingLettersModel(mAcrostic, Message, clueLettersView);
   clueLettersView->setModel(missingClueLetters);
 
   connect(message, &acrostica::MessageBox::textChanged,

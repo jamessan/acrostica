@@ -24,7 +24,6 @@
 #include <QList>
 #include <QMainWindow>
 
-class MissingLettersModel;
 class MissingLettersUI;
 class QAction;
 class QGroupBox;
@@ -49,7 +48,6 @@ class MainWindow : public QMainWindow
 
 public:
   explicit MainWindow(QWidget *parent = 0);
-  virtual ~MainWindow();
 
 protected:
   void closeEvent(QCloseEvent *event) Q_DECL_OVERRIDE;
@@ -79,7 +77,6 @@ private:
   acrostica::MessageBox *message;
   QGroupBox *messageLetters;
   MissingLettersUI *messageLettersView;
-  MissingLettersModel *missingMessageLetters;
 
   acrostica::ui::downmsg *downMessage;
   std::shared_ptr<acrostica::Acrostic> mAcrostic;
@@ -88,7 +85,6 @@ private:
 
   QGroupBox *clueLetters;
   MissingLettersUI *clueLettersView;
-  MissingLettersModel *missingClueLetters;
 };
 
 #endif // ACROSTICA_H
