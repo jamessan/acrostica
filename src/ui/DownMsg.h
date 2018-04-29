@@ -37,6 +37,10 @@ class downmsg : public QGroupBox
 public:
   downmsg(QWidget *parent = 0);
 
+public slots:
+  void mergeMsg(const QModelIndex &first, const QModelIndex &last,
+                const QVector<int> &roles = QVector<int>());
+
 signals:
   void textEdited(const QString& text);
 

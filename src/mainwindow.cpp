@@ -123,6 +123,8 @@ void MainWindow::createWidgets()
           [=](){ missingMessageLetters->update(); });
   connect(clues, &acrostica::ClueModel::dataChanged,
           [=](){ missingClueLetters->update(); });
+  connect(clues, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&, const QVector<int>&)),
+          downMessage, SLOT(mergeMsg(const QModelIndex&, const QModelIndex&, const QVector<int>&)));
 
   connect(clues, &acrostica::ClueModel::rowsRemoved,
           [=](){ missingMessageLetters->update(); });

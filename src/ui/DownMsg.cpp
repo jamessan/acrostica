@@ -61,5 +61,34 @@ namespace acrostica
       connect(lineEdit, &QLineEdit::editingFinished,
               this, morphToLabel);
     }
+
+    void downmsg::mergeMsg(const QModelIndex &first, const QModelIndex &last,
+                           const QVector<int> &roles)
+    {
+      Q_UNUSED(last);
+      if (roles.contains(Qt::EditRole) || roles.contains(Qt::DisplayRole)) {
+        auto model = first.model();
+
+        int rowCount = model->rowCount();
+        QString newMsg(rowCount, ' ');
+        for (int row = 0; row < rowCount; row++)
+        {
+          auto clue = model->index(row, 1).data().toString();
+          if (!clue.isEmpty())
+          {
+            newMsg.replace(row, 1, clue.at(0));
+          }
+        }
+
+        if (useLabel)
+        {
+          label->setText(newMsg.toUpper());
+        }
+        else
+        {
+          lineEdit->setText(newMsg.toUpper());
+        }
+      }
+    }
   }
 }
