@@ -73,6 +73,9 @@ void MainWindow::createActions()
   exitAction = new QAction(tr("E&xit"), this);
   exitAction->setShortcut(tr("Ctrl+Q"));
   connect(exitAction, SIGNAL(triggered()), this, SLOT(close()));
+
+  addClueAction = new QAction(tr("&Add Clue"), this);
+  addClueAction->setStatusTip(tr("Add a new, empty clue at the end of the clues"));
 }
 
 void MainWindow::createMenus()
@@ -84,6 +87,8 @@ void MainWindow::createMenus()
   fileMenu->addAction(printAction);
   fileMenu->addSeparator();
   fileMenu->addAction(exitAction);
+
+  menuBar()->addAction(addClueAction);
 }
 
 void MainWindow::createWidgets()
@@ -112,6 +117,9 @@ void MainWindow::createWidgets()
   clueLettersView = new MissingLettersUI(clueLetters);
   auto missingClueLetters = new MissingLettersModel(mAcrostic, Message, clueLettersView);
   clueLettersView->setModel(missingClueLetters);
+
+  connect(addClueAction, &QAction::triggered,
+          [=](){ clues->insertRow(clues->rowCount() + 1); });
 
   connect(message, &acrostica::MessageBox::textChanged,
           [=](const QString& msg){ mAcrostic->message = msg; });
