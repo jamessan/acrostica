@@ -18,7 +18,10 @@ addons:
       - qt5-qmake
 
 before_install:
-  - if [ "$TRAVIS_OS_NAME" = osx ]; then brew update; brew install qt; fi
+  - if [ "$TRAVIS_OS_NAME" = osx ]; then brew update; fi
+
+install:
+  - if [ "$TRAVIS_OS_NAME" = osx ]; then brew install qt ccache; export PATH="/usr/local/opt/ccache/libexec:$PATH"; fi
 
 cache: ccache
 
