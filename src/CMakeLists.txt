@@ -26,7 +26,9 @@ set(SRC_FILES
   ui/DownMsg.cpp
 )
 
-add_executable(${CMAKE_PROJECT_NAME} WIN32
+add_executable(${CMAKE_PROJECT_NAME}
+  WIN32
+  MACOSX_BUNDLE
   ${SRC_FILES}
 )
 target_link_libraries(${CMAKE_PROJECT_NAME}
@@ -34,4 +36,5 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
 )
 
 install(TARGETS ${CMAKE_PROJECT_NAME}
-        RUNTIME DESTINATION bin)
+  RUNTIME DESTINATION bin
+  BUNDLE DESTINATION bin)
