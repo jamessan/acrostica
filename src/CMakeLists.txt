@@ -26,12 +26,22 @@ set(SRC_FILES
   ui/DownMsg.cpp
 )
 
-add_executable(${CMAKE_PROJECT_NAME} WIN32
+add_executable(${CMAKE_PROJECT_NAME}
+  WIN32
+  MACOSX_BUNDLE
   ${SRC_FILES}
 )
 target_link_libraries(${CMAKE_PROJECT_NAME}
   Qt5::Widgets
 )
 
+if(APPLE)
+  add_custom_command(TARGET ${CMAKE_PROJECT_NAME}
+    POST_BUILD
+    COMMAND macdeployqt
+    ARGS ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CMAKE_PROJECT_NAME}.app -dmg)
+endif()
+
 install(TARGETS ${CMAKE_PROJECT_NAME}
-        RUNTIME DESTINATION bin)
+  RUNTIME DESTINATION bin
+  BUNDLE DESTINATION bin)
