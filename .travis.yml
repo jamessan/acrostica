@@ -29,15 +29,14 @@ script:
   - "./travis.sh"
 
 before_deploy:
-  - make -C build package
+  - if [ "$TRAVIS_OS_NAME" != osx ]; then make -C build package; fi
 
 deploy:
   provider: releases
   api_key:
-    secure: SSwEeuT6tjCSPGPmbJxmtBHDWOsNhXzj4t0/3kyqRSWmtEHbRcDh/VVPpyore1JxPY7Kc/OD94JdwojMAZgrMeJfVWjWvBxwo5yzFGpFT3Qi8MEop5/WndyIfIOxK4ccDC+0t9Y8ujKGaL7njatewDDTU98ReXzVzFcrglbeD78=
+    secure: "BtJirBSoIIyxy2PPpXfnj+RWLCmij28J8aMkj38OUTu1BfO+ayZ6Dex62HcJLKl1xdwTs3lzZrq2QmnrQwmUXGtTx0LTNfNOOeAKNfx7C2qHF5JmcjzYBZOppMwNqOXGFg3t5zNqs5Dpa/gQkKbu18ALOIL1Q2vtB24iR611Yfc="
   file:
-    - build/acrostica-1.0.0-Darwin.dmg
-    - build/acrostica-1.0.0-Darwin.tar.gz
+    - build/bin/acrostica.dmg
   skip_cleanup: true
   on:
     repo: jamessan/acrostica
