@@ -38,6 +38,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
   setCentralWidget(mCentralWidget);
 
+  statusBar();
   createActions();
   createMenus();
   createWidgets();
