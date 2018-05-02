@@ -89,7 +89,8 @@ void MainWindow::createMenus()
   fileMenu->addSeparator();
   fileMenu->addAction(exitAction);
 
-  menuBar()->addAction(addClueAction);
+  auto editMenu = menuBar()->addMenu(tr("&Edit"));
+  editMenu->addAction(addClueAction);
 }
 
 void MainWindow::createWidgets()
