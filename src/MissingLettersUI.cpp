@@ -38,4 +38,9 @@ MissingLettersUI::MissingLettersUI(QWidget *parent) :
   // Disable editing
   setEditTriggers(QAbstractItemView::NoEditTriggers);
   setSelectionMode(QAbstractItemView::NoSelection);
+
+  auto policy = sizePolicy();
+  policy.setHorizontalPolicy(QSizePolicy::Minimum);
+  policy.setVerticalPolicy(QSizePolicy::Minimum);
+  setSizePolicy(policy);
 }

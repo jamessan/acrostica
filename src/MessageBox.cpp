@@ -34,6 +34,9 @@ MessageBox::MessageBox(QWidget *parent)
   connect(textEdit, &QPlainTextEdit::textChanged,
           this, [=](){ emit textChanged(textEdit->toPlainText()); });
 
+  auto policy = textEdit->sizePolicy();
+  policy.setVerticalPolicy(QSizePolicy::Minimum);
+  textEdit->setSizePolicy(policy);
   auto layout = new QVBoxLayout(this);
   layout->addWidget(textEdit);
 }

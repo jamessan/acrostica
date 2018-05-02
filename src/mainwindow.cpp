@@ -108,6 +108,9 @@ void MainWindow::createWidgets()
 
   clueBox_ = new QGroupBox(tr("Clues"), this);
   auto clueView = new QTableView(clueBox_);
+  auto policy = clueView->sizePolicy();
+  policy.setVerticalPolicy(QSizePolicy::MinimumExpanding);
+  clueView->setSizePolicy(policy);
   clueView->setSortingEnabled(false);
   clueView->setCornerButtonEnabled(false);
   clueView->setModel(clues);
