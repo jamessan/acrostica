@@ -72,6 +72,7 @@ private:
   QAction *printAction;
   QAction *exitAction;
   QAction *addClueAction;
+  QAction *removeClueAction;
 
   QWidget *mCentralWidget;
 

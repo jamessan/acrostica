@@ -77,6 +77,10 @@ void MainWindow::createActions()
 
   addClueAction = new QAction(tr("&Add Clue"), this);
   addClueAction->setStatusTip(tr("Add a new, empty clue at the end of the clues"));
+
+  removeClueAction = new QAction(tr("&Remove Clue"), this);
+  removeClueAction->setStatusTip(tr("Remove the selected clue"));
+  removeClueAction->setEnabled(false);
 }
 
 void MainWindow::createMenus()
@@ -91,6 +95,7 @@ void MainWindow::createMenus()
 
   auto editMenu = menuBar()->addMenu(tr("&Edit"));
   editMenu->addAction(addClueAction);
+  editMenu->addAction(removeClueAction);
 }
 
 void MainWindow::createWidgets()
