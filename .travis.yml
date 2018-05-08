@@ -30,7 +30,7 @@ script:
 
 before_deploy:
   - if [ "$TRAVIS_OS_NAME" != osx ]; then make -C build package; fi
-  - if [ "$TRAVIS_OS_NAME" = osx ]; then mv build/bin/ascrostica.dmg build/bin/acrostica-"${TRAVIS_TAG}".dmg; fi
+  - if [ "$TRAVIS_OS_NAME" = osx ]; then mv build/bin/acrostica.dmg build/bin/acrostica-"${TRAVIS_TAG}".dmg; fi
 
 deploy:
   provider: releases
