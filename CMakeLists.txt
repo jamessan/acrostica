@@ -26,7 +26,7 @@ endif()
 
 project(acrostica)
 set(PROJECT_LONGNAME "Acrostica")
-set(PROJECT_VERSION "1.0.0")
+set(PROJECT_VERSION "0.1.0")
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
