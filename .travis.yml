@@ -37,7 +37,7 @@ deploy:
   api_key:
     secure: "BtJirBSoIIyxy2PPpXfnj+RWLCmij28J8aMkj38OUTu1BfO+ayZ6Dex62HcJLKl1xdwTs3lzZrq2QmnrQwmUXGtTx0LTNfNOOeAKNfx7C2qHF5JmcjzYBZOppMwNqOXGFg3t5zNqs5Dpa/gQkKbu18ALOIL1Q2vtB24iR611Yfc="
   file:
-    - build/bin/acrostica-*.dmg
+    - build/bin/acrostica-${TRAVIS_TAG}.dmg
   skip_cleanup: true
   on:
     repo: jamessan/acrostica
