@@ -22,6 +22,7 @@
 #include <memory>
 
 #include <QAbstractTableModel>
+#include <QJsonObject>
 #include <QList>
 #include <QModelIndex>
 #include <QString>
@@ -40,6 +41,9 @@ struct Clue
   {
     return hint == other.hint && answer == other.answer;
   }
+
+  void read(const QJsonObject &json);
+  void write(QJsonObject &json) const;
 };
 
 typedef QString Message;
@@ -54,6 +58,9 @@ struct Acrostic
     return message == other.message
       && clues == other.clues;
   }
+
+  void read(const QJsonObject &json);
+  void write(QJsonObject &json) const;
 };
 
 class ClueModel : public QAbstractTableModel

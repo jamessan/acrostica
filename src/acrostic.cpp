@@ -26,6 +26,61 @@
 namespace acrostica
 {
 
+void Clue::read(const QJsonObject &json)
+{
+  if (json.contains("hint") && json["hint"].isString())
+  {
+    hint = json["hint"].toString();
+  }
+
+  if (json.contains("answer") && json["answer"].isString())
+  {
+    answer = json["answer"].toString();
+  }
+}
+
+void Clue::write(QJsonObject &json) const
+{
+  json["hint"] = hint;
+  json["answer"] = answer;
+}
+
+void Acrostic::read(const QJsonObject &json)
+{
+  if (json.contains("message") && json["message"].isString())
+  {
+    message = json["message"].toString();
+  }
+
+  if (json.contains("clues") && json["clues"].isArray())
+  {
+    QJsonArray clueArray = json["clues"].toArray();
+
+    clues.clear();
+    clues.reserve(clueArray.size());
+    for (int i = 0, max = clueArray.size(); i < max; i++)
+    {
+      QJsonObject obj = clueArray[i].toObject();
+      Clue clue;
+      clue.read(obj);
+      this->clues.append(clue);
+    }
+  }
+}
+
+void Acrostic::write(QJsonObject &json) const
+{
+  json["message"] = message;
+  QJsonArray clueArray;
+  for (auto const clue : clues)
+  {
+    QJsonObject obj;
+    clue.write(obj);
+    clueArray.append(obj);
+  }
+  json["clues"] = clueArray;
+}
+
 ClueModel::ClueModel(std::shared_ptr<Acrostic> acrostic, QObject *parent)
   : QAbstractTableModel(parent)
   , mAcrostic(acrostic)
