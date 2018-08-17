@@ -64,6 +64,10 @@ private:
   void createWidgets();
   void layoutWidgets();
 
+  bool maybeSave();
+  QString filename();
+  void setFilename(const QString &fname);
+
   QMenu *fileMenu;
 
   QAction *newAction;
@@ -87,6 +91,8 @@ private:
 
   QGroupBox *clueLetters;
   MissingLettersUI *clueLettersView;
+
+  QString filename_;
 };
 
 #endif // ACROSTICA_H

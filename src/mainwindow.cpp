@@ -62,7 +62,6 @@ void MainWindow::createActions()
   saveAction = new QAction(tr("&Save"), this);
   saveAction->setShortcut(tr("Ctrl+S"));
   saveAction->setStatusTip(tr("Save current acrostic"));
-  saveAction->setEnabled(false);
   connect(saveAction, SIGNAL(triggered()), this, SLOT(save()));
 
   printAction = new QAction(tr("&Print…"), this);
@@ -174,7 +173,14 @@ void MainWindow::layoutWidgets()
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-  event->accept();
+  if (maybeSave())
+  {
+    event->accept();
+  }
+  else
+  {
+    event->ignore();
+  }
 }
 
 void MainWindow::newAcrostic()
@@ -185,9 +191,74 @@ void MainWindow::open()
 {
 }
 
+QString MainWindow::filename()
+{
+  QString filename;
+  if (filename_.isEmpty())
+  {
+    filename = QFileDialog::getSaveFileName(this,
+                                            tr("Save Acrostic"),
+                                            "",
+                                            tr("Acrostic (*.json)"));
+  }
+  else {
+    filename = filename_;
+  }
+
+  return filename;
+}
+
+bool MainWindow::maybeSave()
+{
+  const QMessageBox::StandardButton ret = QMessageBox::warning(this,
+                                                               "Acrostica",
+                                                               "Do you want to save your changes?",
+                                                               QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel,
+                                                               QMessageBox::Save);
+  switch (ret)
+  {
+    case QMessageBox::Save: {
+      return save();
+    }
+    case QMessageBox::Discard:
+      return true;
+    case QMessageBox::Cancel:
+    default:
+      return false;
+  }
+}
+
 bool MainWindow::save()
 {
+  QString fname = filename();
+
+  if (fname.isEmpty())
+  {
+    return false;
+  }
+
+  QFile file(fname);
+  if (!file.open(QIODevice::WriteOnly)) {
+    QMessageBox::information(this, tr("Unable to open file %1").arg(fname), file.errorString());
+    return false;
+  }
+
+  QJsonObject obj;
+  mAcrostic->write(obj);
+  QJsonDocument doc(obj);
+  file.write(doc.toJson());
+
+  setFilename(fname);
+
   return true;
+}
+
+void MainWindow::setFilename(const QString &fname)
+{
+  filename_ = fname;
+
+  setWindowFilePath(QFileInfo(filename_).fileName());
+  setWindowModified(false);
 }
 
 void MainWindow::print()
