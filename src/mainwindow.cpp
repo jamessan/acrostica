@@ -37,6 +37,7 @@ MainWindow::MainWindow(QWidget *parent)
   , mAcrostic(std::make_shared<acrostica::Acrostic>())
 {
   setCentralWidget(mCentralWidget);
+  setFilename("");
 
   statusBar();
   createActions();
@@ -133,19 +134,22 @@ void MainWindow::createWidgets()
           [=](){ clues->insertRow(clues->rowCount() + 1); });
 
   connect(message, &acrostica::MessageBox::textChanged,
-          [=](const QString& msg){ mAcrostic->message = msg; });
-  connect(message, &acrostica::MessageBox::textChanged,
-          [=](const QString&){ missingClueLetters->update(); });
-  connect(message, &acrostica::MessageBox::textChanged,
-          [=](const QString&){ missingMessageLetters->update(); });
+          [=](const QString& msg){
+            mAcrostic->message = msg;
+            missingClueLetters->update();
+            missingMessageLetters->update();
+            setWindowModified(true);
+          });
 
   connect(downMessage, SIGNAL(textEdited(const QString&)),
           clues, SLOT(propagateDownMsg(const QString&)));
 
   connect(clues, &acrostica::ClueModel::dataChanged,
-          [=](){ missingMessageLetters->update(); });
-  connect(clues, &acrostica::ClueModel::dataChanged,
-          [=](){ missingClueLetters->update(); });
+          [=](){
+            missingClueLetters->update();
+            missingMessageLetters->update();
+            setWindowModified(true);
+          });
   connect(clues, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&, const QVector<int>&)),
           downMessage, SLOT(mergeMsg(const QModelIndex&, const QModelIndex&, const QVector<int>&)));
 
@@ -210,6 +214,11 @@ QString MainWindow::filename()
 
 bool MainWindow::maybeSave()
 {
+  if (!isWindowModified())
+  {
+    return true;
+  }
+
   const QMessageBox::StandardButton ret = QMessageBox::warning(this,
                                                                "Acrostica",
                                                                "Do you want to save your changes?",
@@ -257,7 +266,15 @@ void MainWindow::setFilename(const QString &fname)
 {
   filename_ = fname;
 
-  setWindowFilePath(QFileInfo(filename_).fileName());
+  if (filename_.isEmpty())
+  {
+    setWindowTitle("Acrostica[*]");
+  }
+  else
+  {
+    setWindowTitle(QString("Acrostica - %1[*]")
+                   .arg(QFileInfo(filename_).fileName()));
+  }
   setWindowModified(false);
 }
 
