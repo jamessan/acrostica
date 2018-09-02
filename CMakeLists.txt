@@ -31,6 +31,11 @@ set(PROJECT_VERSION "0.1.0")
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Do not implicitly link to qmain
+if(POLICY CMP0020)
+  cmake_policy(SET CMP0020 NEW)
+endif()
+
 set(CMAKE_AUTOMOC ON)
 
 if (EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
