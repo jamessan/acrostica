@@ -28,6 +28,9 @@ project(acrostica)
 set(PROJECT_LONGNAME "Acrostica")
 set(PROJECT_VERSION "0.1.0")
 
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 set(CMAKE_AUTOMOC ON)
 
 if (EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
@@ -47,10 +50,6 @@ if (EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
 endif()
 
 find_package(Qt5Widgets REQUIRED)
-
-if (NOT MSVC)
-  set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -std=c++11)
-endif()
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
