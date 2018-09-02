@@ -20,7 +20,7 @@ set(SRC_FILES
   acrostic.cpp
   main.cpp
   mainwindow.cpp
-  MessageBox.cpp
+  MessageWidget.cpp
   MissingLettersModel.cpp
   MissingLettersUI.cpp
   ui/DownMsg.cpp

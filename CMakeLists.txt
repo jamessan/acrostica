@@ -1,6 +1,6 @@
 ###
 # Acrostica - Simple acrostic creator
-# Copyright (C) 2014-2016 James McCoy <jamessan@jamessan.com>
+# Copyright © 2014-2018 James McCoy <jamessan@jamessan.com>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -29,7 +29,6 @@ set(PROJECT_LONGNAME "Acrostica")
 set(PROJECT_VERSION "0.1.0")
 
 set(CMAKE_AUTOMOC ON)
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 if (EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Acrostica is an acrostic creator")
@@ -55,4 +54,5 @@ endif()
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
+include_directories(include)
 add_subdirectory(src)

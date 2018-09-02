@@ -17,7 +17,7 @@
  */
 
 #include <QtWidgets>
-#include "MissingLettersModel.h"
+#include "acrostica/MissingLettersModel.h"
 
 #include <algorithm>
 #include <memory>
@@ -27,7 +27,7 @@
 #include <QString>
 #include <QVector>
 
-#include "acrostic.h"
+#include "acrostica/acrostic.h"
 
 MissingLettersModel::MissingLettersModel(std::shared_ptr<acrostica::Acrostic> acrostic,
                                          AdditiveSource source, QWidget *parent)

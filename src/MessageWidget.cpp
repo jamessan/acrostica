@@ -16,17 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "MessageBox.h"
+#include "acrostica/MessageWidget.h"
 #include <QtWidgets>
 
 #include <memory>
 
-#include "acrostic.h"
+#include "acrostica/acrostic.h"
 
 namespace acrostica
 {
 
-MessageBox::MessageBox(QWidget *parent)
+MessageWidget::MessageWidget(QWidget *parent)
   : QGroupBox(tr("Message"), parent)
 {
   auto textEdit = new QPlainTextEdit(this);

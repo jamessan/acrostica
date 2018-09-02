@@ -1,6 +1,6 @@
 /*
  * Acrostica - Simple acrostic creator
- * Copyright (C) 2014-2018 James McCoy <jamessan@jamessan.com>
+ * Copyright © 2014-2018 James McCoy <jamessan@jamessan.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ class QWidget;
 namespace acrostica
 {
   class Acrostic;
-  class MessageBox;
+  class MessageWidget;
   namespace ui
   {
     class downmsg;
@@ -80,7 +80,7 @@ private:
 
   QWidget *mCentralWidget;
 
-  acrostica::MessageBox *message;
+  acrostica::MessageWidget *message;
   QGroupBox *messageLetters;
   MissingLettersUI *messageLettersView;
 
