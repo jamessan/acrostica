@@ -21,8 +21,8 @@
 
 #include <memory>
 
-#include <QVector>
 #include <QAbstractTableModel>
+#include <QVector>
 
 namespace acrostica
 {
@@ -35,7 +35,7 @@ enum AdditiveSource
   Clues
 };
 
-class MissingLettersModel : public QAbstractTableModel
+class Q_DECL_EXPORT MissingLettersModel : public QAbstractTableModel
 {
   Q_OBJECT
 

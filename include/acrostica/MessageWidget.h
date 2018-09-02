@@ -28,7 +28,7 @@
 namespace acrostica
 {
 
-class MessageWidget : public QGroupBox
+class Q_DECL_EXPORT MessageWidget : public QGroupBox
 {
   Q_OBJECT
 

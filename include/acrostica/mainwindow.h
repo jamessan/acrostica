@@ -42,7 +42,7 @@ namespace acrostica
   }
 }
 
-class MainWindow : public QMainWindow
+class Q_DECL_EXPORT MainWindow : public QMainWindow
 {
   Q_OBJECT
 
