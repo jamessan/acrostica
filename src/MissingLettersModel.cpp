@@ -103,3 +103,5 @@ void MissingLettersModel::update()
   mLetters = letters;
   endResetModel();
 }
+
+#include "acrostica/moc_MissingLettersModel.cpp"

@@ -224,3 +224,5 @@ void ClueModel::propagateDownMsg(const QString &downMsg)
 }
 
 }
+
+#include "acrostica/moc_acrostic.cpp"

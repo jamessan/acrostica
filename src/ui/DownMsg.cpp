@@ -92,3 +92,5 @@ namespace acrostica
     }
   }
 }
+
+#include "acrostica/ui/moc_DownMsg.cpp"

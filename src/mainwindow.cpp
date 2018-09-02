@@ -281,3 +281,5 @@ void MainWindow::setFilename(const QString &fname)
 void MainWindow::print()
 {
 }
+
+#include "acrostica/moc_mainwindow.cpp"

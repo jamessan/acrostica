@@ -42,3 +42,5 @@ MessageWidget::MessageWidget(QWidget *parent)
 }
 
 }
+
+#include "acrostica/moc_MessageWidget.cpp"

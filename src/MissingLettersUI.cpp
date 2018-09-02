@@ -44,3 +44,5 @@ MissingLettersUI::MissingLettersUI(QWidget *parent) :
   policy.setVerticalPolicy(QSizePolicy::Minimum);
   setSizePolicy(policy);
 }
+
+#include "acrostica/moc_MissingLettersUI.cpp"
