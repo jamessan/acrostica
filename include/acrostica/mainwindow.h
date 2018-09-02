@@ -34,7 +34,7 @@ class QWidget;
 
 namespace acrostica
 {
-  class Acrostic;
+  struct Acrostic;
   class MessageWidget;
   namespace ui
   {
