@@ -17,9 +17,10 @@
  */
 
 #include "acrostica/MessageWidget.h"
-#include <QtWidgets>
 
 #include <memory>
+
+#include <QtWidgets>
 
 #include "acrostica/acrostic.h"
 

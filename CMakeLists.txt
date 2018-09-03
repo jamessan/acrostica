@@ -28,8 +28,19 @@ project(acrostica)
 set(PROJECT_LONGNAME "Acrostica")
 set(PROJECT_VERSION "0.1.0")
 
+# Do not recursively expand variables
+if(POLICY CMP0054)
+  cmake_policy(SET CMP0054 NEW)
+endif()
+
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+  add_definitions(/W4 /WX /FIacrostica/pragma.h)
+else()
+  add_definitions(-Wall -Werror)
+endif()
 
 # Do not implicitly link to qmain
 if(POLICY CMP0020)

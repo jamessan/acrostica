@@ -16,14 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QtWidgets>
 #include "acrostica/mainwindow.h"
 
 #include <memory>
 
-#include <QPalette>
-#include <QSizePolicy>
-#include <QTableView>
+#include <QtWidgets>
 
 #include "acrostica/acrostic.h"
 #include "acrostica/ui/DownMsg.h"

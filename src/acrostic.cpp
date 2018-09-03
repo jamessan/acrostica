@@ -17,10 +17,10 @@
  */
 
 #include "acrostica/acrostic.h"
-#include <QtWidgets>
 
 #include <memory>
 
+#include <QtWidgets>
 #include <QVariant>
 
 namespace acrostica

@@ -45,10 +45,12 @@ public:
 
   int rowCount(const QModelIndex& parent = QModelIndex()) const override
   {
+    Q_UNUSED(parent);
     return 6;
   }
   int columnCount(const QModelIndex& parent = QModelIndex()) const override
   {
+    Q_UNUSED(parent);
     return 5;
   }
   QVariant data(const QModelIndex& index, int role) const override;

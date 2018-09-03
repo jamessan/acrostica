@@ -16,12 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QtWidgets>
 #include "acrostica/ui/DownMsg.h"
 
-#include <QGroupBox>
-#include <QPalette>
 #include <QRegularExpression>
+#include <QtWidgets>
 
 namespace acrostica
 {
