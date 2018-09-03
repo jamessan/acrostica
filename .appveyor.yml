@@ -1,0 +1,35 @@
+image:
+  - Visual Studio 2015
+
+version: '{build}'
+
+platform:
+  - x86
+  - x64
+
+configuration:
+  - Debug
+  - Release
+
+environment:
+  matrix:
+    - QT_BIN: C:\Qt\5.11\msvc2015\bin
+    - QT_BIN: C:\Qt\5.11\msvc2015_64\bin
+
+matrix:
+  exclude:
+    - platform: x86
+      QT_BIN: C:\Qt\5.11\msvc2015_64\bin
+    - platform: x64
+      QT_BIN: C:\Qt\5.11\msvc2015\bin
+
+before_build:
+  - set PATH=%QT_BIN%;%PATH%
+  - if "%PLATFORM%"=="x64" ( call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86_amd64 )
+  - if "%PLATFORM%"=="x86" ( call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86 )
+
+build_script:
+  - mkdir build
+  - cd build
+  - IF "%PLATFORM%"=="x64" ( cmake -G "Visual Studio 14 2015 Win64" .. ) ELSE ( cmake -G "Visual Studio 14 2015" .. )
+  - cmake --build . --config "%CONFIGURATION%"
