@@ -38,6 +38,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
   add_definitions(/W4 /WX /FIacrostica/pragma.h)
+  add_definitions(/MP)
 else()
   add_definitions(-Wall -Werror)
 endif()
