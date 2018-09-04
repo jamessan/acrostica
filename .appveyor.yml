@@ -33,3 +33,18 @@ build_script:
   - cd build
   - IF "%PLATFORM%"=="x64" ( cmake -G "Visual Studio 14 2015 Win64" .. ) ELSE ( cmake -G "Visual Studio 14 2015" .. )
   - cmake --build . --config "%CONFIGURATION%"
+
+artifacts:
+  - path: build\acrostica-*.zip
+
+deploy:
+  - provider: Environment
+    name: production
+    on:
+      configuration: Release
+      APPVEYOR_REPO_TAG: true
+    description: ''
+    artifact: /.*acrostica-.*\.zip/
+    draft: true
+    auth_token:
+      secure: Yd8fKc8zX5POlVv3sepbW48CNXte1LtvDCnQ/t06+XyvCH1pOXpcmZ8NTL3SDa7c
