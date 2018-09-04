@@ -50,6 +50,8 @@ endif()
 
 set(CMAKE_AUTOMOC ON)
 
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
 if (EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Acrostica is an acrostic creator")
   set(CPACK_PACKAGE_VENDOR "James McCoy <jamessan@jamessan.com>")
@@ -60,6 +62,8 @@ if (EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
     set(CPACK_GENERATOR "DragNDrop")
     set(CPACK_DMG_FORMAT "UDZO")
     include(CPackDMG)
+  elseif(MSVC)
+    set(CPACK_GENERATOR "ZIP")
   else()
     set(CPACK_GENERATOR "TGZ")
   endif()
@@ -67,8 +71,6 @@ if (EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
 endif()
 
 find_package(Qt5Widgets REQUIRED)
-
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 include_directories(include)
 add_subdirectory(src)
