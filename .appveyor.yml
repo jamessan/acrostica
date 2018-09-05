@@ -3,6 +3,11 @@ image:
 
 version: '{build}'
 
+branches:
+  only:
+    - master
+    - /^v\d+\.\d+(\.\d+)?(-\S*)?$/
+
 platform:
   - x86
   - x64
