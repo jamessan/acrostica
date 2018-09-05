@@ -4,11 +4,10 @@ sudo: false
 
 os:
   - osx
+  - linux
 
 addons:
   apt:
-    sources:
-      - debian-sid
     packages:
       - gcc
       - g++
