@@ -1,6 +1,6 @@
 /*
  * Acrostica - Simple acrostic creator
- * Copyright (C) 2014-2015 James McCoy <jamessan@jamessan.com>
+ * Copyright © 2014-2018 James McCoy <jamessan@jamessan.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@
 
 #include <QTableView>
 
-class MissingLettersUI : public QTableView
+class Q_DECL_EXPORT MissingLettersUI : public QTableView
 {
   Q_OBJECT
 

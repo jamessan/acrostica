@@ -1,6 +1,6 @@
 /*
  * Acrostica - Simple acrostic creator
- * Copyright (C) 2014-2015 James McCoy <jamessan@jamessan.com>
+ * Copyright © 2014-2018 James McCoy <jamessan@jamessan.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,10 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QtWidgets>
-#include "MissingLettersUI.h"
+#include "acrostica/MissingLettersUI.h"
 
-#include <QHeaderView>
+#include <QtWidgets>
 
 MissingLettersUI::MissingLettersUI(QWidget *parent) :
   QTableView(parent)
@@ -44,3 +43,5 @@ MissingLettersUI::MissingLettersUI(QWidget *parent) :
   policy.setVerticalPolicy(QSizePolicy::Minimum);
   setSizePolicy(policy);
 }
+
+#include "acrostica/moc_MissingLettersUI.cpp"

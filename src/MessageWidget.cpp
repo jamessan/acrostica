@@ -1,6 +1,6 @@
 /*
  * Acrostica - Simple acrostic creator
- * Copyright (C) 2016-2018 James McCoy <jamessan@jamessan.com>
+ * Copyright © 2018 James McCoy <jamessan@jamessan.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,41 +16,32 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACROSTICA_UI_DOWNMESSAGE_
-#define ACROSTICA_UI_DOWNMESSAGE_
+#include "acrostica/MessageWidget.h"
 
-#include <QGroupBox>
-#include <QString>
+#include <memory>
 
-class QLabel;
-class QLineEdit;
+#include <QtWidgets>
+
+#include "acrostica/acrostic.h"
 
 namespace acrostica
 {
-namespace ui
+
+MessageWidget::MessageWidget(QWidget *parent)
+  : QGroupBox(tr("Message"), parent)
 {
+  auto textEdit = new QPlainTextEdit(this);
+  textEdit->setTabChangesFocus(true);
+  connect(textEdit, &QPlainTextEdit::textChanged,
+          this, [=](){ emit textChanged(textEdit->toPlainText()); });
 
-class downmsg : public QGroupBox
-{
-  Q_OBJECT
-
-public:
-  downmsg(QWidget *parent = 0);
-
-public slots:
-  void mergeMsg(const QModelIndex &first, const QModelIndex &last,
-                const QVector<int> &roles = QVector<int>());
-
-signals:
-  void textEdited(const QString& text);
-
-private:
-  bool useLabel;
-  QLineEdit *lineEdit;
-  QLabel *label;
-};
-
-}
+  auto policy = textEdit->sizePolicy();
+  policy.setVerticalPolicy(QSizePolicy::Minimum);
+  textEdit->setSizePolicy(policy);
+  auto layout = new QVBoxLayout(this);
+  layout->addWidget(textEdit);
 }
 
-#endif
+}
+
+#include "acrostica/moc_MessageWidget.cpp"

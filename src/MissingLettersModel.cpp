@@ -16,18 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QtWidgets>
-#include "MissingLettersModel.h"
+#include "acrostica/MissingLettersModel.h"
 
 #include <algorithm>
 #include <memory>
 
 #include <QMap>
-#include <QModelIndex>
 #include <QString>
+#include <QtWidgets>
 #include <QVector>
 
-#include "acrostic.h"
+#include "acrostica/acrostic.h"
 
 MissingLettersModel::MissingLettersModel(std::shared_ptr<acrostica::Acrostic> acrostic,
                                          AdditiveSource source, QWidget *parent)
@@ -56,11 +55,15 @@ QVariant MissingLettersModel::data(const QModelIndex& index, int role) const
 QVariant MissingLettersModel::headerData(int section, Qt::Orientation orientation,
                                          int role) const
 {
+  Q_UNUSED(section);
+  Q_UNUSED(orientation);
+  Q_UNUSED(role);
   return QVariant();
 }
 
 Qt::ItemFlags MissingLettersModel::flags(const QModelIndex& index) const
 {
+  Q_UNUSED(index);
   return Qt::ItemIsEnabled | Qt::ItemIsEditable;
 }
 
@@ -103,3 +106,5 @@ void MissingLettersModel::update()
   mLetters = letters;
   endResetModel();
 }
+
+#include "acrostica/moc_MissingLettersModel.cpp"

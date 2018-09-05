@@ -16,24 +16,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACROSTICA_MESSAGEBOX_H_
-#define ACROSTICA_MESSAGEBOX_H_
+#ifndef ACROSTICA_MESSAGEWIDGET_H_
+#define ACROSTICA_MESSAGEWIDGET_H_
 
 #include <memory>
 
 #include <QGroupBox>
 
-#include "acrostic.h"
+#include "acrostica/acrostic.h"
 
 namespace acrostica
 {
 
-class MessageBox : public QGroupBox
+class Q_DECL_EXPORT MessageWidget : public QGroupBox
 {
   Q_OBJECT
 
 public:
-  MessageBox(QWidget *parent = nullptr);
+  MessageWidget(QWidget *parent = nullptr);
 
 signals:
   void textChanged(const QString& text);

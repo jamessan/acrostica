@@ -1,6 +1,6 @@
 ###
 # Acrostica - Simple acrostic creator
-# Copyright (C) 2014-2018 James McCoy <jamessan@jamessan.com>
+# Copyright © 2014-2018 James McCoy <jamessan@jamessan.com>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@ set(SRC_FILES
   acrostic.cpp
   main.cpp
   mainwindow.cpp
-  MessageBox.cpp
+  MessageWidget.cpp
   MissingLettersModel.cpp
   MissingLettersUI.cpp
   ui/DownMsg.cpp
@@ -31,8 +31,13 @@ add_executable(${CMAKE_PROJECT_NAME}
   MACOSX_BUNDLE
   ${SRC_FILES}
 )
+
+set(QTLIBS Qt5::Widgets)
+if(WIN32)
+  set(QTLIBS ${QTLIBS} Qt5::WinMain)
+endif()
 target_link_libraries(${CMAKE_PROJECT_NAME}
-  Qt5::Widgets
+  ${QTLIBS}
 )
 
 if(APPLE)
@@ -40,6 +45,14 @@ if(APPLE)
     POST_BUILD
     COMMAND macdeployqt
     ARGS ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CMAKE_PROJECT_NAME}.app -dmg)
+elseif(WIN32)
+  add_custom_command(TARGET ${CMAKE_PROJECT_NAME}
+    POST_BUILD
+    COMMAND windeployqt
+    ARGS --dir $<TARGET_FILE_DIR:${CMAKE_PROJECT_NAME}>-deploy $<TARGET_FILE:${CMAKE_PROJECT_NAME}>)
+  install(DIRECTORY $<TARGET_FILE_DIR:${CMAKE_PROJECT_NAME}>-deploy/
+    DESTINATION bin
+    USE_SOURCE_PERMISSIONS)
 endif()
 
 install(TARGETS ${CMAKE_PROJECT_NAME}

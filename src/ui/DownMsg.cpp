@@ -1,6 +1,6 @@
 /*
  * Acrostica - Simple acrostic creator
- * Copyright (C) 2016-2018 James McCoy <jamessan@jamessan.com>
+ * Copyright © 2016-2018 James McCoy <jamessan@jamessan.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,12 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QtWidgets>
-#include "ui/DownMsg.h"
+#include "acrostica/ui/DownMsg.h"
 
-#include <QGroupBox>
-#include <QPalette>
 #include <QRegularExpression>
+#include <QtWidgets>
 
 namespace acrostica
 {
@@ -92,3 +90,5 @@ namespace acrostica
     }
   }
 }
+
+#include "acrostica/ui/moc_DownMsg.cpp"

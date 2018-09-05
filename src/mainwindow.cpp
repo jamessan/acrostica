@@ -1,6 +1,6 @@
 /*
  * Acrostica - Simple acrostic creator
- * Copyright (C) 2014-2018 James McCoy <jamessan@jamessan.com>
+ * Copyright © 2014-2018 James McCoy <jamessan@jamessan.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,20 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QtWidgets>
-#include "mainwindow.h"
+#include "acrostica/mainwindow.h"
 
 #include <memory>
 
-#include <QPalette>
-#include <QSizePolicy>
-#include <QTableView>
+#include <QtWidgets>
 
-#include "acrostic.h"
-#include "ui/DownMsg.h"
-#include "MessageBox.h"
-#include "MissingLettersModel.h"
-#include "MissingLettersUI.h"
+#include "acrostica/acrostic.h"
+#include "acrostica/ui/DownMsg.h"
+#include "acrostica/MessageWidget.h"
+#include "acrostica/MissingLettersModel.h"
+#include "acrostica/MissingLettersUI.h"
 
 MainWindow::MainWindow(QWidget *parent)
   : QMainWindow(parent)
@@ -100,7 +97,7 @@ void MainWindow::createMenus()
 
 void MainWindow::createWidgets()
 {
-  message = new acrostica::MessageBox(this);
+  message = new acrostica::MessageWidget(this);
 
   messageLetters = new QGroupBox(tr("Letters Missing from Message"), this);
   messageLettersView = new MissingLettersUI(messageLetters);
@@ -133,7 +130,7 @@ void MainWindow::createWidgets()
   connect(addClueAction, &QAction::triggered,
           [=](){ clues->insertRow(clues->rowCount() + 1); });
 
-  connect(message, &acrostica::MessageBox::textChanged,
+  connect(message, &acrostica::MessageWidget::textChanged,
           [=](const QString& msg){
             mAcrostic->message = msg;
             missingClueLetters->update();
@@ -281,3 +278,5 @@ void MainWindow::setFilename(const QString &fname)
 void MainWindow::print()
 {
 }
+
+#include "acrostica/moc_mainwindow.cpp"

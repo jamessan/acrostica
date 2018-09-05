@@ -1,6 +1,6 @@
 /*
  * Acrostica - Simple acrostic creator
- * Copyright (C) 2016-2018 James McCoy <jamessan@jamessan.com>
+ * Copyright © 2016-2018 James McCoy <jamessan@jamessan.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,11 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "acrostic.h"
-#include <QtWidgets>
+#include "acrostica/acrostic.h"
 
 #include <memory>
 
+#include <QtWidgets>
 #include <QVariant>
 
 namespace acrostica
@@ -224,3 +224,5 @@ void ClueModel::propagateDownMsg(const QString &downMsg)
 }
 
 }
+
+#include "acrostica/moc_acrostic.cpp"
