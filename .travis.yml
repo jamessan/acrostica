@@ -13,9 +13,10 @@ env:
 addons:
   apt:
     packages:
+      - cmake
       - gcc
       - g++
-      - cmake
+      - ninja-build
       - qt5-default
       - qtbase5-dev-tools
       - qt5-qmake

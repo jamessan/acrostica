@@ -10,7 +10,7 @@ mkdir build
   if [ "$TRAVIS_OS_NAME" = osx ]; then
     cmake -DCMAKE_PREFIX_PATH=/usr/local/opt/qt -DCMAKE_BUILD_TYPE=$BUILD_TYPE ..
   else
-    cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE ..
+    cmake -G Ninja -DCMAKE_BUILD_TYPE=$BUILD_TYPE ..
   fi
 )
-make -C build
+cmake --build build
