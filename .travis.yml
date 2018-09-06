@@ -54,3 +54,5 @@ deploy:
     tags: true
     condition: $CC = gcc && $TRAVIS_OS_NAME = osx && $BUILD_TYPE = RelWithDebInfo
   draft: true
+  name: ${TRAVIS_TAG}
+  target_commitish: ${TRAVIS_COMMIT}

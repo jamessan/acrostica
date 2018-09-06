@@ -51,5 +51,6 @@ deploy:
     description: ''
     artifact: /.*acrostica-.*\.zip/
     draft: true
+    tag: $(APPVEYOR_REPO_TAG_NAME)
     auth_token:
       secure: Yd8fKc8zX5POlVv3sepbW48CNXte1LtvDCnQ/t06+XyvCH1pOXpcmZ8NTL3SDa7c
