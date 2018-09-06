@@ -52,5 +52,5 @@ deploy:
   on:
     repo: jamessan/acrostica
     tags: true
-    condition: $CC = gcc && $TRAVIS_OS_NAME = osx
+    condition: $CC = gcc && $TRAVIS_OS_NAME = osx && $BUILD_TYPE = RelWithDebInfo
   draft: true
