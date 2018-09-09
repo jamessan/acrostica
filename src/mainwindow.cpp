@@ -54,7 +54,6 @@ void MainWindow::createActions()
   openAction = new QAction(tr("&Open…"), this);
   openAction->setShortcut(tr("Ctrl+O"));
   openAction->setStatusTip(tr("Open existing acrostic"));
-  openAction->setEnabled(false);
   connect(openAction, SIGNAL(triggered()), this, SLOT(open()));
 
   saveAction = new QAction(tr("&Save"), this);
@@ -190,6 +189,30 @@ void MainWindow::newAcrostic()
 
 void MainWindow::open()
 {
+  if (!maybeSave())
+  {
+    return;
+  }
+
+  QString filename = QFileDialog::getOpenFileName(this,
+                                                  tr("Open Acrostic"),
+                                                  "",
+                                                  tr("Acrostic (*.json)"));
+  if (filename.isEmpty()) {
+    return;
+  }
+
+  QFile file(filename);
+  if (!file.open(QIODevice::ReadOnly)) {
+    QMessageBox::information(this, tr("Unable to open file %1").arg(filename), file.errorString());
+    return;
+  }
+
+  QByteArray bytes = file.readAll();
+  QJsonDocument doc(QJsonDocument::fromJson(bytes));
+  mAcrostic->read(doc.object());
+
+  setFilename(filename);
 }
 
 QString MainWindow::filename()
