@@ -29,17 +29,22 @@ namespace acrostica
 
 MessageWidget::MessageWidget(QWidget *parent)
   : QGroupBox(tr("Message"), parent)
+  , textEdit_(new QPlainTextEdit(this))
 {
-  auto textEdit = new QPlainTextEdit(this);
-  textEdit->setTabChangesFocus(true);
-  connect(textEdit, &QPlainTextEdit::textChanged,
-          this, [=](){ emit textChanged(textEdit->toPlainText()); });
+  textEdit_->setTabChangesFocus(true);
+  connect(textEdit_, &QPlainTextEdit::textChanged,
+          this, [=](){ emit textChanged(textEdit_->toPlainText()); });
 
-  auto policy = textEdit->sizePolicy();
+  auto policy = textEdit_->sizePolicy();
   policy.setVerticalPolicy(QSizePolicy::Minimum);
-  textEdit->setSizePolicy(policy);
+  textEdit_->setSizePolicy(policy);
   auto layout = new QVBoxLayout(this);
-  layout->addWidget(textEdit);
+  layout->addWidget(textEdit_);
+}
+
+void MessageWidget::setText(const QString &text)
+{
+  textEdit_->setPlainText(text);
 }
 
 }
