@@ -100,7 +100,7 @@ void MainWindow::createWidgets()
 
   messageLetters = new QGroupBox(tr("Letters Missing from Message"), this);
   messageLettersView = new MissingLettersUI(messageLetters);
-  auto missingMessageLetters = new MissingLettersModel(mAcrostic, Clues, messageLettersView);
+  auto missingMessageLetters = new acrostica::MissingLettersModel(mAcrostic, Clues, messageLettersView);
   messageLettersView->setModel(missingMessageLetters);
 
   downMessage = new acrostica::ui::downmsg(this);
@@ -123,7 +123,7 @@ void MainWindow::createWidgets()
 
   clueLetters = new QGroupBox(tr("Letters Missing from Clues"), this);
   clueLettersView = new MissingLettersUI(clueLetters);
-  auto missingClueLetters = new MissingLettersModel(mAcrostic, Message, clueLettersView);
+  auto missingClueLetters = new acrostica::MissingLettersModel(mAcrostic, Message, clueLettersView);
   clueLettersView->setModel(missingClueLetters);
 
   connect(addClueAction, &QAction::triggered,

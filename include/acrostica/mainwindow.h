@@ -36,6 +36,7 @@ namespace acrostica
 {
   struct Acrostic;
   class MessageWidget;
+  class MissingLettersModel;
   namespace ui
   {
     class downmsg;

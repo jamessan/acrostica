@@ -24,16 +24,15 @@
 #include <QAbstractTableModel>
 #include <QVector>
 
-namespace acrostica
-{
-struct Acrostic;
-}
-
 enum AdditiveSource
 {
   Message,
   Clues
 };
+
+namespace acrostica
+{
+struct Acrostic;
 
 class Q_DECL_EXPORT MissingLettersModel : public QAbstractTableModel
 {
@@ -66,5 +65,7 @@ private:
   AdditiveSource mSource;
   std::shared_ptr<acrostica::Acrostic> mAcrostic;
 };
+
+}
 
 #endif
