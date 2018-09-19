@@ -31,6 +31,9 @@
 MainWindow::MainWindow(QWidget *parent)
   : QMainWindow(parent)
   , mCentralWidget(new QWidget)
+  , missingMessageLetters_(nullptr)
+  , missingClueLetters_(nullptr)
+  , clues_(nullptr)
   , mAcrostic(std::make_shared<acrostica::Acrostic>())
 {
   setCentralWidget(mCentralWidget);
@@ -100,12 +103,12 @@ void MainWindow::createWidgets()
 
   messageLetters = new QGroupBox(tr("Letters Missing from Message"), this);
   messageLettersView = new MissingLettersUI(messageLetters);
-  auto missingMessageLetters = new acrostica::MissingLettersModel(mAcrostic, Clues, messageLettersView);
-  messageLettersView->setModel(missingMessageLetters);
+  missingMessageLetters_ = new acrostica::MissingLettersModel(mAcrostic, Clues, messageLettersView);
+  messageLettersView->setModel(missingMessageLetters_);
 
   downMessage = new acrostica::ui::downmsg(this);
 
-  acrostica::ClueModel *clues = new acrostica::ClueModel(mAcrostic, this);
+  clues_ = new acrostica::ClueModel(mAcrostic, this);
 
   clueBox_ = new QGroupBox(tr("Clues"), this);
   auto clueView = new QTableView(clueBox_);
@@ -114,7 +117,7 @@ void MainWindow::createWidgets()
   clueView->setSizePolicy(policy);
   clueView->setSortingEnabled(false);
   clueView->setCornerButtonEnabled(false);
-  clueView->setModel(clues);
+  clueView->setModel(clues_);
   clueView->setTabKeyNavigation(false);
   clueView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
@@ -123,36 +126,36 @@ void MainWindow::createWidgets()
 
   clueLetters = new QGroupBox(tr("Letters Missing from Clues"), this);
   clueLettersView = new MissingLettersUI(clueLetters);
-  auto missingClueLetters = new acrostica::MissingLettersModel(mAcrostic, Message, clueLettersView);
-  clueLettersView->setModel(missingClueLetters);
+  missingClueLetters_ = new acrostica::MissingLettersModel(mAcrostic, Message, clueLettersView);
+  clueLettersView->setModel(missingClueLetters_);
 
   connect(addClueAction, &QAction::triggered,
-          [=](){ clues->insertRow(clues->rowCount() + 1); });
+          [=](){ clues_->insertRow(clues_->rowCount() + 1); });
 
   connect(message, &acrostica::MessageWidget::textChanged,
           [=](const QString& msg){
             mAcrostic->message = msg;
-            missingClueLetters->update();
-            missingMessageLetters->update();
+            missingClueLetters_->update();
+            missingMessageLetters_->update();
             setWindowModified(true);
           });
 
   connect(downMessage, SIGNAL(textEdited(const QString&)),
-          clues, SLOT(propagateDownMsg(const QString&)));
+          clues_, SLOT(propagateDownMsg(const QString&)));
 
-  connect(clues, &acrostica::ClueModel::dataChanged,
+  connect(clues_, &acrostica::ClueModel::dataChanged,
           [=](){
-            missingClueLetters->update();
-            missingMessageLetters->update();
+            missingClueLetters_->update();
+            missingMessageLetters_->update();
             setWindowModified(true);
           });
-  connect(clues, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&, const QVector<int>&)),
+  connect(clues_, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&, const QVector<int>&)),
           downMessage, SLOT(mergeMsg(const QModelIndex&, const QModelIndex&, const QVector<int>&)));
 
-  connect(clues, &acrostica::ClueModel::rowsRemoved,
-          [=](){ missingMessageLetters->update(); });
-  connect(clues, &acrostica::ClueModel::rowsRemoved,
-          [=](){ missingClueLetters->update(); });
+  connect(clues_, &acrostica::ClueModel::rowsRemoved,
+          [=](){ missingMessageLetters_->update(); });
+  connect(clues_, &acrostica::ClueModel::rowsRemoved,
+          [=](){ missingClueLetters_->update(); });
 }
 
 void MainWindow::layoutWidgets()

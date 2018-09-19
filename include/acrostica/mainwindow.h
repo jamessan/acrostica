@@ -35,6 +35,7 @@ class QWidget;
 namespace acrostica
 {
   struct Acrostic;
+  class ClueModel;
   class MessageWidget;
   class MissingLettersModel;
   namespace ui
@@ -86,6 +87,9 @@ private:
   MissingLettersUI *messageLettersView;
 
   acrostica::ui::downmsg *downMessage;
+  acrostica::MissingLettersModel *missingMessageLetters_;
+  acrostica::MissingLettersModel *missingClueLetters_;
+  acrostica::ClueModel *clues_;
   std::shared_ptr<acrostica::Acrostic> mAcrostic;
 
   QGroupBox *clueBox_;
