@@ -196,6 +196,12 @@ bool ClueModel::removeRows(int row, int count, const QModelIndex &parent)
   return true;
 }
 
+void ClueModel::reset()
+{
+  beginResetModel();
+  endResetModel();
+}
+
 void ClueModel::propagateDownMsg(const QString &downMsg)
 {
   int rows = rowCount();

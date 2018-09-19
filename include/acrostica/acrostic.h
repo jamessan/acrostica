@@ -94,6 +94,8 @@ class Q_DECL_EXPORT ClueModel : public QAbstractTableModel
   bool removeRows(int row, int count,
                   const QModelIndex &parent = QModelIndex()) override;
 
+  void reset();
+
 public slots:
   void propagateDownMsg(const QString &downMsg);
 
