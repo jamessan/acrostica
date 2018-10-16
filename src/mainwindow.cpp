@@ -216,6 +216,7 @@ void MainWindow::open()
   mAcrostic->read(doc.object());
 
   mMessage->setText(mAcrostic->message);
+  clues_->reset();
 
   setFilename(filename);
 }

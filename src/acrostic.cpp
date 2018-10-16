@@ -199,6 +199,11 @@ bool ClueModel::removeRows(int row, int count, const QModelIndex &parent)
 void ClueModel::reset()
 {
   beginResetModel();
+  for (int row = 0, rows = rowCount(); row < rows; row++)
+  {
+    auto idx = index(row, 1);
+    emit dataChanged(idx, idx, QVector<int>() << Qt::DisplayRole);
+  }
   endResetModel();
 }
 
