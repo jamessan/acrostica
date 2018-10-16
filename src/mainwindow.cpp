@@ -99,7 +99,7 @@ void MainWindow::createMenus()
 
 void MainWindow::createWidgets()
 {
-  message = new acrostica::MessageWidget(this);
+  mMessage = new acrostica::MessageWidget(this);
 
   messageLetters = new QGroupBox(tr("Letters Missing from Message"), this);
   messageLettersView = new MissingLettersUI(messageLetters);
@@ -132,7 +132,7 @@ void MainWindow::createWidgets()
   connect(addClueAction, &QAction::triggered,
           [=](){ clues_->insertRow(clues_->rowCount() + 1); });
 
-  connect(message, &acrostica::MessageWidget::textChanged,
+  connect(mMessage, &acrostica::MessageWidget::textChanged,
           [=](const QString& msg){
             mAcrostic->message = msg;
             missingClueLetters_->update();
@@ -167,7 +167,7 @@ void MainWindow::layoutWidgets()
   clueLettersLayout->addWidget(clueLettersView);
 
   QGridLayout *centralLayout = new QGridLayout(mCentralWidget);
-  centralLayout->addWidget(message, 0, 0);
+  centralLayout->addWidget(mMessage, 0, 0);
   centralLayout->addWidget(messageLetters, 0, 1);
   centralLayout->addWidget(downMessage, 1, 0, 1, 2);
   centralLayout->addWidget(clueBox_, 2, 0);

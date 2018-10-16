@@ -82,7 +82,7 @@ private:
 
   QWidget *mCentralWidget;
 
-  acrostica::MessageWidget *message;
+  acrostica::MessageWidget *mMessage;
   QGroupBox *messageLetters;
   MissingLettersUI *messageLettersView;
 
