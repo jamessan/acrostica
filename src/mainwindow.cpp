@@ -215,6 +215,8 @@ void MainWindow::open()
   QJsonDocument doc(QJsonDocument::fromJson(bytes));
   mAcrostic->read(doc.object());
 
+  mMessage->setText(mAcrostic->message);
+
   setFilename(filename);
 }
 
