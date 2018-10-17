@@ -51,7 +51,6 @@ void MainWindow::createActions()
   newAction = new QAction(tr("&New"), this);
   newAction->setShortcut(tr("Ctrl+N"));
   newAction->setStatusTip(tr("Create a new acrostic"));
-  newAction->setEnabled(false);
   connect(newAction, SIGNAL(triggered()), this, SLOT(newAcrostic()));
 
   openAction = new QAction(tr("&Open…"), this);
@@ -188,6 +187,18 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 void MainWindow::newAcrostic()
 {
+  if (!maybeSave())
+  {
+    return;
+  }
+
+  mAcrostic->message.clear();
+  mAcrostic->clues.clear();
+  mMessage->setText("");
+  mDownMessage->reset("");
+  clues_->reset();
+
+  setFilename("");
 }
 
 void MainWindow::open()
