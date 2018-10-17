@@ -46,18 +46,46 @@ namespace acrostica
       connect(lineEdit, &QLineEdit::textEdited,
               this, toUpper);
 
-      auto morphToLabel = [this]()
+      auto transform = [this]()
       {
+        morphToLabel(lineEdit->text());
+      };
+      connect(lineEdit, &QLineEdit::editingFinished,
+              this, transform);
+    }
+
+    void downmsg::morphToLabel(const QString &text)
+    {
         layout()->removeWidget(lineEdit);
         lineEdit->hide();
         useLabel = true;
 
-        label->setText(lineEdit->text());
+        label->setText(text);
         label->show();
         layout()->addWidget(label);
-      };
-      connect(lineEdit, &QLineEdit::editingFinished,
-              this, morphToLabel);
+    }
+
+    void downmsg::morphToLineEdit(const QString &text)
+    {
+      layout()->removeWidget(label);
+      label->hide();
+      useLabel = false;
+
+      lineEdit->setText(text);
+      lineEdit->show();
+      layout()->addWidget(lineEdit);
+    }
+
+    void downmsg::reset(const QString &text)
+    {
+      if (text.isEmpty())
+      {
+        morphToLineEdit(text);
+      }
+      else
+      {
+        morphToLabel(text);
+      }
     }
 
     void downmsg::mergeMsg(const QModelIndex &first, const QModelIndex &last,

@@ -86,7 +86,7 @@ private:
   QGroupBox *messageLetters;
   MissingLettersUI *messageLettersView;
 
-  acrostica::ui::downmsg *downMessage;
+  acrostica::ui::downmsg *mDownMessage;
   acrostica::MissingLettersModel *missingMessageLetters_;
   acrostica::MissingLettersModel *missingClueLetters_;
   acrostica::ClueModel *clues_;

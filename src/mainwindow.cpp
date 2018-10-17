@@ -106,7 +106,7 @@ void MainWindow::createWidgets()
   missingMessageLetters_ = new acrostica::MissingLettersModel(mAcrostic, Clues, messageLettersView);
   messageLettersView->setModel(missingMessageLetters_);
 
-  downMessage = new acrostica::ui::downmsg(this);
+  mDownMessage = new acrostica::ui::downmsg(this);
 
   clues_ = new acrostica::ClueModel(mAcrostic, this);
 
@@ -140,7 +140,7 @@ void MainWindow::createWidgets()
             setWindowModified(true);
           });
 
-  connect(downMessage, SIGNAL(textEdited(const QString&)),
+  connect(mDownMessage, SIGNAL(textEdited(const QString&)),
           clues_, SLOT(propagateDownMsg(const QString&)));
 
   connect(clues_, &acrostica::ClueModel::dataChanged,
@@ -150,7 +150,7 @@ void MainWindow::createWidgets()
             setWindowModified(true);
           });
   connect(clues_, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&, const QVector<int>&)),
-          downMessage, SLOT(mergeMsg(const QModelIndex&, const QModelIndex&, const QVector<int>&)));
+          mDownMessage, SLOT(mergeMsg(const QModelIndex&, const QModelIndex&, const QVector<int>&)));
 
   connect(clues_, &acrostica::ClueModel::rowsRemoved,
           [=](){ missingMessageLetters_->update(); });
@@ -169,7 +169,7 @@ void MainWindow::layoutWidgets()
   QGridLayout *centralLayout = new QGridLayout(mCentralWidget);
   centralLayout->addWidget(mMessage, 0, 0);
   centralLayout->addWidget(messageLetters, 0, 1);
-  centralLayout->addWidget(downMessage, 1, 0, 1, 2);
+  centralLayout->addWidget(mDownMessage, 1, 0, 1, 2);
   centralLayout->addWidget(clueBox_, 2, 0);
   centralLayout->addWidget(clueLetters, 2, 1);
 }
@@ -216,6 +216,16 @@ void MainWindow::open()
   mAcrostic->read(doc.object());
 
   mMessage->setText(mAcrostic->message);
+
+  QString downmsg;
+  for (const auto &clue : mAcrostic->clues)
+  {
+    if (!clue.answer.isEmpty())
+    {
+      downmsg.append(clue.answer[0]);
+    }
+  }
+  mDownMessage->reset(downmsg);
   clues_->reset();
 
   setFilename(filename);
