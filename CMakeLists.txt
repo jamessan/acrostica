@@ -26,7 +26,7 @@ endif()
 
 project(acrostica)
 set(PROJECT_LONGNAME "Acrostica")
-set(PROJECT_VERSION "0.2.0")
+set(PROJECT_VERSION "0.2.1-dev")
 
 # Do not recursively expand variables
 if(POLICY CMP0054)
