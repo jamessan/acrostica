@@ -49,28 +49,29 @@ MainWindow::MainWindow(QWidget *parent)
 void MainWindow::createActions()
 {
   newAction = new QAction(tr("&New"), this);
-  newAction->setShortcut(tr("Ctrl+N"));
+  newAction->setShortcut(QKeySequence::New);
   newAction->setStatusTip(tr("Create a new acrostic"));
   connect(newAction, SIGNAL(triggered()), this, SLOT(newAcrostic()));
 
   openAction = new QAction(tr("&Open…"), this);
-  openAction->setShortcut(tr("Ctrl+O"));
+  openAction->setShortcut(QKeySequence::Open);
   openAction->setStatusTip(tr("Open existing acrostic"));
   connect(openAction, SIGNAL(triggered()), this, SLOT(open()));
 
   saveAction = new QAction(tr("&Save"), this);
-  saveAction->setShortcut(tr("Ctrl+S"));
+  saveAction->setShortcut(QKeySequence::Save);
   saveAction->setStatusTip(tr("Save current acrostic"));
   connect(saveAction, SIGNAL(triggered()), this, SLOT(save()));
 
   printAction = new QAction(tr("&Print…"), this);
-  printAction->setShortcut(tr("Ctrl+P"));
+  printAction->setShortcut(QKeySequence::Print);
   printAction->setStatusTip(tr("Print"));
   printAction->setEnabled(false);
   connect(printAction, SIGNAL(triggered()), this, SLOT(print()));
 
   exitAction = new QAction(tr("E&xit"), this);
-  exitAction->setShortcut(tr("Ctrl+Q"));
+  exitAction->setShortcut(QKeySequence::Quit);
+  exitAction->setMenuRole(QAction::QuitRole);
   connect(exitAction, SIGNAL(triggered()), this, SLOT(close()));
 
   addClueAction = new QAction(tr("&Add Clue"), this);
