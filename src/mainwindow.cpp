@@ -63,6 +63,11 @@ void MainWindow::createActions()
   saveAction->setStatusTip(tr("Save current acrostic"));
   connect(saveAction, SIGNAL(triggered()), this, SLOT(save()));
 
+  mSaveAsAction = new QAction(tr("Save As…"), this);
+  mSaveAsAction->setShortcut(QKeySequence::SaveAs);
+  mSaveAsAction->setStatusTip(tr("Save current acrostic to a new file"));
+  connect(mSaveAsAction, SIGNAL(triggered()), this, SLOT(saveAs()));
+
   printAction = new QAction(tr("&Print…"), this);
   printAction->setShortcut(QKeySequence::Print);
   printAction->setStatusTip(tr("Print"));
@@ -88,6 +93,7 @@ void MainWindow::createMenus()
   fileMenu->addAction(newAction);
   fileMenu->addAction(openAction);
   fileMenu->addAction(saveAction);
+  fileMenu->addAction(mSaveAsAction);
   fileMenu->addAction(printAction);
   fileMenu->addSeparator();
   fileMenu->addAction(exitAction);
@@ -243,10 +249,10 @@ void MainWindow::open()
   setFilename(filename);
 }
 
-QString MainWindow::filename()
+QString MainWindow::filename(bool forceNewName)
 {
   QString filename;
-  if (filename_.isEmpty())
+  if (forceNewName || filename_.isEmpty())
   {
     filename = QFileDialog::getSaveFileName(this,
                                             tr("Save Acrostic"),
@@ -285,9 +291,9 @@ bool MainWindow::maybeSave()
   }
 }
 
-bool MainWindow::save()
+bool MainWindow::save(bool forceNewName)
 {
-  QString fname = filename();
+  QString fname = filename(forceNewName);
 
   if (fname.isEmpty())
   {
@@ -308,6 +314,12 @@ bool MainWindow::save()
   setFilename(fname);
 
   return true;
+}
+
+bool MainWindow::saveAs()
+{
+  bool forceNewName = true;
+  return save(forceNewName);
 }
 
 void MainWindow::setFilename(const QString &fname)

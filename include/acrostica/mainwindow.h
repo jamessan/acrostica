@@ -57,7 +57,8 @@ protected:
 private slots:
   void newAcrostic();
   void open();
-  bool save();
+  bool save(bool forceNewName = false);
+  bool saveAs();
   void print();
 
 private:
@@ -67,7 +68,7 @@ private:
   void layoutWidgets();
 
   bool maybeSave();
-  QString filename();
+  QString filename(bool forceNewName);
   void setFilename(const QString &fname);
 
   QMenu *fileMenu;
@@ -75,6 +76,7 @@ private:
   QAction *newAction;
   QAction *openAction;
   QAction *saveAction;
+  QAction *mSaveAsAction;
   QAction *printAction;
   QAction *exitAction;
   QAction *addClueAction;
