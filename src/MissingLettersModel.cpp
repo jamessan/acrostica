@@ -28,6 +28,9 @@
 
 #include "acrostica/acrostic.h"
 
+namespace acrostica
+{
+
 MissingLettersModel::MissingLettersModel(std::shared_ptr<acrostica::Acrostic> acrostic,
                                          AdditiveSource source, QWidget *parent)
   : QAbstractTableModel(parent)
@@ -71,8 +74,8 @@ void MissingLettersModel::update()
 {
   QMap<QChar, int> delta;
 
-  int msgVal = (mSource == Message) ? 1 : -1;
-  int clueVal = (mSource == Clues) ? 1 : -1;
+  int msgVal = (mSource == AdditiveSource::Message) ? 1 : -1;
+  int clueVal = (mSource == AdditiveSource::Clues) ? 1 : -1;
 
   for (auto c : mAcrostic->message.toUpper())
   {
@@ -105,6 +108,8 @@ void MissingLettersModel::update()
   beginResetModel();
   mLetters = letters;
   endResetModel();
+}
+
 }
 
 #include "acrostica/moc_MissingLettersModel.cpp"

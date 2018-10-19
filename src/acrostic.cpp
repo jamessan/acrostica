@@ -28,11 +28,13 @@ namespace acrostica
 
 void Clue::read(const QJsonObject &json)
 {
+  hint.clear();
   if (json.contains("hint") && json["hint"].isString())
   {
     hint = json["hint"].toString();
   }
 
+  answer.clear();
   if (json.contains("answer") && json["answer"].isString())
   {
     answer = json["answer"].toString();
@@ -47,16 +49,17 @@ void Clue::write(QJsonObject &json) const
 
 void Acrostic::read(const QJsonObject &json)
 {
+  message.clear();
   if (json.contains("message") && json["message"].isString())
   {
     message = json["message"].toString();
   }
 
+  clues.clear();
   if (json.contains("clues") && json["clues"].isArray())
   {
     QJsonArray clueArray = json["clues"].toArray();
 
-    clues.clear();
     clues.reserve(clueArray.size());
     for (int i = 0, max = clueArray.size(); i < max; i++)
     {
@@ -191,6 +194,17 @@ bool ClueModel::removeRows(int row, int count, const QModelIndex &parent)
   }
   endRemoveRows();
   return true;
+}
+
+void ClueModel::reset()
+{
+  beginResetModel();
+  for (int row = 0, rows = rowCount(); row < rows; row++)
+  {
+    auto idx = index(row, 1);
+    emit dataChanged(idx, idx, QVector<int>() << Qt::DisplayRole);
+  }
+  endResetModel();
 }
 
 void ClueModel::propagateDownMsg(const QString &downMsg)

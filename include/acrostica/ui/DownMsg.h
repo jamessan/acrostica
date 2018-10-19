@@ -36,6 +36,7 @@ class Q_DECL_EXPORT downmsg : public QGroupBox
 
 public:
   downmsg(QWidget *parent = 0);
+  void reset(const QString &text);
 
 public slots:
   void mergeMsg(const QModelIndex &first, const QModelIndex &last,
@@ -45,6 +46,9 @@ signals:
   void textEdited(const QString& text);
 
 private:
+  void morphToLabel(const QString &text);
+  void morphToLineEdit(const QString &text);
+
   bool useLabel;
   QLineEdit *lineEdit;
   QLabel *label;

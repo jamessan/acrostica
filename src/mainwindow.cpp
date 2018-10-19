@@ -30,7 +30,11 @@
 
 MainWindow::MainWindow(QWidget *parent)
   : QMainWindow(parent)
+  , mSaveDialog(nullptr)
   , mCentralWidget(new QWidget)
+  , missingMessageLetters_(nullptr)
+  , missingClueLetters_(nullptr)
+  , clues_(nullptr)
   , mAcrostic(std::make_shared<acrostica::Acrostic>())
 {
   setCentralWidget(mCentralWidget);
@@ -46,30 +50,34 @@ MainWindow::MainWindow(QWidget *parent)
 void MainWindow::createActions()
 {
   newAction = new QAction(tr("&New"), this);
-  newAction->setShortcut(tr("Ctrl+N"));
+  newAction->setShortcut(QKeySequence::New);
   newAction->setStatusTip(tr("Create a new acrostic"));
-  newAction->setEnabled(false);
   connect(newAction, SIGNAL(triggered()), this, SLOT(newAcrostic()));
 
   openAction = new QAction(tr("&Open…"), this);
-  openAction->setShortcut(tr("Ctrl+O"));
+  openAction->setShortcut(QKeySequence::Open);
   openAction->setStatusTip(tr("Open existing acrostic"));
-  openAction->setEnabled(false);
   connect(openAction, SIGNAL(triggered()), this, SLOT(open()));
 
   saveAction = new QAction(tr("&Save"), this);
-  saveAction->setShortcut(tr("Ctrl+S"));
+  saveAction->setShortcut(QKeySequence::Save);
   saveAction->setStatusTip(tr("Save current acrostic"));
   connect(saveAction, SIGNAL(triggered()), this, SLOT(save()));
 
+  mSaveAsAction = new QAction(tr("Save As…"), this);
+  mSaveAsAction->setShortcut(QKeySequence::SaveAs);
+  mSaveAsAction->setStatusTip(tr("Save current acrostic to a new file"));
+  connect(mSaveAsAction, SIGNAL(triggered()), this, SLOT(saveAs()));
+
   printAction = new QAction(tr("&Print…"), this);
-  printAction->setShortcut(tr("Ctrl+P"));
+  printAction->setShortcut(QKeySequence::Print);
   printAction->setStatusTip(tr("Print"));
   printAction->setEnabled(false);
   connect(printAction, SIGNAL(triggered()), this, SLOT(print()));
 
   exitAction = new QAction(tr("E&xit"), this);
-  exitAction->setShortcut(tr("Ctrl+Q"));
+  exitAction->setShortcut(QKeySequence::Quit);
+  exitAction->setMenuRole(QAction::QuitRole);
   connect(exitAction, SIGNAL(triggered()), this, SLOT(close()));
 
   addClueAction = new QAction(tr("&Add Clue"), this);
@@ -86,6 +94,7 @@ void MainWindow::createMenus()
   fileMenu->addAction(newAction);
   fileMenu->addAction(openAction);
   fileMenu->addAction(saveAction);
+  fileMenu->addAction(mSaveAsAction);
   fileMenu->addAction(printAction);
   fileMenu->addSeparator();
   fileMenu->addAction(exitAction);
@@ -97,16 +106,16 @@ void MainWindow::createMenus()
 
 void MainWindow::createWidgets()
 {
-  message = new acrostica::MessageWidget(this);
+  mMessage = new acrostica::MessageWidget(this);
 
   messageLetters = new QGroupBox(tr("Letters Missing from Message"), this);
   messageLettersView = new MissingLettersUI(messageLetters);
-  auto missingMessageLetters = new MissingLettersModel(mAcrostic, Clues, messageLettersView);
-  messageLettersView->setModel(missingMessageLetters);
+  missingMessageLetters_ = new acrostica::MissingLettersModel(mAcrostic, Clues, messageLettersView);
+  messageLettersView->setModel(missingMessageLetters_);
 
-  downMessage = new acrostica::ui::downmsg(this);
+  mDownMessage = new acrostica::ui::downmsg(this);
 
-  acrostica::ClueModel *clues = new acrostica::ClueModel(mAcrostic, this);
+  clues_ = new acrostica::ClueModel(mAcrostic, this);
 
   clueBox_ = new QGroupBox(tr("Clues"), this);
   auto clueView = new QTableView(clueBox_);
@@ -115,7 +124,7 @@ void MainWindow::createWidgets()
   clueView->setSizePolicy(policy);
   clueView->setSortingEnabled(false);
   clueView->setCornerButtonEnabled(false);
-  clueView->setModel(clues);
+  clueView->setModel(clues_);
   clueView->setTabKeyNavigation(false);
   clueView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
@@ -124,36 +133,36 @@ void MainWindow::createWidgets()
 
   clueLetters = new QGroupBox(tr("Letters Missing from Clues"), this);
   clueLettersView = new MissingLettersUI(clueLetters);
-  auto missingClueLetters = new MissingLettersModel(mAcrostic, Message, clueLettersView);
-  clueLettersView->setModel(missingClueLetters);
+  missingClueLetters_ = new acrostica::MissingLettersModel(mAcrostic, Message, clueLettersView);
+  clueLettersView->setModel(missingClueLetters_);
 
   connect(addClueAction, &QAction::triggered,
-          [=](){ clues->insertRow(clues->rowCount() + 1); });
+          [=](){ clues_->insertRow(clues_->rowCount() + 1); });
 
-  connect(message, &acrostica::MessageWidget::textChanged,
+  connect(mMessage, &acrostica::MessageWidget::textChanged,
           [=](const QString& msg){
             mAcrostic->message = msg;
-            missingClueLetters->update();
-            missingMessageLetters->update();
+            missingClueLetters_->update();
+            missingMessageLetters_->update();
             setWindowModified(true);
           });
 
-  connect(downMessage, SIGNAL(textEdited(const QString&)),
-          clues, SLOT(propagateDownMsg(const QString&)));
+  connect(mDownMessage, SIGNAL(textEdited(const QString&)),
+          clues_, SLOT(propagateDownMsg(const QString&)));
 
-  connect(clues, &acrostica::ClueModel::dataChanged,
+  connect(clues_, &acrostica::ClueModel::dataChanged,
           [=](){
-            missingClueLetters->update();
-            missingMessageLetters->update();
+            missingClueLetters_->update();
+            missingMessageLetters_->update();
             setWindowModified(true);
           });
-  connect(clues, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&, const QVector<int>&)),
-          downMessage, SLOT(mergeMsg(const QModelIndex&, const QModelIndex&, const QVector<int>&)));
+  connect(clues_, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&, const QVector<int>&)),
+          mDownMessage, SLOT(mergeMsg(const QModelIndex&, const QModelIndex&, const QVector<int>&)));
 
-  connect(clues, &acrostica::ClueModel::rowsRemoved,
-          [=](){ missingMessageLetters->update(); });
-  connect(clues, &acrostica::ClueModel::rowsRemoved,
-          [=](){ missingClueLetters->update(); });
+  connect(clues_, &acrostica::ClueModel::rowsRemoved,
+          [=](){ missingMessageLetters_->update(); });
+  connect(clues_, &acrostica::ClueModel::rowsRemoved,
+          [=](){ missingClueLetters_->update(); });
 }
 
 void MainWindow::layoutWidgets()
@@ -165,9 +174,9 @@ void MainWindow::layoutWidgets()
   clueLettersLayout->addWidget(clueLettersView);
 
   QGridLayout *centralLayout = new QGridLayout(mCentralWidget);
-  centralLayout->addWidget(message, 0, 0);
+  centralLayout->addWidget(mMessage, 0, 0);
   centralLayout->addWidget(messageLetters, 0, 1);
-  centralLayout->addWidget(downMessage, 1, 0, 1, 2);
+  centralLayout->addWidget(mDownMessage, 1, 0, 1, 2);
   centralLayout->addWidget(clueBox_, 2, 0);
   centralLayout->addWidget(clueLetters, 2, 1);
 }
@@ -186,21 +195,78 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 void MainWindow::newAcrostic()
 {
+  if (!maybeSave())
+  {
+    return;
+  }
+
+  mAcrostic->message.clear();
+  mAcrostic->clues.clear();
+  mMessage->setText("");
+  mDownMessage->reset("");
+  clues_->reset();
+
+  setFilename("");
 }
 
 void MainWindow::open()
 {
+  if (!maybeSave())
+  {
+    return;
+  }
+
+  QString filename = QFileDialog::getOpenFileName(this,
+                                                  tr("Open Acrostic"),
+                                                  "",
+                                                  tr("Acrostic (*.json)"));
+  if (filename.isEmpty()) {
+    return;
+  }
+
+  QFile file(filename);
+  if (!file.open(QIODevice::ReadOnly)) {
+    QMessageBox::information(this, tr("Unable to open file %1").arg(filename), file.errorString());
+    return;
+  }
+
+  QByteArray bytes = file.readAll();
+  QJsonDocument doc(QJsonDocument::fromJson(bytes));
+  mAcrostic->read(doc.object());
+
+  mMessage->setText(mAcrostic->message);
+
+  QString downmsg;
+  for (const auto &clue : mAcrostic->clues)
+  {
+    if (!clue.answer.isEmpty())
+    {
+      downmsg.append(clue.answer[0]);
+    }
+  }
+  mDownMessage->reset(downmsg);
+  clues_->reset();
+
+  setFilename(filename);
 }
 
-QString MainWindow::filename()
+QString MainWindow::filename(bool forceNewName)
 {
   QString filename;
-  if (filename_.isEmpty())
+  if (forceNewName || filename_.isEmpty())
   {
-    filename = QFileDialog::getSaveFileName(this,
-                                            tr("Save Acrostic"),
-                                            "",
-                                            tr("Acrostic (*.json)"));
+    if (!mSaveDialog)
+    {
+      mSaveDialog = new QFileDialog(this, tr("Save Acrostic"),
+                                    "", tr("Acrostic (*.json)"));
+      mSaveDialog->setDefaultSuffix("json");
+      mSaveDialog->setAcceptMode(QFileDialog::AcceptSave);
+      mSaveDialog->setNameFilter(tr("Acrostic (*.json)"));
+    }
+    if (mSaveDialog->exec() == QDialog::Accepted)
+    {
+      filename = mSaveDialog->selectedFiles().first();
+    }
   }
   else {
     filename = filename_;
@@ -234,9 +300,9 @@ bool MainWindow::maybeSave()
   }
 }
 
-bool MainWindow::save()
+bool MainWindow::save(bool forceNewName)
 {
-  QString fname = filename();
+  QString fname = filename(forceNewName);
 
   if (fname.isEmpty())
   {
@@ -257,6 +323,12 @@ bool MainWindow::save()
   setFilename(fname);
 
   return true;
+}
+
+bool MainWindow::saveAs()
+{
+  bool forceNewName = true;
+  return save(forceNewName);
 }
 
 void MainWindow::setFilename(const QString &fname)

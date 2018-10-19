@@ -25,6 +25,8 @@
 
 #include "acrostica/acrostic.h"
 
+class QPlainTextEdit;
+
 namespace acrostica
 {
 
@@ -35,8 +37,13 @@ class Q_DECL_EXPORT MessageWidget : public QGroupBox
 public:
   MessageWidget(QWidget *parent = nullptr);
 
+  void setText(const QString& text);
+
 signals:
   void textChanged(const QString& text);
+
+private:
+  QPlainTextEdit *textEdit_;
 };
 
 }

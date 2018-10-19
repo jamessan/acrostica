@@ -26,6 +26,7 @@
 
 class MissingLettersUI;
 class QAction;
+class QFileDialog;
 class QGroupBox;
 class QMenu;
 class QScrollArea;
@@ -35,7 +36,9 @@ class QWidget;
 namespace acrostica
 {
   struct Acrostic;
+  class ClueModel;
   class MessageWidget;
+  class MissingLettersModel;
   namespace ui
   {
     class downmsg;
@@ -55,7 +58,8 @@ protected:
 private slots:
   void newAcrostic();
   void open();
-  bool save();
+  bool save(bool forceNewName = false);
+  bool saveAs();
   void print();
 
 private:
@@ -65,7 +69,7 @@ private:
   void layoutWidgets();
 
   bool maybeSave();
-  QString filename();
+  QString filename(bool forceNewName);
   void setFilename(const QString &fname);
 
   QMenu *fileMenu;
@@ -73,18 +77,24 @@ private:
   QAction *newAction;
   QAction *openAction;
   QAction *saveAction;
+  QAction *mSaveAsAction;
   QAction *printAction;
   QAction *exitAction;
   QAction *addClueAction;
   QAction *removeClueAction;
 
+  QFileDialog *mSaveDialog;
+
   QWidget *mCentralWidget;
 
-  acrostica::MessageWidget *message;
+  acrostica::MessageWidget *mMessage;
   QGroupBox *messageLetters;
   MissingLettersUI *messageLettersView;
 
-  acrostica::ui::downmsg *downMessage;
+  acrostica::ui::downmsg *mDownMessage;
+  acrostica::MissingLettersModel *missingMessageLetters_;
+  acrostica::MissingLettersModel *missingClueLetters_;
+  acrostica::ClueModel *clues_;
   std::shared_ptr<acrostica::Acrostic> mAcrostic;
 
   QGroupBox *clueBox_;
