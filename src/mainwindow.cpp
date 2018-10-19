@@ -30,6 +30,7 @@
 
 MainWindow::MainWindow(QWidget *parent)
   : QMainWindow(parent)
+  , mSaveDialog(nullptr)
   , mCentralWidget(new QWidget)
   , missingMessageLetters_(nullptr)
   , missingClueLetters_(nullptr)
@@ -254,10 +255,18 @@ QString MainWindow::filename(bool forceNewName)
   QString filename;
   if (forceNewName || filename_.isEmpty())
   {
-    filename = QFileDialog::getSaveFileName(this,
-                                            tr("Save Acrostic"),
-                                            "",
-                                            tr("Acrostic (*.json)"));
+    if (!mSaveDialog)
+    {
+      mSaveDialog = new QFileDialog(this, tr("Save Acrostic"),
+                                    "", tr("Acrostic (*.json)"));
+      mSaveDialog->setDefaultSuffix("json");
+      mSaveDialog->setAcceptMode(QFileDialog::AcceptSave);
+      mSaveDialog->setNameFilter(tr("Acrostic (*.json)"));
+    }
+    if (mSaveDialog->exec() == QDialog::Accepted)
+    {
+      filename = mSaveDialog->selectedFiles().first();
+    }
   }
   else {
     filename = filename_;

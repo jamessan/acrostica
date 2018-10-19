@@ -26,6 +26,7 @@
 
 class MissingLettersUI;
 class QAction;
+class QFileDialog;
 class QGroupBox;
 class QMenu;
 class QScrollArea;
@@ -81,6 +82,8 @@ private:
   QAction *exitAction;
   QAction *addClueAction;
   QAction *removeClueAction;
+
+  QFileDialog *mSaveDialog;
 
   QWidget *mCentralWidget;
 
