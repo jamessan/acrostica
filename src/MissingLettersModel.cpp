@@ -102,7 +102,9 @@ void MissingLettersModel::update()
     QChar c = pair.first;
     int i = c.unicode() - 'A';
     int count = std::max(pair.second, 0);
-    letters[i] = QString(count, QChar(c));
+    if (count > 0) {
+      letters[i] = QString(QChar(c)) + QString::number(count);
+    }
   }
 
   beginResetModel();
