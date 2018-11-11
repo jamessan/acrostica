@@ -21,6 +21,8 @@
 
 int main(int argc, char *argv[])
 {
+  QCoreApplication::setOrganizationName("acrostica");
+  QCoreApplication::setApplicationName("acrostica");
   QApplication a(argc, argv);
   MainWindow w;
   w.show();

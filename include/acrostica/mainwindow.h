@@ -68,6 +68,9 @@ private:
   void createWidgets();
   void layoutWidgets();
 
+  void saveSettings();
+  void restoreSettings();
+
   bool maybeSave();
   QString filename(bool forceNewName);
   void setFilename(const QString &fname);

@@ -45,6 +45,7 @@ MainWindow::MainWindow(QWidget *parent)
   createMenus();
   createWidgets();
   layoutWidgets();
+  restoreSettings();
 }
 
 void MainWindow::createActions()
@@ -181,10 +182,30 @@ void MainWindow::layoutWidgets()
   centralLayout->addWidget(clueLetters, 2, 1);
 }
 
+void MainWindow::saveSettings()
+{
+    QSettings settings;
+    settings.beginGroup("MainWindow");
+    settings.setValue("geometry", saveGeometry());
+    settings.setValue("windowState", saveState());
+    settings.endGroup();
+}
+
+void MainWindow::restoreSettings()
+{
+  QSettings settings;
+  settings.beginGroup("MainWindow");
+  restoreGeometry(settings.value("geometry").toByteArray());
+  restoreState(settings.value("windowState").toByteArray());
+  settings.endGroup();
+}
+
 void MainWindow::closeEvent(QCloseEvent *event)
 {
   if (maybeSave())
   {
+    saveSettings();
+
     event->accept();
   }
   else
