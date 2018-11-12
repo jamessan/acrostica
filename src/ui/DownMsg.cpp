@@ -36,6 +36,10 @@ namespace acrostica
       setLayout(new QVBoxLayout);
       layout()->addWidget(lineEdit);
 
+      auto policy = sizePolicy();
+      policy.setVerticalPolicy(QSizePolicy::Maximum);
+      setSizePolicy(policy);
+
       label->hide();
 
       auto toUpper = [this](const QString &s)
