@@ -21,7 +21,7 @@
 
 #include <memory>
 
-#include <QAbstractTableModel>
+#include <QAbstractListModel>
 #include <QVector>
 
 enum AdditiveSource
@@ -34,28 +34,33 @@ namespace acrostica
 {
 struct Acrostic;
 
-class Q_DECL_EXPORT MissingLettersModel : public QAbstractTableModel
+class Q_DECL_EXPORT MissingLettersModel : public QAbstractListModel
 {
   Q_OBJECT
 
 public:
   MissingLettersModel(std::shared_ptr<acrostica::Acrostic> acrostic,
                       AdditiveSource source, QWidget *parent = 0);
+  QVariant data(const QModelIndex& index, int role) const override;
 
   int rowCount(const QModelIndex& parent = QModelIndex()) const override
   {
     Q_UNUSED(parent);
-    return 6;
+    return mLetters.size();
   }
-  int columnCount(const QModelIndex& parent = QModelIndex()) const override
-  {
-    Q_UNUSED(parent);
-    return 5;
-  }
-  QVariant data(const QModelIndex& index, int role) const override;
   QVariant headerData(int section, Qt::Orientation orientation,
-                      int role = Qt::DisplayRole) const override;
-  Qt::ItemFlags flags(const QModelIndex& index) const override;
+                      int role = Qt::DisplayRole) const override
+  {
+    Q_UNUSED(section);
+    Q_UNUSED(orientation);
+    Q_UNUSED(role);
+    return QVariant();
+  }
+  Qt::ItemFlags flags(const QModelIndex& index) const override
+  {
+    Q_UNUSED(index);
+    return Qt::ItemIsEnabled;
+  }
 
 public slots:
   void update();

@@ -33,8 +33,8 @@ namespace acrostica
 
 MissingLettersModel::MissingLettersModel(std::shared_ptr<acrostica::Acrostic> acrostic,
                                          AdditiveSource source, QWidget *parent)
-  : QAbstractTableModel(parent)
-  , mLetters(rowCount() * columnCount(), "")
+  : QAbstractListModel(parent)
+  , mLetters()
   , mSource(source)
   , mAcrostic(acrostic)
 {
@@ -46,28 +46,13 @@ QVariant MissingLettersModel::data(const QModelIndex& index, int role) const
   if (!index.isValid())
     return QVariant();
 
-  if (index.row() >= rowCount() || index.column() >= columnCount())
+  if (index.row() >= rowCount())
     return QVariant();
 
   if (role != Qt::DisplayRole)
     return QVariant();
 
-  return mLetters[index.row() * columnCount() + index.column()];
-}
-
-QVariant MissingLettersModel::headerData(int section, Qt::Orientation orientation,
-                                         int role) const
-{
-  Q_UNUSED(section);
-  Q_UNUSED(orientation);
-  Q_UNUSED(role);
-  return QVariant();
-}
-
-Qt::ItemFlags MissingLettersModel::flags(const QModelIndex& index) const
-{
-  Q_UNUSED(index);
-  return Qt::ItemIsEnabled | Qt::ItemIsEditable;
+  return mLetters[index.row()];
 }
 
 void MissingLettersModel::update()
@@ -96,14 +81,13 @@ void MissingLettersModel::update()
     }
   }
 
-  QVector<QString> letters(rowCount() * columnCount(), "");
+  QVector<QString> letters;
   for (auto pair : delta.toStdMap())
   {
     QChar c = pair.first;
-    int i = c.unicode() - 'A';
     int count = std::max(pair.second, 0);
     if (count > 0) {
-      letters[i] = QString(QChar(c)) + QString::number(count);
+      letters.append(QString(QChar(c)) + QString::number(count));
     }
   }
 
