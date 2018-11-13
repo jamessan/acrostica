@@ -29,7 +29,7 @@ class QAction;
 class QFileDialog;
 class QGroupBox;
 class QMenu;
-class QScrollArea;
+class QSplitter;
 class QString;
 class QWidget;
 
@@ -68,6 +68,9 @@ private:
   void createWidgets();
   void layoutWidgets();
 
+  void saveSettings();
+  void restoreSettings();
+
   bool maybeSave();
   QString filename(bool forceNewName);
   void setFilename(const QString &fname);
@@ -90,6 +93,9 @@ private:
   acrostica::MessageWidget *mMessage;
   QGroupBox *messageLetters;
   MissingLettersUI *messageLettersView;
+
+  QSplitter *mClueSplitter;
+  QSplitter *mMessageSplitter;
 
   acrostica::ui::downmsg *mDownMessage;
   acrostica::MissingLettersModel *missingMessageLetters_;

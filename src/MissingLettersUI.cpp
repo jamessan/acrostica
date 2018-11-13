@@ -21,27 +21,15 @@
 #include <QtWidgets>
 
 MissingLettersUI::MissingLettersUI(QWidget *parent) :
-  QTableView(parent)
+  QListView(parent)
 {
-  // Remove distractions
-  setShowGrid(false);
-  horizontalHeader()->setVisible(false);
-  verticalHeader()->setVisible(false);
-
   // Disallow focus since these widgets just provide information
   setFocusPolicy(Qt::NoFocus);
 
   // Adjust size of displayed widgets
-  horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
-
-  // Disable editing
-  setEditTriggers(QAbstractItemView::NoEditTriggers);
-  setSelectionMode(QAbstractItemView::NoSelection);
-
-  auto policy = sizePolicy();
-  policy.setHorizontalPolicy(QSizePolicy::Minimum);
-  policy.setVerticalPolicy(QSizePolicy::Minimum);
-  setSizePolicy(policy);
+  setWrapping(true);
+  setFlow(QListView::LeftToRight);
+  setResizeMode(QListView::Adjust);
 }
 
 #include "acrostica/moc_MissingLettersUI.cpp"

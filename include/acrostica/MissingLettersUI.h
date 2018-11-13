@@ -19,9 +19,9 @@
 #ifndef ACROSTICA_MISSINGLETTERSUI_H
 #define ACROSTICA_MISSINGLETTERSUI_H
 
-#include <QTableView>
+#include <QListView>
 
-class Q_DECL_EXPORT MissingLettersUI : public QTableView
+class Q_DECL_EXPORT MissingLettersUI : public QListView
 {
   Q_OBJECT
 

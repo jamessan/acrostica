@@ -32,6 +32,8 @@ MainWindow::MainWindow(QWidget *parent)
   : QMainWindow(parent)
   , mSaveDialog(nullptr)
   , mCentralWidget(new QWidget)
+  , mClueSplitter(nullptr)
+  , mMessageSplitter(nullptr)
   , missingMessageLetters_(nullptr)
   , missingClueLetters_(nullptr)
   , clues_(nullptr)
@@ -45,6 +47,7 @@ MainWindow::MainWindow(QWidget *parent)
   createMenus();
   createWidgets();
   layoutWidgets();
+  restoreSettings();
 }
 
 void MainWindow::createActions()
@@ -167,24 +170,57 @@ void MainWindow::createWidgets()
 
 void MainWindow::layoutWidgets()
 {
-  QVBoxLayout *messageLettersLayout = new QVBoxLayout(messageLetters);
+  mMessageSplitter = new QSplitter(this);
+  mClueSplitter = new QSplitter(this);
+
+  auto messageLettersLayout = new QVBoxLayout(messageLetters);
   messageLettersLayout->addWidget(messageLettersView);
 
-  QVBoxLayout *clueLettersLayout = new QVBoxLayout(clueLetters);
+  auto clueLettersLayout = new QVBoxLayout(clueLetters);
   clueLettersLayout->addWidget(clueLettersView);
 
-  QGridLayout *centralLayout = new QGridLayout(mCentralWidget);
-  centralLayout->addWidget(mMessage, 0, 0);
-  centralLayout->addWidget(messageLetters, 0, 1);
-  centralLayout->addWidget(mDownMessage, 1, 0, 1, 2);
-  centralLayout->addWidget(clueBox_, 2, 0);
-  centralLayout->addWidget(clueLetters, 2, 1);
+  mMessageSplitter->setChildrenCollapsible(false);
+  mMessageSplitter->addWidget(mMessage);
+  mMessageSplitter->addWidget(messageLetters);
+
+  mClueSplitter->setChildrenCollapsible(false);
+  mClueSplitter->addWidget(clueBox_);
+  mClueSplitter->addWidget(clueLetters);
+
+  QVBoxLayout *centralLayout = new QVBoxLayout(mCentralWidget);
+  centralLayout->addWidget(mMessageSplitter);
+  centralLayout->addWidget(mDownMessage);
+  centralLayout->addWidget(mClueSplitter);
+}
+
+void MainWindow::saveSettings()
+{
+    QSettings settings;
+    settings.beginGroup("MainWindow");
+    settings.setValue("geometry", saveGeometry());
+    settings.setValue("windowState", saveState());
+    settings.setValue("clueSplitter", mClueSplitter->saveState());
+    settings.setValue("messageSplitter", mMessageSplitter->saveState());
+    settings.endGroup();
+}
+
+void MainWindow::restoreSettings()
+{
+  QSettings settings;
+  settings.beginGroup("MainWindow");
+  restoreGeometry(settings.value("geometry").toByteArray());
+  restoreState(settings.value("windowState").toByteArray());
+  mClueSplitter->restoreState(settings.value("clueSplitter").toByteArray());
+  mMessageSplitter->restoreState(settings.value("messageSplitter").toByteArray());
+  settings.endGroup();
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
   if (maybeSave())
   {
+    saveSettings();
+
     event->accept();
   }
   else
