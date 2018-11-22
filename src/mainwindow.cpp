@@ -133,6 +133,14 @@ void MainWindow::createWidgets()
   clueView->setTabKeyNavigation(false);
   clueView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
+  // Enable clue removal when one is selected
+  auto selection = clueView->selectionModel();
+  connect(selection, &QItemSelectionModel::selectionChanged,
+          [=](const QItemSelection &selected, const QItemSelection &deselected) {
+            Q_UNUSED(deselected);
+            removeClueAction->setEnabled(!selected.indexes().isEmpty());
+          });
+
   QVBoxLayout *clueLayout = new QVBoxLayout(clueBox_);
   clueLayout->addWidget(clueView);
 
