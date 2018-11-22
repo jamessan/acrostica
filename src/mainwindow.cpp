@@ -128,6 +128,8 @@ void MainWindow::createWidgets()
   clueView->setSortingEnabled(false);
   clueView->setCornerButtonEnabled(false);
   clueView->setModel(clues_);
+  clueView->setSelectionBehavior(QAbstractItemView::SelectRows);
+  clueView->setSelectionMode(QAbstractItemView::SingleSelection);
   clueView->setTabKeyNavigation(false);
   clueView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
