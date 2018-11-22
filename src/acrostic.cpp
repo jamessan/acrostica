@@ -156,7 +156,7 @@ QVariant ClueModel::headerData(int section, Qt::Orientation orientation,
   }
   if (orientation == Qt::Horizontal)
   {
-    return QVariant::fromValue(section == 0 ? tr("Hint") : tr("Answer"));
+    return QVariant::fromValue(section == 0 ? tr("Clue") : tr("Answer"));
   }
 
   QString s;
