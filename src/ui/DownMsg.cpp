@@ -92,6 +92,24 @@ namespace acrostica
       }
     }
 
+    void downmsg::mergeMsg(const QModelIndex &parent, int first, int last)
+    {
+      Q_UNUSED(parent);
+
+      if (useLabel)
+      {
+        auto msg = label->text();
+        msg.remove(first, last - first + 1);
+        label->setText(msg);
+      }
+      else
+      {
+        auto msg = lineEdit->text();
+        msg.remove(first, last - first + 1);
+        lineEdit->setText(msg);
+      }
+    }
+
     void downmsg::mergeMsg(const QModelIndex &first, const QModelIndex &last,
                            const QVector<int> &roles)
     {

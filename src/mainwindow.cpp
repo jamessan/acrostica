@@ -132,6 +132,14 @@ void MainWindow::createWidgets()
   clueView->setSelectionMode(QAbstractItemView::SingleSelection);
   clueView->setTabKeyNavigation(false);
   clueView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+  connect(removeClueAction, &QAction::triggered,
+          [=]() {
+            auto selection = clueView->selectionModel();
+            auto indexes = selection->selectedRows();
+            for (const auto& index : indexes) {
+              clues_->removeRows(index.row(), 1);
+            }
+          });
 
   // Enable clue removal when one is selected
   auto selection = clueView->selectionModel();
@@ -171,6 +179,8 @@ void MainWindow::createWidgets()
           });
   connect(clues_, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&, const QVector<int>&)),
           mDownMessage, SLOT(mergeMsg(const QModelIndex&, const QModelIndex&, const QVector<int>&)));
+  connect(clues_, SIGNAL(rowsAboutToBeRemoved(const QModelIndex&, int, int)),
+          mDownMessage, SLOT(mergeMsg(const QModelIndex&, int, int)));
 
   connect(clues_, &acrostica::ClueModel::rowsRemoved,
           [=](){ missingMessageLetters_->update(); });

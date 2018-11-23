@@ -39,6 +39,7 @@ public:
   void reset(const QString &text);
 
 public slots:
+  void mergeMsg(const QModelIndex &parent, int first, int last);
   void mergeMsg(const QModelIndex &first, const QModelIndex &last,
                 const QVector<int> &roles = QVector<int>());
 
