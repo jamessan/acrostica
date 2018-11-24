@@ -89,7 +89,6 @@ void MainWindow::createActions()
 
   removeClueAction = new QAction(tr("&Remove Clue"), this);
   removeClueAction->setStatusTip(tr("Remove the selected clue"));
-  removeClueAction->setShortcut(QKeySequence::Delete);
   removeClueAction->setEnabled(false);
 }
 
