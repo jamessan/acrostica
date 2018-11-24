@@ -53,6 +53,7 @@ void ClueView::removeSelectedClues() {
   auto indexes = selection->selectedRows();
   for (const auto& index : indexes) {
     model()->removeRows(index.row(), 1);
+    window()->setWindowModified(true);
   }
 }
 

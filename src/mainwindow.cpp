@@ -144,7 +144,10 @@ void MainWindow::createWidgets()
   clueLettersView->setModel(missingClueLetters_);
 
   connect(addClueAction, &QAction::triggered,
-          [=](){ clues_->insertRow(clues_->rowCount() + 1); });
+          [=](){
+            clues_->insertRow(clues_->rowCount() + 1);
+            setWindowModified(true);
+          });
 
   connect(mMessage, &acrostica::MessageWidget::textChanged,
           [=](const QString& msg){
