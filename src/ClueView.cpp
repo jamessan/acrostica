@@ -41,7 +41,9 @@ ClueView::ClueView(QWidget *parent) : QTableView(parent)
 }
 
 void ClueView::focusOutEvent(QFocusEvent *event) {
-  if (event->reason() != Qt::MenuBarFocusReason && event->reason() != Qt::PopupFocusReason) {
+  if (event->reason() != Qt::MenuBarFocusReason
+      && event->reason() != Qt::PopupFocusReason
+      && event->reason() != Qt::ActiveWindowFocusReason) {
     auto selection = selectionModel();
     selection->clearSelection();
     QTableView::focusOutEvent(event);
