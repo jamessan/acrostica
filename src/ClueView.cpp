@@ -37,6 +37,14 @@ ClueView::ClueView(QWidget *parent) : QTableView(parent)
   horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 }
 
+void ClueView::focusOutEvent(QFocusEvent *event) {
+  if (event->reason() != Qt::MenuBarFocusReason && event->reason() != Qt::PopupFocusReason) {
+    auto selection = selectionModel();
+    selection->clearSelection();
+    QTableView::focusOutEvent(event);
+  }
+}
+
 }
 
 #include "acrostica/moc_ClueView.cpp"
