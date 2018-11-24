@@ -34,6 +34,7 @@ class ClueView : public ::QTableView
   ClueView(QWidget *parent = nullptr);
 
   void focusOutEvent(QFocusEvent *event) override;
+  void removeSelectedClues();
 };
 
 }

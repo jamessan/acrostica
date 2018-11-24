@@ -89,6 +89,7 @@ void MainWindow::createActions()
 
   removeClueAction = new QAction(tr("&Remove Clue"), this);
   removeClueAction->setStatusTip(tr("Remove the selected clue"));
+  removeClueAction->setShortcut(QKeySequence::Delete);
   removeClueAction->setEnabled(false);
 }
 
@@ -125,13 +126,7 @@ void MainWindow::createWidgets()
   auto clueView = new acrostica::ClueView(clueBox_);
   clueView->setModel(clues_);
   connect(removeClueAction, &QAction::triggered,
-          [=]() {
-            auto selection = clueView->selectionModel();
-            auto indexes = selection->selectedRows();
-            for (const auto& index : indexes) {
-              clues_->removeRows(index.row(), 1);
-            }
-          });
+          clueView, &acrostica::ClueView::removeSelectedClues);
 
   // Enable clue removal when one is selected
   auto selection = clueView->selectionModel();

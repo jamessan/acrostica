@@ -35,6 +35,9 @@ ClueView::ClueView(QWidget *parent) : QTableView(parent)
   setSelectionMode(QAbstractItemView::SingleSelection);
   setTabKeyNavigation(false);
   horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+
+  QShortcut *delclue = new QShortcut(QKeySequence::Delete, this);
+  connect(delclue, &QShortcut::activated, this, &acrostica::ClueView::removeSelectedClues);
 }
 
 void ClueView::focusOutEvent(QFocusEvent *event) {
@@ -42,6 +45,14 @@ void ClueView::focusOutEvent(QFocusEvent *event) {
     auto selection = selectionModel();
     selection->clearSelection();
     QTableView::focusOutEvent(event);
+  }
+}
+
+void ClueView::removeSelectedClues() {
+  auto selection = selectionModel();
+  auto indexes = selection->selectedRows();
+  for (const auto& index : indexes) {
+    model()->removeRows(index.row(), 1);
   }
 }
 
