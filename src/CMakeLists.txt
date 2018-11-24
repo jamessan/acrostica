@@ -24,6 +24,7 @@ set(SRC_FILES
   MessageWidget.cpp
   MissingLettersModel.cpp
   MissingLettersUI.cpp
+  PrintWindow.cpp
   ui/DownMsg.cpp
 )
 

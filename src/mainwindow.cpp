@@ -28,6 +28,7 @@
 #include "acrostica/MessageWidget.h"
 #include "acrostica/MissingLettersModel.h"
 #include "acrostica/MissingLettersUI.h"
+#include "acrostica/PrintWindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
   : QMainWindow(parent)
@@ -38,6 +39,7 @@ MainWindow::MainWindow(QWidget *parent)
   , missingMessageLetters_(nullptr)
   , missingClueLetters_(nullptr)
   , clues_(nullptr)
+  , mPrintWindow(nullptr)
   , mAcrostic(std::make_shared<acrostica::Acrostic>())
 {
   setCentralWidget(mCentralWidget);
@@ -76,7 +78,6 @@ void MainWindow::createActions()
   printAction = new QAction(tr("&Print…"), this);
   printAction->setShortcut(QKeySequence::Print);
   printAction->setStatusTip(tr("Print"));
-  printAction->setEnabled(false);
   connect(printAction, SIGNAL(triggered()), this, SLOT(print()));
 
   exitAction = new QAction(tr("E&xit"), this);
@@ -111,6 +112,8 @@ void MainWindow::createMenus()
 void MainWindow::createWidgets()
 {
   mMessage = new acrostica::MessageWidget(this);
+
+  mPrintWindow = new acrostica::PrintWindow(this);
 
   messageLetters = new QGroupBox(tr("Letters Missing from Message"), this);
   messageLettersView = new MissingLettersUI(messageLetters);
@@ -154,6 +157,7 @@ void MainWindow::createWidgets()
             mAcrostic->message = msg;
             missingClueLetters_->update();
             missingMessageLetters_->update();
+            mPrintWindow->setMessage(msg);
             setWindowModified(true);
           });
 
@@ -394,6 +398,7 @@ void MainWindow::setFilename(const QString &fname)
 
 void MainWindow::print()
 {
+  mPrintWindow->show();
 }
 
 #include "acrostica/moc_mainwindow.cpp"
