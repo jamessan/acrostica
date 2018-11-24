@@ -23,6 +23,7 @@
 #include <QtWidgets>
 
 #include "acrostica/acrostic.h"
+#include "acrostica/ClueView.h"
 #include "acrostica/ui/DownMsg.h"
 #include "acrostica/MessageWidget.h"
 #include "acrostica/MissingLettersModel.h"
@@ -121,17 +122,8 @@ void MainWindow::createWidgets()
   clues_ = new acrostica::ClueModel(mAcrostic, this);
 
   clueBox_ = new QGroupBox(tr("Clues"), this);
-  auto clueView = new QTableView(clueBox_);
-  auto policy = clueView->sizePolicy();
-  policy.setVerticalPolicy(QSizePolicy::MinimumExpanding);
-  clueView->setSizePolicy(policy);
-  clueView->setSortingEnabled(false);
-  clueView->setCornerButtonEnabled(false);
+  auto clueView = new acrostica::ClueView(clueBox_);
   clueView->setModel(clues_);
-  clueView->setSelectionBehavior(QAbstractItemView::SelectRows);
-  clueView->setSelectionMode(QAbstractItemView::SingleSelection);
-  clueView->setTabKeyNavigation(false);
-  clueView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
   connect(removeClueAction, &QAction::triggered,
           [=]() {
             auto selection = clueView->selectionModel();
