@@ -23,6 +23,7 @@
 #include <QtWidgets>
 
 #include "acrostica/acrostic.h"
+#include "acrostica/ClueView.h"
 #include "acrostica/ui/DownMsg.h"
 #include "acrostica/MessageWidget.h"
 #include "acrostica/MissingLettersModel.h"
@@ -88,6 +89,7 @@ void MainWindow::createActions()
 
   removeClueAction = new QAction(tr("&Remove Clue"), this);
   removeClueAction->setStatusTip(tr("Remove the selected clue"));
+  removeClueAction->setShortcut(QKeySequence::Delete);
   removeClueAction->setEnabled(false);
 }
 
@@ -121,15 +123,18 @@ void MainWindow::createWidgets()
   clues_ = new acrostica::ClueModel(mAcrostic, this);
 
   clueBox_ = new QGroupBox(tr("Clues"), this);
-  auto clueView = new QTableView(clueBox_);
-  auto policy = clueView->sizePolicy();
-  policy.setVerticalPolicy(QSizePolicy::MinimumExpanding);
-  clueView->setSizePolicy(policy);
-  clueView->setSortingEnabled(false);
-  clueView->setCornerButtonEnabled(false);
+  auto clueView = new acrostica::ClueView(clueBox_);
   clueView->setModel(clues_);
-  clueView->setTabKeyNavigation(false);
-  clueView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+  connect(removeClueAction, &QAction::triggered,
+          clueView, &acrostica::ClueView::removeSelectedClues);
+
+  // Enable clue removal when one is selected
+  auto selection = clueView->selectionModel();
+  connect(selection, &QItemSelectionModel::selectionChanged,
+          [=](const QItemSelection &selected, const QItemSelection &deselected) {
+            Q_UNUSED(deselected);
+            removeClueAction->setEnabled(!selected.indexes().isEmpty());
+          });
 
   QVBoxLayout *clueLayout = new QVBoxLayout(clueBox_);
   clueLayout->addWidget(clueView);
@@ -161,6 +166,8 @@ void MainWindow::createWidgets()
           });
   connect(clues_, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&, const QVector<int>&)),
           mDownMessage, SLOT(mergeMsg(const QModelIndex&, const QModelIndex&, const QVector<int>&)));
+  connect(clues_, SIGNAL(rowsAboutToBeRemoved(const QModelIndex&, int, int)),
+          mDownMessage, SLOT(mergeMsg(const QModelIndex&, int, int)));
 
   connect(clues_, &acrostica::ClueModel::rowsRemoved,
           [=](){ missingMessageLetters_->update(); });

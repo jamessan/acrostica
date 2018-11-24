@@ -18,6 +18,7 @@
 
 set(SRC_FILES
   acrostic.cpp
+  ClueView.cpp
   main.cpp
   mainwindow.cpp
   MessageWidget.cpp
