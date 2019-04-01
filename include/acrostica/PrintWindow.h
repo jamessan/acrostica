@@ -19,13 +19,23 @@
 #ifndef ACROSTICA_PRINTWINDOW_H_
 #define ACROSTICA_PRINTWINDOW_H_
 
+#include <QStyledItemDelegate>
 #include <QWidget>
 
-class QStringListModel;
 class QListView;
+class QStringListModel;
 
 namespace acrostica
 {
+
+class ItemDelegate : public QStyledItemDelegate
+{
+ public:
+  ItemDelegate(QObject *parent = nullptr) : QStyledItemDelegate(parent)
+  {}
+  QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override;
+  void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
+};
 
 class PrintWindow : public QWidget
 {
@@ -40,6 +50,7 @@ class PrintWindow : public QWidget
  private:
   QStringListModel *mModel;
   QListView *mView;
+  ItemDelegate *mItemDelegate;
 };
 
 }
