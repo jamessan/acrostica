@@ -1,6 +1,6 @@
 /*
  * Acrostica - Simple acrostic creator
- * Copyright © 2016-2018 James McCoy <jamessan@jamessan.com>
+ * Copyright © 2016-2021 James McCoy <jamessan@jamessan.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -75,7 +75,7 @@ void Acrostic::write(QJsonObject &json) const
 {
   json["message"] = message;
   QJsonArray clueArray;
-  for (auto const clue : clues)
+  for (const auto & clue : clues)
   {
     QJsonObject obj;
     clue.write(obj);
