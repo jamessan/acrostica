@@ -1,0 +1,76 @@
+name: CI
+on:
+  push:
+    branches: 'main'
+  pull_request:
+    branches: 'main'
+
+jobs:
+  linux:
+    name: Linux ${{ matrix.compiler }} ${{ matrix.build-type }}
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler: [g++, clang++]
+        build-type: [Debug, RelWithDebInfo]
+
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup environment
+        run: |
+          cat <<EOF >> "$GITHUB_ENV"
+          CCACHE_BASEDIR=$GITHUB_WORKSPACE
+          CCACHE_COMPRESS=1
+          CCACHE_SLOPPINESS=time_macros,file_macro
+          CCACHE_DIR=$HOME/.ccache
+          CXX=${{ matrix.compiler }}
+          EOF
+
+      - name: Install apt packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ccache clang cmake g++ ninja-build qt5-default qtbase5-dev-tools qt5-qmake
+
+      - uses: actions/cache@v2
+        with:
+          path: ${{ env.CCACHE_DIR }}
+          key: ${{ runner.os }}-${{ matrix.compiler }}-${{ matrix.build-type }}-ccache
+
+      - name: Build
+        run: |
+          mkdir build
+          cd build
+          cmake -G Ninja -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} ..
+          cmake --build .
+
+  macOS:
+    name: macOS ${{ matrix.build-type }}
+    strategy:
+      fail-fast: false
+      matrix:
+        build-type: [Debug, RelWithDebInfo]
+
+    runs-on: macos-10.15
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Cache QT
+        id: qtcache
+        uses: actions/cache@v1
+        with:
+          path: ../Qt
+          key: ${{ runner.os }}-Qt
+
+      - name: Install QT
+        uses: jurplel/install-qt-action@v2
+        with:
+          cached: ${{ steps.qtcache.outputs.cache-hit }}
+
+      - name: Build
+        run: |
+          mkdir build
+          cd build
+          cmake -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} ..
+          cmake --build .
