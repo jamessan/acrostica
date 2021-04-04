@@ -39,6 +39,7 @@ namespace acrostica
   class ClueModel;
   class MessageWidget;
   class MissingLettersModel;
+  class PrintWindow;
   namespace ui
   {
     class downmsg;
@@ -101,6 +102,7 @@ private:
   acrostica::MissingLettersModel *missingMessageLetters_;
   acrostica::MissingLettersModel *missingClueLetters_;
   acrostica::ClueModel *clues_;
+  acrostica::PrintWindow *mPrintWindow;
   std::shared_ptr<acrostica::Acrostic> mAcrostic;
 
   QGroupBox *clueBox_;
